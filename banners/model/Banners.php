@@ -1,0 +1,933 @@
+<?php if ( ! defined('ABS_PATH')) exit('ABS_PATH is not loaded. Direct access is not allowed.');
+
+	/*
+	 * MIT License
+	 * 
+	 * Copyright (c) 2020 XenoTrue
+	 * 
+	 * Permission is hereby granted, free of charge, to any person obtaining a copy
+	 * of this software and associated documentation files (the "Software"), to deal
+	 * in the Software without restriction, including without limitation the rights
+	 * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 * copies of the Software, and to permit persons to whom the Software is
+	 * furnished to do so, subject to the following conditions:
+	 * 
+	 * The above copyright notice and this permission notice shall be included in all
+	 * copies or substantial portions of the Software.
+	 * 
+	 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	 * SOFTWARE.
+	 */
+
+/**
+ * Model of Banners
+ */
+class Banners extends DAO
+{
+	private static $instance;
+
+	/**
+	 * Singleton Pattern
+	 */
+	public static function newInstance()
+	{
+		if(!self::$instance instanceof self) {
+			self::$instance = new self;
+		}
+		return self::$instance;
+	}
+
+	function __construct()
+	{
+		parent::__construct();
+	}
+
+	public function getTable_banners_positions()
+	{
+		return DB_TABLE_PREFIX.'t_banners_positions';
+	}
+
+	public function getTable_banners_advertisers()
+	{
+		return DB_TABLE_PREFIX.'t_banners_advertisers';
+	}
+
+	public function getTable_banners()
+	{
+		return DB_TABLE_PREFIX.'t_banners';
+	}
+
+	public function getTable_banners_clics()
+	{
+		return DB_TABLE_PREFIX.'t_banners_clics';
+	}
+
+	/**
+	 * Import tables to database using a sql file
+	 */
+	public function import($file)
+	{
+		$sql  = file_get_contents($file);
+
+		if(!$this->dao->importSQL($sql)) {
+			throw new Exception("Error importSQL::Banners".$file);
+		}
+	}
+
+	/**
+	 * Config the plugin in osclass database, settings the preferences table 
+	 * and import sql tables of plugin from struct.sql
+	 */
+	public function install()
+	{
+		$this->import(BANNERS_PATH.'struct.sql');
+		osc_set_preference('version', '1.0.0', BANNERS_PREF, 'STRING');
+		osc_set_preference('banner_route_page', 'banner-url', BANNERS_PREF, 'STRING');
+		osc_set_preference('banner_route_param', 'ref', BANNERS_PREF, 'STRING');
+		osc_set_preference('show_url_banner', '0', BANNERS_PREF, 'BOOLEAN');
+		osc_run_hook('banners_install');
+	}
+
+	/**
+	 * Delete all fields from the 'preferences' table and also delete all tables of plugin
+	 */
+	public function uninstall()
+	{
+		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners_clics()));
+		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners()));
+		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners_advertisers()));
+		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners_positions()));
+		Preference::newInstance()->delete(array('s_section' => BANNERS_PREF));
+		osc_run_hook('banners_uninstall');
+	}
+
+    /**
+     * Add clic
+     */
+    public function addClic($data)
+    {
+        return $this->dao->insert($this->getTable_banners_clics(), $data);
+    }
+
+	/**
+     * Delete clic
+     */
+    public function deleteClicById($id)
+    {
+        return $this->dao->delete($this->getTable_banners_clics(), array('pk_i_id' => $id));
+    }
+
+
+	/**
+     * Get all clics of a specific banner
+     *
+     * @access public
+     * @since unknown
+     * @param int $bannerId
+     * @return array
+     */
+    public function getClicsByBannerId($bannerId)
+    {
+        $this->dao->select('*');
+        $this->dao->from($this->getTable_banners_clics());
+        $this->dao->where('fk_i_banner_id', $bannerId);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->result();
+        }
+        return array();
+    }
+
+	/**
+	 * Count clics a banner
+	 *
+	 * @access public
+	 * @since unknown
+	 * @param int $bannerId
+	 * @return int
+	 */
+	public function countClicsByBannerId($bannerId)
+	{
+		$this->dao->select('COUNT(*) as total') ;
+		$this->dao->from($this->getTable_banners_clics());
+		$this->dao->where('fk_i_banner_id', $bannerId);
+		$result = $this->dao->get();
+		if($result) {
+			$row = $result->row();
+			if(isset($row['total'])) {
+				return $row['total'];
+			}
+		}
+		return 0;
+	}
+
+    /**
+     * addAvertiser: Create/Update advertiser
+     */
+    public function setAdvertiser($data)
+    {
+        // Create
+        if (!$data['pk_i_id']) {
+            unset($data['pk_i_id']);
+            return $this->dao->insert($this->getTable_banners_advertisers(), $data);
+
+        // Update
+        } else {
+            return $this->dao->update($this->getTable_banners_advertisers(), $data, array('pk_i_id' => $data['pk_i_id']));
+        }
+    }
+
+    /**
+     * Delete advertiser.
+     *
+     * Note: Firts delete all her banners.
+     *
+     * @access public
+     * @param integer $id
+     * @return bool Return true if has been deleted, on contrary will return false.
+     */
+    public function deleteAdverstiser($id)
+    {
+        $banners = $this->getByAdvertiserId($id);
+        if($banners) {
+            foreach ($banners as $banner) {
+                $this->deleteBanner($banner['pk_i_id']);
+            }
+        }
+        return $this->dao->delete($this->getTable_banners_advertisers(), array('pk_i_id' => $id));
+    }
+
+	/**
+	 * Get all advertisers
+	 *
+	 * @access public
+	 * @since unknown
+	 * @return array
+	 */
+	public function getAllAdvertisers()
+	{
+		$this->dao->select('*');
+		$this->dao->from($this->getTable_banners_advertisers());
+		$this->dao->orderBy('s_name', 'ASC');
+		$result = $this->dao->get();
+		if($result) {
+			return $result->result();
+		}
+		return array();
+	}
+
+    /**
+     * Search advertisers
+     *
+     * This function is for search with parameters in the AdvertisersDataTable.php
+     *
+     * @access public
+     * @since unknown
+     * @param array $params Is a array variable witch containt all parameters for the search and pagination
+     * @return array
+     */
+    public function advertisers($params)
+    {
+        $start = (isset($params['start']) && $params['start']!='' ) ? $params['start']: 0;
+        $limit = (isset($params['limit']) && $params['limit']!='' ) ? $params['limit']: 10;
+        $name = (isset($params['name']) && $params['name']!='') ? $params['name'] : '';
+        $userId = (isset($params['userId']) && $params['userId']!='') ? $params['userId'] : '';
+
+        $this->dao->select('*');
+        $this->dao->from($this->getTable_banners_advertisers());
+        $this->dao->orderBy('dt_date', 'DESC');
+        if ($name!='') {
+            $this->dao->like('s_name', $name);
+            $this->dao->orLike('s_business_sector', $name);
+            if (strtolower($name) == 'active') {
+                $this->dao->orLike('b_active', 1);
+            }
+            if (strtolower($name) == 'deactive') {
+                $this->dao->orLike('b_active', 0);
+            }
+        }
+
+        if ($userId != '') {
+            $this->dao->orLike('fk_i_user_id', $userId);
+        }
+
+        $this->dao->limit($limit, $start);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->result();
+        }
+        return array();
+    }
+
+    /**
+     * Count total advertisers
+     *
+     * @access public
+     * @since unknown
+     * @return integer
+     */
+    public function advertisersTotal()
+    {
+        $this->dao->select('COUNT(*) as total') ;
+        $this->dao->from($this->getTable_banners_advertisers());
+        $result = $this->dao->get();
+        if($result) {
+            $row = $result->row();
+            if(isset($row['total'])) {
+                return $row['total'];
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Get advertiser by is user registered
+     *
+     * @access public
+     * @since unknown
+     * @param integer $userId
+     * @return array
+     */
+    public function getAdvertiserByUserId($userId)
+    {
+        $this->dao->select('*');
+        $this->dao->from($this->getTable_banners_advertisers());
+        $this->dao->where('fk_i_user_id', $userId);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->result();
+        }
+        return array();
+    }
+
+	/**
+     * Get advertiser
+     *
+     * @access public
+     * @since unknown
+     * @param integer $id
+     * @return array
+     */
+    public function getAdvertiserById($id)
+    {
+    	$this->dao->select('*');
+        $this->dao->from($this->getTable_banners_advertisers());
+        $this->dao->where('pk_i_id', $id);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->row();
+        }
+        return false;
+    }
+
+    /**
+     * addPosition: Create/Update position
+     */
+    public function setPosition($data)
+    {
+        // Create
+        if (!$data['pk_i_id']) {
+            unset($data['pk_i_id']);
+            return $this->dao->insert($this->getTable_banners_positions(), $data);
+
+        // Update
+        } else {
+            return $this->dao->update($this->getTable_banners_positions(), $data, array('pk_i_id' => $data['pk_i_id']));
+        }
+    }
+
+    /**
+     * Count total of positions
+     *
+     * @access public
+     * @since unknown
+     * @return integer
+     */
+    public function positionsTotal()
+    {
+        $this->dao->select('COUNT(*) as total') ;
+        $this->dao->from($this->getTable_banners_positions());
+        $result = $this->dao->get();
+        if($result) {
+            $row = $result->row();
+            if(isset($row['total'])) {
+                return $row['total'];
+            }
+        }
+        return 0;
+    }
+
+	/**
+	 * Get all positions
+	 *
+	 * @access public
+	 * @since unknown
+	 * @param integer $bannerId
+	 * @return array
+	 */
+	public function getAllPositions()
+	{
+		$this->dao->select('*');
+		$this->dao->from($this->getTable_banners_positions());
+		$this->dao->orderBy('i_sort_id', 'ASC');
+		$result = $this->dao->get();
+		if($result) {
+			return $result->result();
+		}
+		return array();
+	}
+
+	/**
+     * Get position by it's ID
+     *
+     * @access public
+     * @since unknown
+     * @param integer $id
+     * @return array
+     */
+	public function getPositionById($id)
+	{
+		$this->dao->select('*');
+		$this->dao->from($this->getTable_banners_positions());
+		$this->dao->where('pk_i_id', $id);
+		$result = $this->dao->get();
+		if($result) {
+			return $result->row();
+		}
+		return false;
+	}
+
+    /**
+     * Get position by sort number
+     *
+     * @access public
+     * @since unknown
+     * @param integer $sortId
+     * @return array
+     */
+    public function getPositionBySortId($sortId)
+    {
+        $this->dao->select('*');
+        $this->dao->from($this->getTable_banners_positions());
+        $this->dao->where('i_sort_id', $sortId);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->row();
+        }
+        return false;
+    }
+
+    /**
+     * Delete position
+     */
+    public function deletePositionById($id)
+    {
+        return $this->dao->delete($this->getTable_banners_positions(), array('pk_i_id' => $id));
+    }
+
+    /**
+     * getBannerByName: Get banner by her image name
+     *
+     * @access public
+     * @since unknown
+     * @param string $name
+     * @return array
+     */
+    public function getByName($name)
+    {
+        $this->dao->select('*');
+        $this->dao->from($this->getTable_banners());
+        $this->dao->where('s_name', $name);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->row();
+        }
+        return false;
+    }
+
+
+    /**
+     * getBannerByURL: Get banner by her URL
+     *
+     * @access public
+     * @since unknown
+     * @param string $url
+     * @return array
+     */
+    public function getByURL($url)
+    {
+        $this->dao->select('*');
+        $this->dao->from($this->getTable_banners());
+        $this->dao->where('s_url', $url);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->row();
+        }
+        return false;
+    }
+
+    /**
+     * detectBannerByColorAndPosition: Count banner by her Color
+     *
+     * @access public
+     * @since unknown
+     * @param string $url
+     * @return array
+     */
+    public function detectByColorAndPosition($color, $positionId)
+    {
+        $this->dao->select('COUNT(*) as total') ;
+        $this->dao->from($this->getTable_banners());
+        $this->dao->where('s_color', $color);
+        $this->dao->where('fk_i_position_id', $positionId);
+        $result = $this->dao->get();
+        if($result) {
+            $row = $result->row();
+            if(isset($row['total'])) {
+                return $row['total'];
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * detectDisponibleDateRangeBanner: Check if the date intervals of the banner is in the disponible range
+     * 
+     * This is for validation when uploading banner in a determinated position.
+     * In the each position it cannot repeat a same date range of a banner.
+     *
+     * @access public
+     * @param string $sinceDate
+     * @param string $untilDate
+     * @param string $positionId
+     * @return array
+     */
+    public function detectDisponibleDateRange($sinceDate, $untilDate, $positionId)
+    {
+        $this->dao->select('COUNT(*) as total') ;
+        $this->dao->from($this->getTable_banners());
+        $this->dao->where('fk_i_position_id', $positionId);
+        $this->dao->where("(('$sinceDate' BETWEEN dt_since_date AND date_sub(dt_until_date, interval +1 day)) 
+                            OR ('$untilDate' BETWEEN date_sub(dt_since_date, interval -1 day) AND dt_until_date) 
+                            OR (dt_since_date <= '$sinceDate' AND dt_until_date >= '$sinceDate')
+                            OR (dt_since_date >= '$sinceDate' AND dt_until_date <= '$untilDate'))");
+        $result = $this->dao->get();
+        if($result) {
+            $row = $result->row();
+            if(isset($row['total'])) {
+                return $row['total'];
+            }
+        }
+        return 0;
+    }
+
+	/**
+	 * addBanner: Setting information about banner uploaded
+	 * 
+	 * In this same function can be used for add or update, depending if exist a banner ID.
+	 * If exist banner ID, proceed to update, on contrary add new.
+	 *
+	 * @access public
+	 * @param array $data
+	 * @return array
+	 */
+	public function set($data)
+	{
+		// Add
+		if (!$data['pk_i_id']) {
+			unset($data['pk_i_id']);
+			return $this->dao->insert($this->getTable_banners(), $data);
+
+		// Update
+		} else {
+			return $this->dao->update($this->getTable_banners(), $data, array('pk_i_id' => $data['pk_i_id']));
+		}
+	}
+
+    /**
+     * Count total banners from a especific advertiser
+     *
+     * This function is used for show the total uploaded banners from a advertiser specific by her id.
+     *
+     * @access public
+     * @since unknown
+     * @param array $advertiserId
+     * @return integer
+     */
+    public function getAdvertiserBannersTotal($advertiserId)
+    {
+        $this->dao->select('COUNT(*) as total') ;
+        $this->dao->from($this->getTable_banners());
+        $this->dao->where('fk_i_advertiser_id', $advertiserId);
+        $result = $this->dao->get();
+        if($result) {
+            $row = $result->row();
+            if(isset($row['total'])) {
+                return $row['total'];
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * getBannerById: Get especific banner by it's ID
+     *
+     * @access public
+     * @since unknown
+     * @param array $id
+     * @return array
+     */
+    public function getById($id)
+    {
+    	$this->dao->select('*');
+        $this->dao->from($this->getTable_banners());
+        $this->dao->where('pk_i_id', $id);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->row();
+        }
+        return false;
+    }
+
+    /**
+     * getBannersByPositionId: Get banners by her position
+     *
+     * @access public
+     * @since unknown
+     * @param integer $positionId
+     * @return array
+     */
+    public function getByPositionId($positionId)
+    {
+        $this->dao->select('*');
+        $this->dao->from($this->getTable_banners());
+        $this->dao->where('fk_i_position_id', $positionId);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->result();
+        }
+        return array();
+    }
+
+    /**
+     * getBannersByAdvertiserId: Get banners by a especific id advertiser
+     *
+     * @access public
+     * @since unknown
+     * @param array $advertiserId
+     * @return array
+     */
+    public function getByAdvertiserId($advertiserId)
+    {
+        $this->dao->select('*');
+        $this->dao->from($this->getTable_banners());
+        $this->dao->where('fk_i_advertiser_id', $advertiserId);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->result();
+        }
+        return array();
+    }
+
+    /**
+     * Search banners
+     *
+     * This function is for thorough search with parameters in the BannersDataTable.php.
+     * The results can be ordered by date, update, since date, until date, position of banner, ascendant or descendant.
+     *
+     * @access public
+     * @since unknown
+     * @param array $params Is a array variable witch containt all parameters for the search and pagination
+     * @return array
+     */
+    public function banners($params)
+	{
+		$start = (isset($params['start']) && $params['start'] != '' ) ? $params['start']: 0;
+        $limit = (isset($params['limit']) && $params['limit'] != '' ) ? $params['limit']: 10;
+
+        $sort = (isset($params['sort']) && $params['sort'] != '') ? $params['sort'] : '';
+        $sort = strtolower($sort);
+
+        switch ($sort) {
+        	case 'date':
+        		$sort = 'dt_date';
+        		break;
+        	case 'update':
+        		$sort = 'dt_update';
+        		break;
+        	case 'since_date':
+        		$sort = 'dt_since_date';
+        		break;
+        	case 'until_date':
+        		$sort = 'dt_until_date';
+        		break;
+        	case 'position':
+        		$sort = 'fk_i_position_id';
+        		break;
+        	default:
+        		$sort = 'dt_date';
+        		break;
+        }
+
+        $direction = (isset($params['direction']) && $params['direction'] == 'ASC') ? $params['direction'] : 'DESC';
+        $direction = strtoupper($direction);
+
+        $advertiserId = (isset($params['fk_i_advertiser_id']) && $params['fk_i_advertiser_id']!='') ? $params['fk_i_advertiser_id'] : '';
+        $positionId = (isset($params['fk_i_position_id']) && $params['fk_i_position_id']!='') ? $params['fk_i_position_id'] : '';
+        $url = (isset($params['s_url']) && $params['s_url']!='') ? $params['s_url'] : '';
+        $imageType = (isset($params['s_content_type']) && $params['s_content_type']!='') ? $params['s_content_type'] : '';
+
+        $sinceDate = (isset($params['dt_since_date']) && $params['dt_since_date']!='') ? $params['dt_since_date'] : '';
+        $sinceDateControl = (isset($params['since_control']) && $params['since_control']!='') ? $params['since_control'] : '';
+
+        $untilDate = (isset($params['dt_until_date']) && $params['dt_until_date']!='') ? $params['dt_until_date'] : '';
+        $untilDateControl = (isset($params['until_control']) && $params['until_control']!='') ? $params['until_control'] : '';
+
+        $date = (isset($params['dt_date']) && $params['dt_date']!='') ? $params['dt_date'] : '';
+        $dateControl = (isset($params['date_control']) && $params['date_control']!='') ? $params['date_control'] : '';
+
+        $update = (isset($params['dt_update']) && $params['dt_update']!='') ? $params['dt_update'] : '';
+        $updateControl = (isset($params['update_control']) && $params['update_control']!='') ? $params['update_control'] : '';
+
+        $status = (isset($params['b_active']) && $params['b_active']!='') ? $params['b_active'] : '';
+
+        $this->dao->select('*');
+        $this->dao->from($this->getTable_banners());
+        $this->dao->orderBy($sort, $direction);
+
+        if ($advertiserId != '') {
+        	$this->dao->where('fk_i_advertiser_id', $advertiserId);
+        }
+
+        if ($positionId != '') {
+        	$this->dao->where('fk_i_position_id', $positionId);
+        }
+
+        if ($imageType != '') {
+            if ($imageType == "script") {
+                $this->dao->where('b_image', 0);
+            } else {
+                switch ($imageType) {
+                    case "gif":
+                        $imageType = 'image/gif';
+                        break;
+
+                    case "jpg":
+                        $imageType = 'image/jpg';
+                        break;
+
+                    case "bmp":
+                        $imageType = 'image/bmp';
+                        break;
+
+                    case "png":
+                        $imageType = 'image/png';
+                        break;
+                }
+                $this->dao->where('s_content_type', $imageType);
+            }
+        }
+
+        if ($sinceDate != '') {
+        	switch ($sinceDateControl) {
+        		case 'equal':
+        			$this->dao->where('dt_since_date', $sinceDate);
+        			break;
+
+        		case 'greater':
+        			$this->dao->where("dt_since_date > '$sinceDate'");
+        			break;
+
+        		case 'greater_equal':
+        			$this->dao->where("dt_since_date >= '$sinceDate'");
+        			break;
+
+        		case 'less':
+        			$this->dao->where("dt_since_date < '$sinceDate'");
+        			break;
+
+        		case 'less_equal':
+        			$this->dao->where("dt_since_date <= '$sinceDate'");
+        			break;
+
+        		case 'not_equal':
+        			$this->dao->where("dt_since_date != '$sinceDate'");
+        			break;
+        		
+        		default:
+        			$this->dao->where('dt_since_date', $sinceDate);
+        			break;
+        	}	
+        }
+
+        if ($untilDate != '') {
+        	switch ($untilDateControl) {
+        		case 'equal':
+        			$this->dao->where('dt_until_date', $untilDate);
+        			break;
+
+        		case 'greater':
+        			$this->dao->where("dt_until_date > '$untilDate'");
+        			break;
+
+        		case 'greater_equal':
+        			$this->dao->where("dt_until_date >= '$untilDate'");
+        			break;
+
+        		case 'less':
+        			$this->dao->where("dt_until_date < '$untilDate'");
+        			break;
+
+        		case 'less_equal':
+        			$this->dao->where("dt_until_date <= '$untilDate'");
+        			break;
+
+        		case 'not_equal':
+        			$this->dao->where("dt_until_date != '$untilDate'");
+        			break;
+        		
+        		default:
+        			$this->dao->where('dt_until_date', $untilDate);
+        			break;
+        	}
+        }
+
+        if ($date != '') {
+        	switch ($dateControl) {
+        		case 'equal':
+        			$this->dao->where('dt_date', $date);
+        			break;
+
+        		case 'greater':
+        			$this->dao->where("dt_date > '$date'");
+        			break;
+
+        		case 'greater_equal':
+        			$this->dao->where("dt_date >= '$date'");
+        			break;
+
+        		case 'less':
+        			$this->dao->where("dt_date < '$date'");
+        			break;
+
+        		case 'less_equal':
+        			$this->dao->where("dt_date <= '$date'");
+        			break;
+
+        		case 'not_equal':
+        			$this->dao->where("dt_date != '$date'");
+        			break;
+        		
+        		default:
+        			$this->dao->where('dt_date', $date);
+        			break;
+        	}
+        }
+
+        if ($update != '') {
+        	switch ($updateControl) {
+        		case 'equal':
+        			$this->dao->where('dt_update', $update);
+        			break;
+
+        		case 'greater':
+        			$this->dao->where("dt_update > '$update'");
+        			break;
+
+        		case 'greater_equal':
+        			$this->dao->where("dt_update >= '$update'");
+        			break;
+
+        		case 'less':
+        			$this->dao->where("dt_update < '$update'");
+        			break;
+
+        		case 'less_equal':
+        			$this->dao->where("dt_update <= '$update'");
+        			break;
+
+        		case 'not_equal':
+        			$this->dao->where("dt_update != '$update'");
+        			break;
+        		
+        		default:
+        			$this->dao->where('dt_update', $update);
+        			break;
+        	}
+        }
+
+        if ($status != '') {
+        	if ($status == 0) {
+	        	$this->dao->where('b_active', 0);
+	        } else {
+	        	$this->dao->where('b_active', 1);
+	        }
+        }
+
+        if ($url != '') {
+        	$this->dao->like('s_url', $url);
+        }
+        
+        $this->dao->limit($limit, $start);
+        $result = $this->dao->get();
+        if($result) {
+            return $result->result();
+        }
+        return array();
+	}
+
+	/**
+     * bannersTotal: Get total of banners
+     *
+     * @access public
+     * @since unknown
+     * @return integer
+     */
+	public function total()
+	{
+        $this->dao->select('COUNT(*) as total') ;
+        $this->dao->from($this->getTable_banners());
+        $result = $this->dao->get();
+        if($result) {
+            $row = $result->row();
+            if(isset($row['total'])) {
+                return $row['total'];
+            }
+        }
+        return 0;
+    }
+
+	/**
+     * deleteBanner: Delete banner by it's ID
+     *
+     * Notes: Firts delete all her clics; delete banner file if exist!
+     *
+     * @access public
+     * @since unknown
+     * @param integer $id
+     * @return bool
+     */
+    public function delete($id)
+    {
+        $clics = $this->getClicsByBannerId($id);
+        if ($clics) {
+            foreach ($clics as $clic) {
+                $this->deleteClicById($clic['pk_i_id']);
+            }
+        }
+
+    	$banner = $this->getById($id);
+
+        $banner = BANNERS_FOLDER_SOURCES . $banner['s_name'].'.'.$banner['s_extension'];
+        if (getimagesize($banner) === true) {
+            unlink($banner);
+        }
+        return $this->dao->delete($this->getTable_banners(), array('pk_i_id' => $id));
+    }
+
+}
