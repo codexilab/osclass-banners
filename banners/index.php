@@ -96,7 +96,7 @@ function banners_admin_controllers() {
 
 		case 'banners-admin-new':
 			$filter = function($string) {
-                return __("New banner - Banners", BANNERS_PREF);
+                return __("Banners", BANNERS_PREF);
             };
 
             // Page title (in <head />)
@@ -162,115 +162,6 @@ function banners_admin_controllers() {
 }
 osc_add_hook('renderplugin_controller', 'banners_admin_controllers');
 
-/*function banners_web_controllers() {
-	if (Params::getParam("route") == banners_route_page()) {
-		$do = new CWebBannersURL();
-        $do->doModel();
-	}
-}
-osc_add_hook('renderplugin_controller', 'banners_web_controllers');*/
-
-/**
- * The content of this function it will show by ajax request on this url:
- * <?php echo osc_base_url(); ?>index.php?page=ajax&action=runhook&hook=position_calendar
- */
-/*function position_calendar() {
-    $positionId = (isset($_GET['position']) && $_GET['position']) ? $_GET['position'] : 0;
-    $banners = Banners::newInstance()->getByPositionId($positionId);
-
-    // Si no se ha seleccionado mes, ponemos el actual y el año
-    $month = (isset($_GET['month']) && $_GET['month']) ? $_GET['month'] : date("Y-m");
-
-    // for, than build the calendar
-    $week = 1;
-    for ($i = 1; $i <= date('t', strtotime($month)); $i++) {
-        $day_week = date('N', strtotime($month.'-'.$i));
-        $calendar[$week][$day_week] = $i;
-        if ($day_week == 7) $week++;
-    }
-
-    // save an array each one of the days of a interval, to be compared with days of calendar
-    function daysinterval($since, $until, $color) {
-        $array = array();
-        $date = $since;
-        while(strtotime($date) <= strtotime($until)) {
-            $array[]['date'] = $date;
-            $date = date("Y-m-j", strtotime($date . " + 1 day"));
-        }
-        $array['color'] = $color;
-        return $array;
-    }
-    $intervals = array();
-    foreach ($banners as $banner) {
-        $intervals[] = daysinterval($banner['dt_since_date'], $banner['dt_until_date'], $banner['s_color']);
-    }
-
-    // comparison
-    $comp = array();
-
-    function check_values(&$value = null, $key = null) {
-        return (!$value) ? false : true;
-    }
-    ?>
-
-    <h2 class="render-title">Position <?php echo banners_sort_position($positionId); ?></h2>
-
-    <table class="table" cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <td colspan="7"><b><?php echo strftime('%B %Y', strtotime($month)); ?></b></td>
-            </tr>
-            <tr>
-                <td colspan="7">
-                    <div style="float: left; width: 33.333333333%"><a href="#" id="calendar-previous-button">&laquo; Previous</a></div>
-                    <div style="float: left; width: 33.333333333%"><a href="#" id="calendar-current-button">Current</a></div>
-                    <div style="float: left; width: 33.333333333%"><a href="#" id="calendar-next-button">Next &raquo;</a></div>
-                </td>
-            </tr>
-            <tr>
-                <td>Mon</td>
-                <td>Tue</td>
-                <td>Wed</td>
-                <td>Thu</td>
-                <td>Frid</td>
-                <td>Sat</td>        
-                <td>Sun</td>
-            </tr>
-        </thead>
-        
-        <tbody>
-        <?php foreach ($calendar as $days) : ?>
-            <tr>
-            <?php for ($i = 1; $i <= 7; $i++) : ?>
-                <?php for ($j=0; $j < count($intervals); $j++) : // run intervals to be compared ?>
-                	<?php @$comp[$j] = in_array($month.'-'.$days[$i], array_column($intervals[$j], 'date')); ?>
-	                <?php if ($comp[$j]) : ?>
-	                <td style="background: <?php echo $intervals[$j]['color']; ?>; color: white">
-	                <?php endif; ?>
-                <?php endfor; // end for ?>
-
-                <?php if (!array_filter($comp, 'check_values')) : // if the comparisions have negative results ?>
-                	<td>
-                <?php endif; ?>
-
-                <?php echo isset($days[$i]) ? $days[$i] : ''; ?>
-                </td>
-            <?php endfor; ?>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-    <?php 
-}
-osc_add_hook("ajax_position_calendar", "position_calendar");*/
-
-function modal_form_options() {
-	if (Params::getParam("page") == "plugins") {
-		include BANNERS_PATH . 'parts/admin/modal_form_options.php';
-	}
-}
-osc_add_hook('admin_footer', 'modal_form_options');
-
 /**
  * The content of this function it will show by ajax request on this url:
  * <?php echo osc_base_url(); ?>index.php?page=ajax&action=runhook&hook=banners_controller_requests
@@ -280,6 +171,38 @@ function banners_controller_requests() {
 	$do->doModel();
 }
 osc_add_hook("ajax_banners_controller_requests", "banners_controller_requests");
+
+function modal_form_options() {
+    if (Params::getParam("page") == "plugins") {
+        include BANNERS_PATH . 'parts/admin/modals_form_options.php';
+    }
+}
+osc_add_hook('admin_footer', 'modal_form_options');
+
+/**
+ * Build position hooks.
+ *
+ * If exists a position with the number sort '4', automatically there will be a hook available with that number
+ * Example: osc_run_hook('banners_position_4');
+ */
+$positions = Banners::newInstance()->getAllPositions();
+foreach ($positions as $pos) {
+    $sort = $pos['i_sort_id'];
+
+    osc_add_hook('banners_position_'.$sort, function() use ($sort) {
+
+        $banner = get_banners_position($sort, osc_item_category_id());
+        if (isset($banner) && $banner) {
+            if ($banner['type']) {
+                echo "<a href=\"".$banner['url']."\" target=\"_blank\"><img src=\"".$banner['source']."\" /></a>";
+            } else {
+                echo $banner['script'];
+            }
+        }
+
+    }); // end hook
+
+} // end foreach
 
 
 // 'Configure' link
