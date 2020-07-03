@@ -65,3 +65,8 @@
 	text-align: -moz-center;
 	text-align: -webkit-center;
 }
+
+.color-banner-box {
+	width: 33px;
+    height: 15px;
+}

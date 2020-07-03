@@ -62,7 +62,7 @@ class Banners extends DAO
 		return DB_TABLE_PREFIX.'t_banners';
 	}
 
-	public function getTable_banners_clics()
+	public function getTable_banners_clicks()
 	{
 		return DB_TABLE_PREFIX.'t_banners_clics';
 	}
@@ -98,7 +98,7 @@ class Banners extends DAO
 	 */
 	public function uninstall()
 	{
-		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners_clics()));
+		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners_clicks()));
 		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners()));
 		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners_advertisers()));
 		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners_positions()));
@@ -109,32 +109,32 @@ class Banners extends DAO
     /**
      * Add clic
      */
-    public function addClic($data)
+    public function addClick($data)
     {
-        return $this->dao->insert($this->getTable_banners_clics(), $data);
+        return $this->dao->insert($this->getTable_banners_clicks(), $data);
     }
 
 	/**
      * Delete clic
      */
-    public function deleteClicById($id)
+    public function deleteClickById($id)
     {
-        return $this->dao->delete($this->getTable_banners_clics(), array('pk_i_id' => $id));
+        return $this->dao->delete($this->getTable_banners_clicks(), array('pk_i_id' => $id));
     }
 
 
 	/**
-     * Get all clics of a specific banner
+     * Get all clicks of a specific banner
      *
      * @access public
      * @since unknown
      * @param int $bannerId
      * @return array
      */
-    public function getClicsByBannerId($bannerId)
+    public function getClicksByBannerId($bannerId)
     {
         $this->dao->select('*');
-        $this->dao->from($this->getTable_banners_clics());
+        $this->dao->from($this->getTable_banners_clicks());
         $this->dao->where('fk_i_banner_id', $bannerId);
         $result = $this->dao->get();
         if($result) {
@@ -144,17 +144,17 @@ class Banners extends DAO
     }
 
 	/**
-	 * Count clics a banner
+	 * Count clicks a banner
 	 *
 	 * @access public
 	 * @since unknown
 	 * @param int $bannerId
 	 * @return int
 	 */
-	public function countClicsByBannerId($bannerId)
+	public function countClicksByBannerId($bannerId)
 	{
 		$this->dao->select('COUNT(*) as total') ;
-		$this->dao->from($this->getTable_banners_clics());
+		$this->dao->from($this->getTable_banners_clicks());
 		$this->dao->where('fk_i_banner_id', $bannerId);
 		$result = $this->dao->get();
 		if($result) {
@@ -905,7 +905,7 @@ class Banners extends DAO
 	/**
      * deleteBanner: Delete banner by it's ID
      *
-     * Notes: Firts delete all her clics; delete banner file if exist!
+     * Notes: Firts delete all her clicks; delete banner file if exist!
      *
      * @access public
      * @since unknown
@@ -914,18 +914,18 @@ class Banners extends DAO
      */
     public function delete($id)
     {
-        $clics = $this->getClicsByBannerId($id);
-        if ($clics) {
-            foreach ($clics as $clic) {
-                $this->deleteClicById($clic['pk_i_id']);
+        $clicks = $this->getClicksByBannerId($id);
+        if ($clicks) {
+            foreach ($clicks as $click) {
+                $this->deleteClickById($click['pk_i_id']);
             }
         }
 
     	$banner = $this->getById($id);
 
         $banner = BANNERS_FOLDER_SOURCES . $banner['s_name'].'.'.$banner['s_extension'];
-        if (getimagesize($banner) === true) {
-            unlink($banner);
+        if (image_exists($banner) === true) {
+            @unlink($banner);
         }
         return $this->dao->delete($this->getTable_banners(), array('pk_i_id' => $id));
     }

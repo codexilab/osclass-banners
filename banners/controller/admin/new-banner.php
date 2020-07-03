@@ -94,7 +94,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 						if ($data['s_script'] == "") {
 							osc_add_flash_error_message(__('The banner script cannot be empty.', BANNERS_PREF), 'admin');            
 						} else {
-							#unset($data['s_name']);
+							if ($bannerToUpdate) $data['s_name'] = $bannerToUpdate['s_name']; #unset($data['s_name']);
 							unset($data['s_content_type']);
 							unset($data['s_extension']);
 							if (Params::getParam('s_url') == "") $data['s_url'] = "";

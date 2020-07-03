@@ -137,12 +137,12 @@ input[type="text"].bg-text-gray {
 
                 <div class="form-row">
                     <div class="form-label"><?php _e("Since", BANNERS_PREF); ?></div>
-                    <div class="form-controls"><input id="dt_since_date" type="text" class="xlarge" name="dt_since_date" value="<?php if (isset($bannerToUpdate['dt_since_date'])) echo $bannerToUpdate['dt_since_date']; ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>"></div>
+                    <div class="form-controls"><input id="dt_since_date" type="text" class="xlarge" name="dt_since_date" value="<?php if (isset($bannerToUpdate['dt_since_date'])) echo $bannerToUpdate['dt_since_date']; ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>" autocomplete="off"></div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-label"><?php _e("Until", BANNERS_PREF); ?></div>
-                    <div class="form-controls"><input id="dt_until_date" type="text" class="xlarge" name="dt_until_date" value="<?php if (isset($bannerToUpdate['dt_until_date'])) echo $bannerToUpdate['dt_until_date']; ?>" placeholder="<?php echo todaydate(1, 'month', '00:00:00'); ?>"></div>
+                    <div class="form-controls"><input id="dt_until_date" type="text" class="xlarge" name="dt_until_date" value="<?php if (isset($bannerToUpdate['dt_until_date'])) echo $bannerToUpdate['dt_until_date']; ?>" placeholder="<?php echo todaydate(1, 'month', '00:00:00'); ?>" autocomplete="off"></div>
                 </div>
 
                 <div class="form-row">
@@ -188,12 +188,26 @@ input[type="text"].bg-text-gray {
                 		</fieldset>
                 	</div>
                 </div>
+
+                <?php if ($bannerToUpdate && isset($bannerToUpdate['pk_i_id'])) : ?>
+                <div class="form-row">
+                	<div class="form-label"><?php _e("Clicks", BANNERS_PREF); ?></div>
+                	<div class="form-controls">
+                		<div class="select-box undefined">
+                			<div class="form-label-checkbox"><?php echo Banners::newInstance()->countClicksByBannerId($bannerToUpdate['pk_i_id']); ?></div>
+                		</div>
+                	</div>
+                </div>
+            	<?php endif; ?>
 			</div>
 
 			<div class="clear"></div>
 
 			<div class="form-actions">
 				<a class="btn" href="<?php echo adminReturnBack('banners-admin-advertisers'); ?>"><?php _e('Cancel and go back', BANNERS_PREF); ?></a>
+				<?php if ($bannerToUpdate && isset($bannerToUpdate['pk_i_id'])) : ?>
+				<a class="btn btn-red" href="#" onclick="delete_dialog(<?php echo $bannerToUpdate['pk_i_id']; ?>);return false;"><?php _e('Delete', BANNERS_PREF); ?></a>
+				<?php endif; ?>
 				<input type="submit" value="<?php echo ($bannerToUpdate) ? __("Update banner", BANNERS_PREF) : __("Add new banner", BANNERS_PREF); ?>" class="btn btn-submit">
 			</div>
 
@@ -214,6 +228,27 @@ input[type="text"].bg-text-gray {
         </div>
     </div>
 </div>
+
+<!-- Dialog when it want delete a banner -->
+<form id="dialog-banner-delete" method="get" action="<?php echo osc_route_admin_url(true); ?>" class="has-form-actions hide" title="<?php echo osc_esc_html(__('Delete banner', BANNERS_PREF)); ?>">
+    <input type="hidden" name="page" value="plugins" />
+    <input type="hidden" name="action" value="renderplugin" />
+    <input type="hidden" name="route" value="banners-admin" />
+    <input type="hidden" name="plugin_action" value="delete" />
+    <input type="hidden" name="id[]" value="" />
+
+    <div class="form-horizontal">
+        <div class="form-row">
+            <?php _e('Are you sure you want to delete this banner?', BANNERS_PREF); ?>
+        </div>
+        <div class="form-actions">
+            <div class="wrapper">
+            <a class="btn" href="javascript:void(0);" onclick="$('#dialog-banner-delete').dialog('close');"><?php _e('Cancel', BANNERS_PREF); ?></a>
+            <input id="banner-delete-submit" type="submit" value="<?php echo osc_esc_html( __('Delete', BANNERS_PREF) ); ?>" class="btn btn-red" />
+            </div>
+        </div>
+    </div>
+</form>
 
 <script>
 $(document).ready(function() {
@@ -243,7 +278,7 @@ $(document).ready(function() {
         dateFormat: 'yy-mm-dd'
     });
 
-    /*
+    /**
      * jQuery get selected option value (text and attribute 'value') 
      * From: https://stackoverflow.com/questions/13089944/jquery-get-selected-option-value-not-the-text-but-the-attribute-value 
      */
@@ -272,6 +307,12 @@ $(document).ready(function() {
         title: '<?php echo osc_esc_js( __('Show banner', BANNERS_PREF) ); ?>'
     });
 <?php endif; ?>
+
+	// dialog delete
+	$("#dialog-banner-delete").dialog({
+		autoOpen: false,
+		modal: true
+	});
 });
 
 <?php if ($bannerToUpdate && file_exists(BANNERS_FOLDER_SOURCES.$bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension'])) : ?>
@@ -280,4 +321,11 @@ function show_banner(img) {
     $('#show-banner').dialog('open');
 };
 <?php endif; ?>
+
+// dialog delete function
+function delete_dialog(item_id) {
+    $("#dialog-banner-delete input[name='id[]']").attr('value', item_id);
+    $("#dialog-banner-delete").dialog('open');
+    return false;
+}
 </script>

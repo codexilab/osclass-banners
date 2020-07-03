@@ -42,13 +42,26 @@ $positionToUpdate = __get('positionToUpdate');
     <div class="form-row text-center" id="show-calendar-content"></div>
     <?php endif; ?>
 
+    <div class="form-row center">
+        <label><strong><?php _e("PHP code:", BANNERS_PREF); ?></strong></label>
+        <input type="text" class="xlarge" value="&lt;?php osc_run_hook('banners_position_<?php if (isset($positionToUpdate['i_sort_id'])) echo $positionToUpdate['i_sort_id']; ?>'); ?&gt;" disabled><br />
+        <?php _e("Put this script into the theme.", BANNERS_PREF); ?>
+    </div>
+
     <div class="form-actions">
         <div class="wrapper">
-            <a class="btn btn-mini" href="javascript:void(0);" onclick="$('#modal-300px').dialog('close'); clean_modal();"><?php _e('Close') ?></a>
+            <a class="btn btn-mini button-close" href="javascript:void(0);" onclick="$('#modal-300px').dialog('close'); clean_modal();"><?php _e('Close') ?></a>
             <input type="submit" value="<?php ((!$positionToUpdate) ? _e('Add position') : _e('Save change')); ?>" class="btn btn-mini btn-submit">
             <?php if ($positionToUpdate) : ?>
             <a href="#" onclick="delete_position(<?php if (isset($positionToUpdate['pk_i_id'])) echo $positionToUpdate['pk_i_id']; ?>);return false;" class="btn btn-mini btn-red"><?php _e('Delete'); ?></a>
             <?php endif; ?>
         </div>
-    </div>        
+    </div>
 </div>
+
+<script>
+// Clean iframe after click on x icon to close dialog
+$(".ui-dialog-titlebar-close").click(function() {
+    $(".has-form-actions").html('');
+});
+</script>

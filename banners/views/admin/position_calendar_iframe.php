@@ -24,7 +24,7 @@
      * SOFTWARE.
      */
 
-// Params obtained from ajax.php page=ajax&action=runhook&hook=custom_plugin_requests&route=position_calendar_iframe&position=5&month=
+// Params obtained from ajax.php page=ajax&action=runhook&hook=custom_plugin_requests&route=position_calendar_iframe&position=5&month=2020-09
 $positionId    = __get('positionId');   // Position ID
 $banners       = __get('banners');      // Array of banners by it's ID position
 $month         = __get('month');        // If no month has been selected, we put the current and the year: date("Y-m")

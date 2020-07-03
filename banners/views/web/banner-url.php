@@ -14,7 +14,7 @@ if ($banner) {
 		's_ip' 				=> Params::getServerParam('REMOTE_ADDR'),
 		'dt_date' 			=> todaydate()
 	);
-	Banners::newInstance()->addClic($data);
+	Banners::newInstance()->addClick($data);
 	$url = $banner['s_url'];
 }
 

@@ -244,10 +244,12 @@ osc_show_pagination_admin($aData);
     					<div class="form-row">
     						<div class="form-label"><?php _e('Position', BANNERS_PREF); ?></div>
     						<div class="form-controls">
-    							<option value="" <?php echo ( (Params::getParam('positionId') == '') ? 'selected="selected"' : '' )?>><?php _e('Choose position', BANNERS_PREF); ?></option>
-    							<?php foreach ($positions as $position) : ?>
-    							<option value="<?php echo $position['pk_i_id']; ?>" <?php echo get_html_selected(Params::getParam('positionId'), $position['pk_i_id']); ?>><?php echo $position['i_sort_id']; ?></option>
-    							<?php endforeach; ?>
+    							<select name="positionId">
+    								<option value="" <?php echo ( (Params::getParam('positionId') == '') ? 'selected="selected"' : '' ); ?>><?php _e('Choose position', BANNERS_PREF); ?></option>
+    								<?php foreach ($positions as $position) : ?>
+    								<option value="<?php echo $position['pk_i_id']; ?>" <?php echo get_html_selected(Params::getParam('positionId'), $position['pk_i_id']); ?>><?php echo $position['i_sort_id']; ?></option>
+    								<?php endforeach; ?>
+    							</select>
     						</div>
     					</div>
     				<?php endif; ?>
@@ -491,6 +493,12 @@ $(document).ready(function() {
 function show_banner(img) {
 	$('#image_banner').prop('src', img);
 	$('#show-banner').dialog('open');
+};
+
+// Note: this function can be moved to modals_form_options
+function show_position(id = null, year = null, month = null) {
+    $("#modal-300px").html('<div id="show-calendar-content" class="text-center"></div>'); show_calendar(id, year, month);
+    $('#modal-300px').dialog('open');
 };
 
 // dialog delete function
