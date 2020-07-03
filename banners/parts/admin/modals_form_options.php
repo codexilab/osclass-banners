@@ -47,7 +47,7 @@
 	        autoOpen: false,
 	        width: "300px",
 	        modal: true,
-	        title: '<?php echo osc_esc_js( __('Add position', BANNERS_PREF) ); ?>'
+	        title: '<?php echo osc_esc_js( __('Setting position', BANNERS_PREF) ); ?>'
 	    });
 	});
 
@@ -94,9 +94,9 @@
 
     function show_calendar(id, year = null, month = null) {
     	$("#show-calendar-content").html('<div class="text-center">Loading...</div>');
-        if (!year && !month) {
-            var year = '<?php echo date("Y"); ?>';
-            var month = '<?php echo date("m"); ?>';
+        if (year == null && month == null) {
+            var year    = '<?php echo date("Y"); ?>';
+            var month   = '<?php echo date("m"); ?>';
         }
         var url = '<?php echo osc_base_url(); ?>index.php?page=ajax&action=runhook&hook=banners_controller_requests&route=position_calendar_iframe&position='+id+'&month='+year+'-'+month;
         $.ajax({
