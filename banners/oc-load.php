@@ -28,6 +28,7 @@ require_once BANNERS_PATH . "model/Banners.php";
 
 // Helpers
 require_once BANNERS_PATH . "helpers/hUtils.php";
+require_once BANNERS_PATH . "helpers/hBanners.php";
 
 // Controllers
 require_once BANNERS_PATH . "controller/admin/positions.php";
@@ -35,7 +36,6 @@ require_once BANNERS_PATH . "controller/admin/advertisers.php";
 require_once BANNERS_PATH . "controller/admin/banners.php";
 require_once BANNERS_PATH . "controller/admin/new-banner.php";
 require_once BANNERS_PATH . "controller/admin/settings.php";
-require_once BANNERS_PATH . "controller/web/banner-url.php";
 
 // Ajax
 require_once BANNERS_PATH . "ajax/ajax.php";
