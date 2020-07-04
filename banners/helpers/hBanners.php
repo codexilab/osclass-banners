@@ -119,7 +119,7 @@ if (!function_exists('get_banner_route')) {
  * $banners1 = banners_position_sort(1, osc_item_category_id()); Show banner of position 1 in determinated category of a item.
  * $banners2 = banners_position_sort(3, 'all'); Show banner of position 3 in all categories.
  * 
- *  if (isset($banners1) && $banners1) {
+ *  if ($banners1) {
  *      if ($banners1['type']) {
  *          echo "<a href=\"".$banners1['url']."\" target=\"_blank\"><img ".$banners1['attrs']." /></a>";
  *      } else {
@@ -127,7 +127,7 @@ if (!function_exists('get_banner_route')) {
  *      }
  *  }
  * 
- *  if (isset($banners2) && $banners2) {
+ *  if ($banners2) {
  *      if ($banners2['type']) {
  *          echo "<a href=\"".$banners2['url']."\" target=\"_blank\"><img ".$banners2['attrs']." /></a>";
  *      } else {

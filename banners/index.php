@@ -192,7 +192,7 @@ foreach ($positions as $pos) {
     osc_add_hook('banners_position_'.$sort, function() use ($sort) {
 
         $banner = banners_position_sort($sort, osc_item_category_id());
-        if (isset($banner) && $banner) {
+        if ($banner) {
             if ($banner['type']) {
                 echo "<a href=\"".$banner['url']."\" target=\"_blank\"><img ".$banner['attrs']." /></a>";
             } else {
