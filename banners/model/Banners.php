@@ -64,7 +64,7 @@ class Banners extends DAO
 
 	public function getTable_banners_clicks()
 	{
-		return DB_TABLE_PREFIX.'t_banners_clics';
+		return DB_TABLE_PREFIX.'t_banners_clicks';
 	}
 
 	/**

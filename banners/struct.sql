@@ -43,7 +43,7 @@ CREATE TABLE /*TABLE_PREFIX*/t_banners (
 	FOREIGN KEY (fk_i_position_id) REFERENCES /*TABLE_PREFIX*/t_banners_positions (pk_i_id)
 )	ENGINE=InnoDB DEFAULT CHARACTER SET 'UTF8' COLLATE 'UTF8_GENERAL_CI';
 
-CREATE TABLE /*TABLE_PREFIX*/t_banners_clics (
+CREATE TABLE /*TABLE_PREFIX*/t_banners_clicks (
 	pk_i_id INT NOT NULL AUTO_INCREMENT,
 	fk_i_banner_id INT NULL,
 	s_ip VARCHAR(64) NOT NULL DEFAULT '',
