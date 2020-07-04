@@ -47,7 +47,7 @@ require_once BANNERS_PATH . "oc-load.php";
 
 // URL routes
 osc_add_route('banners-admin', BANNERS_FOLDER.'views/admin/banners', BANNERS_FOLDER.'views/admin/banners', BANNERS_FOLDER.'views/admin/banners.php');
-osc_add_route('banners-admin-new', BANNERS_FOLDER.'views/admin/new-banner', BANNERS_FOLDER.'views/admin/new-banner', BANNERS_FOLDER.'views/admin/new-banner.php');
+osc_add_route('banners-admin-set', BANNERS_FOLDER.'views/admin/set-banner', BANNERS_FOLDER.'views/admin/set-banner', BANNERS_FOLDER.'views/admin/set-banner.php');
 osc_add_route('banners-admin-advertisers', BANNERS_FOLDER.'views/admin/advertisers', BANNERS_FOLDER.'views/admin/advertisers', BANNERS_FOLDER.'views/admin/advertisers.php');
 osc_add_route('banners-admin-positions', BANNERS_FOLDER.'views/admin/positions', BANNERS_FOLDER.'views/admin/positions', BANNERS_FOLDER.'views/admin/positions.php');
 osc_add_route('banners-admin-settings', BANNERS_FOLDER.'views/admin/settings', BANNERS_FOLDER.'views/admin/settings', BANNERS_FOLDER.'views/admin/settings.php');
@@ -94,7 +94,7 @@ function banners_admin_controllers() {
             $do->doModel();
 			break;
 
-		case 'banners-admin-new':
+		case 'banners-admin-set':
 			$filter = function($string) {
                 return __("Banners", BANNERS_PREF);
             };

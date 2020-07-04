@@ -39,10 +39,10 @@ input[type="text"].bg-text-gray {
 
 <?php banners_admin_menu(); ?>
 
-<form id="dialog-new" method="post" action="<?php echo osc_route_admin_url('banners-admin-new'); if ($bannerToUpdate) echo '&banner='.$bannerToUpdate['pk_i_id']; ?>" enctype="multipart/form-data">
+<form id="dialog-new" method="post" action="<?php echo osc_route_admin_url('banners-admin-set'); if ($bannerToUpdate) echo '&banner='.$bannerToUpdate['pk_i_id']; ?>" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="plugins" />
 	<input type="hidden" name="action" value="renderplugin" />
-	<input type="hidden" name="route" value="banners-admin-new" />
+	<input type="hidden" name="route" value="banners-admin-set" />
 	<input type="hidden" name="plugin_action" value="new_banner" />
 
 	<div class="form-horizontal">
@@ -80,7 +80,7 @@ input[type="text"].bg-text-gray {
 								<?php if ($positions) : ?>
 								<select name="fk_i_position_id" id="fk_i_position_id" style="opacity: 0;">
 									<?php foreach($positions as $position) : ?>
-									<option value="<?php echo $position['pk_i_id']; ?>" <?php if (isset($bannerToUpdate['fk_i_position_id'])) echo get_html_selected($bannerToUpdate['fk_i_position_id'], $position['pk_i_id']); ?>><?php echo $position['i_sort_id']; ?></option>
+									<option value="<?php echo $position['pk_i_id']; ?>" <?php if (isset($bannerToUpdate['fk_i_position_id'])) echo get_html_selected($bannerToUpdate['fk_i_position_id'], $position['pk_i_id']); ?>><?php echo $position['i_sort_id']; ?> <?php if ($position['s_title'] !== '') echo ' - '.$position['s_title']; ?></option>
 									<?php endforeach; ?>
 								</select>
 								<?php endif; ?>
@@ -286,7 +286,7 @@ $(document).ready(function() {
     // Ways to retrieve selected option and text outside handler
 	var positionId 		= $('#fk_i_position_id option').filter(':selected').val(); 	//console.log('Selected option value ' + positionId); 
 	var positionSort 	= $('#fk_i_position_id option').filter(':selected').text(); //console.log('Selected option text ' + positionSort);
-	show_calendar(positionId);
+	if (positionId > 0) show_calendar(positionId);
 
 	$('#fk_i_position_id').on('change', function () {
 		// Ways to retrieve selected option and text outside handler

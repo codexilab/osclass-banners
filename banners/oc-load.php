@@ -34,7 +34,7 @@ require_once BANNERS_PATH . "helpers/hBanners.php";
 require_once BANNERS_PATH . "controller/admin/positions.php";
 require_once BANNERS_PATH . "controller/admin/advertisers.php";
 require_once BANNERS_PATH . "controller/admin/banners.php";
-require_once BANNERS_PATH . "controller/admin/new-banner.php";
+require_once BANNERS_PATH . "controller/admin/set-banner.php";
 require_once BANNERS_PATH . "controller/admin/settings.php";
 
 // Ajax
