@@ -48,6 +48,9 @@ class CAdminBannersNew extends AdminSecBaseModel
 					's_category'            => (Params::getParam('all_categories')) ? 'all' : implode(',', Params::getParam('s_category')),
 					's_url'                 => setURL(Params::getParam('s_url')),
 					's_name'                => osc_genRandomPassword(),
+					's_title' 				=> Params::getParam('s_title'),
+					's_alt' 				=> Params::getParam('s_alt'),
+					's_css_class' 			=> Params::getParam('s_css_class'),
 					's_content_type'        => (!$banner['type'] && $bannerToUpdate) ? $bannerToUpdate['s_content_type'] : $banner['type'], // image/gif image/jpg image/png
 					's_extension'           => $banner['mime'], // png jpg gif
 					's_script'              => $_POST['s_script'],

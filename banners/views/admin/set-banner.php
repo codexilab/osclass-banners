@@ -113,16 +113,22 @@ input[type="text"].bg-text-gray {
 				</div>
 
 				<div class="form-row">
+                    <div class="form-label"><?php _e("URL", BANNERS_PREF); ?></div>
+                    <div class="form-controls"><input type="text" class="xlarge" name="s_url" value="<?php if ($bannerToUpdate && isset($bannerToUpdate['s_url']) && $bannerToUpdate['s_url']) echo $bannerToUpdate['s_url']; ?>"></div>
+                </div>
+
+				<div class="form-row">
 					<div class="form-label"><?php _e("Banner", BANNERS_PREF); ?></div>
 					<div class="form-controls">
 						<div class="form-label-checkbox">
-							<label><input id="bannertype" name="b_image" type="radio" <?php if ($bannerToUpdate && isset($bannerToUpdate['b_image']) && $bannerToUpdate['b_image'] || !$bannerToUpdate) echo 'checked="checked"'; ?> value="1"><?php _e("Image", BANNERS_PREF); ?></label> <label><input id="bannertype" name="b_image" type="radio" <?php if ($bannerToUpdate && isset($bannerToUpdate['b_image']) && !$bannerToUpdate['b_image']) echo 'checked="checked"'; ?> value="0"><?php _e("Script", BANNERS_PREF); ?></label>
+							<label><input name="b_image" type="radio" <?php if ($bannerToUpdate && isset($bannerToUpdate['b_image']) && $bannerToUpdate['b_image'] || !$bannerToUpdate) echo 'checked="checked"'; ?> value="1"><?php _e("Image", BANNERS_PREF); ?></label> 
+							<label><input name="b_image" type="radio" <?php if ($bannerToUpdate && isset($bannerToUpdate['b_image']) && !$bannerToUpdate['b_image']) echo 'checked="checked"'; ?> value="0"><?php _e("Script", BANNERS_PREF); ?></label>
 						</div>
-						<div id="bannertype1" class="desc" <?php if ($bannerToUpdate && isset($bannerToUpdate['b_image']) && $bannerToUpdate['b_image'] <= 0) echo 'style="display: none;"'; ?>>
+						<div class="desc bannertype1" <?php if ($bannerToUpdate && isset($bannerToUpdate['b_image']) && $bannerToUpdate['b_image'] <= 0) echo 'style="display: none;"'; ?>>
                             <input type="file" name="banner" id="banner" /> 
                             <?php if ($bannerToUpdate && isset($bannerToUpdate['s_name']) && isset($bannerToUpdate['s_extension'])) echo '<a href="#" onclick="show_banner(\''.BANNERS_ROUTE_SOURCES.$bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension'].'\');return false;">'.__("View", BANNERS_PREF).'</a>'; ?>
                         </div>
-                        <div id="bannertype0" class="desc" <?php if (!$bannerToUpdate || $bannerToUpdate && isset($bannerToUpdate['b_image']) && $bannerToUpdate['b_image'] >= 1) echo 'style="display: none;"'; ?>>
+                        <div class="desc bannertype0" <?php if (!$bannerToUpdate || $bannerToUpdate && isset($bannerToUpdate['b_image']) && $bannerToUpdate['b_image'] >= 1) echo 'style="display: none;"'; ?>>
                             <textarea name="s_script"><?php if ($bannerToUpdate && isset($bannerToUpdate['s_script'])) : ?><?php echo htmlentities($bannerToUpdate['s_script']); ?><?php else: ?><?php echo htmlentities('<a href="{URL}">'.__("Click me!", BANNERS_PREF).'</a>'); ?><?php endif; ?></textarea>
                             <br>
                             <strong><?php _e("Optional:", BANNERS_PREF); ?></strong> <?php _e("You can use {URL} tag to count clicks from URL field if you wish.", BANNERS_PREF); ?>
@@ -130,9 +136,19 @@ input[type="text"].bg-text-gray {
 					</div>
 				</div>
 
-				<div class="form-row">
-                    <div class="form-label"><?php _e("URL", BANNERS_PREF); ?></div>
-                    <div class="form-controls"><input type="text" class="xlarge" name="s_url" value="<?php if ($bannerToUpdate && isset($bannerToUpdate['s_url']) && $bannerToUpdate['s_url']) echo $bannerToUpdate['s_url']; ?>"></div>
+                <div class="form-row desc bannertype1" <?php if ($bannerToUpdate && isset($bannerToUpdate['b_image']) && $bannerToUpdate['b_image'] <= 0) echo 'style="display: none;"'; ?>>
+                    <div class="form-label"><?php _e("Title", BANNERS_PREF); ?></div>
+                    <div class="form-controls"><input type="text" class="xlarge" name="s_title" value="<?php if ($bannerToUpdate && isset($bannerToUpdate['s_title']) && $bannerToUpdate['s_title']) echo $bannerToUpdate['s_title']; ?>"></div>
+                </div>
+
+                <div class="form-row desc bannertype1" <?php if ($bannerToUpdate && isset($bannerToUpdate['b_image']) && $bannerToUpdate['b_image'] <= 0) echo 'style="display: none;"'; ?>>
+                    <div class="form-label"><?php _e("Alt", BANNERS_PREF); ?></div>
+                    <div class="form-controls"><input type="text" class="xlarge" name="s_alt" value="<?php if ($bannerToUpdate && isset($bannerToUpdate['s_alt']) && $bannerToUpdate['s_alt']) echo $bannerToUpdate['s_alt']; ?>"></div>
+                </div>
+
+                <div class="form-row desc bannertype1" <?php if ($bannerToUpdate && isset($bannerToUpdate['b_image']) && $bannerToUpdate['b_image'] <= 0) echo 'style="display: none;"'; ?>>
+                    <div class="form-label"><?php _e("CSS Class", BANNERS_PREF); ?></div>
+                    <div class="form-controls"><input type="text" class="xlarge" name="s_css_class" value="<?php if ($bannerToUpdate && isset($bannerToUpdate['s_css_class']) && $bannerToUpdate['s_css_class']) echo $bannerToUpdate['s_css_class']; ?>"></div>
                 </div>
 
                 <div class="form-row">
@@ -268,7 +284,7 @@ $(document).ready(function() {
     $("input[name$='b_image']").click(function() {
         var test = $(this).val();
         $("div.desc").hide();
-        $("#bannertype"+test).show();
+        $(".bannertype"+test).show();
     });
 
     $('#dt_since_date').datepicker({
