@@ -35,6 +35,8 @@ input[type="text"].bg-text-gray {
 
 <?php // banners_admin_menu(); ?>
 
+<?php if (!$advertiserToUpdate) : ?><h2 class="render-title"><?php _e("Add new advertiser", BANNERS_PREF); ?></h2><?php endif; ?>
+
 <!--<form id="new-advertiser" method="post" action="" class="has-form-actions hide">-->
     <input type="hidden" name="page" value="plugins" />
     <input type="hidden" name="action" value="renderplugin" />
@@ -63,7 +65,7 @@ input[type="text"].bg-text-gray {
         </div>
         <div class="form-actions">
             <div class="wrapper">
-                <a class="btn button-close" href="javascript:void(0);" onclick="$('#modal-500px').dialog('close'); clean_modal();"><?php _e('Cancel', BANNERS_PREF); ?></a>
+                <a class="btn button-close" href="javascript:void(0);" onclick="$('#modal-500px').dialog('close');"><?php _e('Cancel', BANNERS_PREF); ?></a>
                 <input type="submit" value="<?php echo ($advertiserToUpdate) ? __('Update advertiser', BANNERS_PREF) : __('Add new advertiser', BANNERS_PREF); ?>" class="btn btn-submit">
             </div>
         </div>
@@ -107,11 +109,6 @@ $(document).ready(function() {
         $('#fAdv').attr('disabled', false).removeClass('bg-text-gray');
         $('#cAdv').addClass('hide');
         $('#fAdvId').val('');
-    });
-
-    // Clean iframe after click on x icon to close dialog
-    $(".ui-dialog-titlebar-close").click(function() {
-        $(".has-form-actions").html('');
     });
 });
 </script>

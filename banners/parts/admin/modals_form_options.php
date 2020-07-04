@@ -26,13 +26,9 @@
 
 ?>
 
-<form id="modal-500px" method="post" action="" class="has-form-actions hide">
-	Loading...
-</form>
+<form id="modal-500px" method="post" action="" class="has-form-actions hide"></form>
 
-<form id="modal-300px" method="post" action="" class="has-form-actions hide">
-	Loading...
-</form>
+<form id="modal-300px" method="post" action="" class="has-form-actions hide"></form>
 
 <script>
 	$(document).ready(function() {
@@ -40,22 +36,25 @@
 	        autoOpen: false,
 	        width: "500px",
 	        modal: true,
-	        title: '<?php echo osc_esc_js( __('Add new advertiser', BANNERS_PREF) ); ?>'
+	        title: '<?php echo osc_esc_js( __('Banners', BANNERS_PREF) ); ?>',
+            position: "top"
 	    });
 
 	    $("#modal-300px").dialog({
 	        autoOpen: false,
 	        width: "300px",
 	        modal: true,
-	        title: '<?php echo osc_esc_js( __('Setting position', BANNERS_PREF) ); ?>'
+	        title: '<?php echo osc_esc_js( __('Banners', BANNERS_PREF) ); ?>',
+            position: "top"
 	    });
 	});
 
-	function clean_modal() {
-		$(".has-form-actions").html('');
+	function loading_modal() {
+		return '<div class="text-center">Loading...</div>';
 	}
 
 	function set_advertiser(advertiser_id = null) {
+        $("#modal-500px").html(loading_modal());
         $('#modal-500px').dialog('open');
         var url = '<?php echo osc_base_url(); ?>index.php?page=ajax&action=runhook&hook=banners_controller_requests&route=set_advertiser_iframe&id='+advertiser_id;
         $.ajax({
@@ -68,14 +67,16 @@
 	};
 
 	function set_position(id = null) {
-	    $('#modal-300px').dialog('open');
+        var modal = (id == null) ? '#modal-300px' : '#modal-500px';
+        $(modal).html(loading_modal());
+	    $(modal).dialog('open');
 	    var url = '<?php echo osc_base_url(); ?>index.php?page=ajax&action=runhook&hook=banners_controller_requests&route=set_position_iframe&id='+id;
         $.ajax({
             method: "GET",
             url: url,
             dataType: "html"
         }).done(function(data) {
-            $("#modal-300px").html(data);
+            $(modal).html(data);
         });
 	};
 
@@ -93,7 +94,7 @@
     };
 
     function show_calendar(id, year = null, month = null) {
-    	$("#show-calendar-content").html('<div class="text-center">Loading...</div>');
+    	$("#show-calendar-content").html(loading_modal());
         if (year == null && month == null) {
             var year    = '<?php echo date("Y"); ?>';
             var month   = '<?php echo date("m"); ?>';

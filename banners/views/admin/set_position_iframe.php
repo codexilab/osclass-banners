@@ -27,6 +27,10 @@
 $positionToUpdate = __get('positionToUpdate');
 ?>
 
+<?php if (!$positionToUpdate) : ?>
+<div class="text-right"><h2 class="render-title"><?php _e("Add new position", BANNERS_PREF); ?></h2></div>
+<?php endif; ?>
+
 <input type="hidden" name="page" value="plugins" />
 <input type="hidden" name="action" value="renderplugin" />
 <input type="hidden" name="route" value="banners-admin-positions" />
@@ -34,23 +38,37 @@ $positionToUpdate = __get('positionToUpdate');
 <input type="hidden" name="position_id" id="position_id" value="<?php if (isset($positionToUpdate['pk_i_id'])) echo $positionToUpdate['pk_i_id']; ?>" />
 
 <div class="form-horizontal">
-    <div class="form-row text-center">
-        <label><?php _e("Sort number:", BANNERS_PREF); ?> <input type="text" class="input-small" name="i_sort_id" value="<?php if (isset($positionToUpdate['i_sort_id'])) echo $positionToUpdate['i_sort_id']; ?>"></label>
-    </div>
+    <div class="grid-system">
+        <div class="grid-row grid-50">
+            <div class="form-row">
+                <label><?php _e("Title", BANNERS_PREF); ?> <input type="text" class="xlarge" name="s_title" value="<?php if (isset($positionToUpdate['s_title'])) echo $positionToUpdate['s_title']; ?>"></label>
+            </div>
+
+            <div class="form-row">
+                <label><?php _e("Sort number", BANNERS_PREF); ?> <input type="text" class="input-small" name="i_sort_id" value="<?php if (isset($positionToUpdate['i_sort_id'])) echo $positionToUpdate['i_sort_id']; ?>"></label>
+            </div>
+        </div>
+
+        <?php if ($positionToUpdate) : ?>
+        <div class="grid-row grid-50 text-left">
+            <div class="form-row text-center" id="show-calendar-content"></div>
+        </div>
+        <?php endif; ?>
+    </div><!-- /.grid-system -->
+
+    <div class="clear"></div>
 
     <?php if ($positionToUpdate) : ?>
-    <div class="form-row text-center" id="show-calendar-content"></div>
-    <?php endif; ?>
-
     <div class="form-row center">
-        <label><strong><?php _e("PHP code:", BANNERS_PREF); ?></strong></label>
-        <input type="text" class="xlarge" value="&lt;?php osc_run_hook('banners_position_<?php if (isset($positionToUpdate['i_sort_id'])) echo $positionToUpdate['i_sort_id']; ?>'); ?&gt;" disabled><br />
+        <strong><?php _e("PHP code:", BANNERS_PREF); ?></strong>
+        <pre>&lt;?php osc_run_hook('banners_position_<?php if (isset($positionToUpdate['i_sort_id'])) echo $positionToUpdate['i_sort_id']; ?>'); ?&gt;</pre>
         <?php _e("Put this script into the theme.", BANNERS_PREF); ?>
     </div>
+    <?php endif; ?>
 
     <div class="form-actions">
         <div class="wrapper">
-            <a class="btn btn-mini button-close" href="javascript:void(0);" onclick="$('#modal-300px').dialog('close'); clean_modal();"><?php _e('Close') ?></a>
+            <a class="btn btn-mini button-close" href="javascript:void(0);" onclick="$('#modal-500px, #modal-300px').dialog('close');"><?php _e('Close') ?></a>
             <input type="submit" value="<?php ((!$positionToUpdate) ? _e('Add position') : _e('Save change')); ?>" class="btn btn-mini btn-submit">
             <?php if ($positionToUpdate) : ?>
             <a href="#" onclick="delete_position(<?php if (isset($positionToUpdate['pk_i_id'])) echo $positionToUpdate['pk_i_id']; ?>);return false;" class="btn btn-mini btn-red"><?php _e('Delete'); ?></a>
@@ -58,10 +76,3 @@ $positionToUpdate = __get('positionToUpdate');
         </div>
     </div>
 </div>
-
-<script>
-// Clean iframe after click on x icon to close dialog
-$(".ui-dialog-titlebar-close").click(function() {
-    $(".has-form-actions").html('');
-});
-</script>

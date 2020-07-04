@@ -41,7 +41,7 @@ $mimes 			= get_banner_mimes();
 <?php banners_admin_menu(); ?>
 
 <h2 class="render-title"><?php _e("Manage banners", BANNERS_PREF); ?>
-	<a href="<?php echo osc_route_admin_url('banners-admin-new'); ?>" class="btn btn-mini"><?php _e("Add new", BANNERS_PREF); ?></a>
+	<a href="<?php echo osc_route_admin_url('banners-admin-set'); ?>" class="btn btn-mini"><?php _e("Add new", BANNERS_PREF); ?></a>
 </h2>
 
 <!-- DataTable -->
@@ -247,7 +247,7 @@ osc_show_pagination_admin($aData);
     							<select name="positionId">
     								<option value="" <?php echo ( (Params::getParam('positionId') == '') ? 'selected="selected"' : '' ); ?>><?php _e('Choose position', BANNERS_PREF); ?></option>
     								<?php foreach ($positions as $position) : ?>
-    								<option value="<?php echo $position['pk_i_id']; ?>" <?php echo get_html_selected(Params::getParam('positionId'), $position['pk_i_id']); ?>><?php echo $position['i_sort_id']; ?></option>
+    								<option value="<?php echo $position['pk_i_id']; ?>" <?php echo get_html_selected(Params::getParam('positionId'), $position['pk_i_id']); ?>><?php echo $position['i_sort_id']; ?><?php if ($position['s_title'] !== '') echo ' - '.$position['s_title']; ?></option>
     								<?php endforeach; ?>
     							</select>
     						</div>

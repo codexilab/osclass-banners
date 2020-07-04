@@ -130,7 +130,7 @@
 					$options_more   = array();
 					$moreOptions 	= '';
 
-					$options[] = '<a href="'.osc_route_admin_url('banners-admin-new').'&banner='.$aRow['pk_i_id'].'">' . __("Edit", BANNERS_PREF) . '</a>';
+					$options[] = '<a href="'.osc_route_admin_url('banners-admin-set').'&banner='.$aRow['pk_i_id'].'">' . __("Edit", BANNERS_PREF) . '</a>';
 					$options[] = '<a href="#" onclick="delete_dialog('.$aRow['pk_i_id'].');return false;">' . __("Delete", BANNERS_PREF) . '</a></center>';
 
 					// more actions

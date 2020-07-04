@@ -25,9 +25,10 @@
      */
 
 // Params obtained from ajax.php page=ajax&action=runhook&hook=custom_plugin_requests&route=position_calendar_iframe&position=5&month=2020-09
-$positionId    = __get('positionId');   // Position ID
-$banners       = __get('banners');      // Array of banners by it's ID position
-$month         = __get('month');        // If no month has been selected, we put the current and the year: date("Y-m")
+$month         = __get('month');                       // If no month has been selected, we put the current and the year: date("Y-m")
+$positionId    = __get('positionId');                  // Position ID
+$position      = get_position_by_id($positionId);      // Position by its ID
+$banners       = get_banner_by_position($positionId);  // Array of banners by its ID position
 
 // For build the calendar
 $week = 1;
@@ -61,7 +62,7 @@ function check_values(&$value = null, $key = null) {
 }
 ?>
 
-<h2 class="render-title"><?php _e("Position", BANNERS_PREF); ?> <?php echo banners_sort_position($positionId); ?></h2>
+<h3 class="render-title"><?php _e("Position", BANNERS_PREF); ?> <?php if (isset($position['i_sort_id'])) echo $position['i_sort_id']; ?> <?php if (isset($position['s_title'])) echo ' - ' . $position['s_title']; ?></h3>
 
 <table class="table" cellpadding="0" cellspacing="0">
      <thead>

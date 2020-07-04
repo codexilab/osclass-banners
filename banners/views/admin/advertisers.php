@@ -35,7 +35,7 @@ $rows           = $aData['aRows'];
 
 <?php banners_admin_menu(); ?>
 
-<h2 class="render-title"><?php _e("Manage advertisers", BANNERS_PREF); ?></h2>
+<h2 class="render-title"><?php _e("Manage advertisers", BANNERS_PREF); ?> <a href="#" onclick="set_advertiser();return false;" class="btn btn-mini"><?php _e("Add new", BANNERS_PREF); ?></a></h2>
 
 <!-- DataTable -->
 <div class="relative">

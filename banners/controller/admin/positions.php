@@ -30,18 +30,29 @@ class CAdminBannersPositions extends AdminSecBaseModel
 {
 	public function doModel()
 	{
+		$positionId = Params::getParam('position_id');
+		$position 	= Banners::newInstance()->getPositionById($positionId);
+
 		switch (Params::getParam('plugin_action')) {
 			case 'set_position':
+				$validateSortNumber = false;
+				if ($position) {
+					if ($position['i_sort_id'] == Params::getParam('i_sort_id')) {
+						$validateSortNumber = true;
+					}
+				}
+
 				// If the fields are right
 				if (!Params::getParam('i_sort_id') || !is_numeric(Params::getParam('i_sort_id'))) {
 					osc_add_flash_error_message(__('Set number of position.', BANNERS_PREF), 'admin');
-				} elseif (Banners::newInstance()->getPositionBySortId(Params::getParam('i_sort_id'))) {
+				} elseif (!$validateSortNumber) {
 					osc_add_flash_error_message(__('This position already exist.', BANNERS_PREF), 'admin');
 				} else {
 					$data = array(
 						// If the field 'position_id' have value, proceed to update!
 						'pk_i_id'   => (Params::getParam('position_id') >= 1) ? Params::getParam('position_id') : false,
-						'i_sort_id' => Params::getParam('i_sort_id')
+						'i_sort_id' => Params::getParam('i_sort_id'),
+						's_title' 	=> Params::getParam('s_title')
 					);
 					if (Banners::newInstance()->setPosition($data)) {
 						osc_add_flash_ok_message(__('Position has been correctly placed.', BANNERS_PREF), 'admin');
@@ -52,13 +63,14 @@ class CAdminBannersPositions extends AdminSecBaseModel
 		        break;
 
 			case 'delete_position':
-				$positionId = Params::getParam('position_id');
-
-				// If exist banners using this position
-				if (Banners::newInstance()->getByPositionId($positionId)) {
-					osc_add_flash_error_message(__('The position can\'t be deleted, there are banners using it.', BANNERS_PREF), 'admin');
-				} else {
-					Banners::newInstance()->deletePositionById($positionId);
+				// If exist this position
+				if ($position) {
+					// If exist banners using this position
+					if (Banners::newInstance()->getByPositionId($position['pk_i_id'])) {
+						osc_add_flash_error_message(__('The position can\'t be deleted, there are banners using it.', BANNERS_PREF), 'admin');
+					} else {
+						Banners::newInstance()->deletePositionById($position['pk_i_id']);
+					}
 				}
 				ob_get_clean();
 				osc_redirect_to($_SERVER['HTTP_REFERER']);

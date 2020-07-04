@@ -1,5 +1,17 @@
 <?php
 /**
+ * Get the position.
+ *
+ * @param int $id
+ * @return array
+ */
+if (!function_exists('get_position_by_id')) {
+    function get_position_by_id($id) {
+        return Banners::newInstance()->getPositionById($id);
+    }
+}
+
+/**
  * Internal admin menu.
  *
  * @return string
@@ -38,7 +50,7 @@ function banners_route_param() {
  */
 if (!function_exists('banners_sort_position')) {
     function banners_sort_position($id) {
-        $position = Banners::newInstance()->getPositionById($id);
+        $position = get_position_by_id($id);
         return ($position) ? $position['i_sort_id'] : 0;
     }
 }
@@ -77,13 +89,27 @@ if (!function_exists('banners_count_total')) {
 }
 
 /**
+ * Get banner by position Id
+ *
+ * @param int $positionId
+ * @return array
+ */
+if (!function_exists('get_banner_by_position')) {
+    function get_banner_by_position($positionId) {
+        return Banners::newInstance()->getByPositionId($positionId);
+    }
+}
+
+/**
  * Build the full internal uri of redirect
  *
  * @return string
  */
-function get_banner_route($url) {
+if (!function_exists('get_banner_route')) {
+    function get_banner_route($url) {
     $r = (!osc_rewrite_enabled()) ? '&' : '?';
-    return osc_route_url(banners_route_page()).$r.banners_route_param().'='.$url;
+        return osc_route_url(banners_route_page()).$r.banners_route_param().'='.$url;
+    }
 }
 
 /**
@@ -119,7 +145,7 @@ function get_banner_route($url) {
 function get_banners_position($sort, $category = 'all') {
     $position = Banners::newInstance()->getPositionBySortId($sort);
     if ($position) {
-        $banners = Banners::newInstance()->getByPositionId($position['pk_i_id']);
+        $banners = get_banner_by_position($position['pk_i_id']);
         if ($banners) {
             foreach ($banners as $banner) {
                 $b = array();
