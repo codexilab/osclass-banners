@@ -1,4 +1,4 @@
-Bender Bootstrap pre-release 0.1-beta 2020-08-04
+Banners pre-release 0.1-beta 2020-08-04
 -------------------------
 - Banners can be added CSS class and other basic attributes
 - Positions may have a title for reference
