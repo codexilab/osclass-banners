@@ -39,9 +39,10 @@ $positionToUpdate = __get('positionToUpdate');
 
 <div class="form-horizontal">
     <div class="grid-system">
-        <div class="grid-row grid-50">
+        <div class="grid-row grid-<?php echo ($positionToUpdate) ? "50" : "100"; ?>">
             <div class="form-row">
-                <label><?php _e("Title", BANNERS_PREF); ?> <input type="text" class="xlarge" name="s_title" value="<?php if (isset($positionToUpdate['s_title'])) echo $positionToUpdate['s_title']; ?>"></label>
+                <?php _e("Title", BANNERS_PREF); ?>
+                <input type="text" class="xlarge" name="s_title" value="<?php if (isset($positionToUpdate['s_title'])) echo $positionToUpdate['s_title']; ?>">
             </div>
 
             <div class="form-row">

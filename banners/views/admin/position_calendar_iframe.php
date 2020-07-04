@@ -27,8 +27,8 @@
 // Params obtained from ajax.php page=ajax&action=runhook&hook=custom_plugin_requests&route=position_calendar_iframe&position=5&month=2020-09
 $month         = __get('month');                       // If no month has been selected, we put the current and the year: date("Y-m")
 $positionId    = __get('positionId');                  // Position ID
-$position      = get_position_by_id($positionId);      // Position by its ID
-$banners       = get_banner_by_position($positionId);  // Array of banners by its ID position
+$position      = position_by_id($positionId);      // Position by its ID
+$banners       = banners_by_position($positionId);  // Array of banners by its ID position
 
 // For build the calendar
 $week = 1;
@@ -91,7 +91,7 @@ function check_values(&$value = null, $key = null) {
           <?php foreach ($calendar as $days) : ?>
           <tr>
           <?php for ($i = 1; $i <= 7; $i++) : ?>
-               <?php for ($j=0; $j < count($intervals); $j++) : // Run intervals to be compared ?>
+               <?php for ($j = 0; $j < count($intervals); $j++) : // Run intervals to be compared ?>
                     <?php @$comp[$j] = in_array($month.'-'.$days[$i], array_column($intervals[$j], 'date')); ?>
                     <?php if ($comp[$j]) : ?>
                     <td style="background: <?php echo $intervals[$j]['color']; ?>; color: white">

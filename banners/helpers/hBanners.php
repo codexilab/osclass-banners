@@ -1,12 +1,12 @@
 <?php
 /**
- * Get the position.
+ * Get position by primary key ID.
  *
  * @param int $id
  * @return array
  */
-if (!function_exists('get_position_by_id')) {
-    function get_position_by_id($id) {
+if (!function_exists('position_by_id')) {
+    function position_by_id($id) {
         return Banners::newInstance()->getPositionById($id);
     }
 }
@@ -50,7 +50,7 @@ function banners_route_param() {
  */
 if (!function_exists('banners_sort_position')) {
     function banners_sort_position($id) {
-        $position = get_position_by_id($id);
+        $position = position_by_id($id);
         return ($position) ? $position['i_sort_id'] : 0;
     }
 }
@@ -89,13 +89,13 @@ if (!function_exists('banners_count_total')) {
 }
 
 /**
- * Get banner by position Id
+ * Get banners by position Id
  *
  * @param int $positionId
  * @return array
  */
-if (!function_exists('get_banner_by_position')) {
-    function get_banner_by_position($positionId) {
+if (!function_exists('banners_by_position')) {
+    function banners_by_position($positionId) {
         return Banners::newInstance()->getByPositionId($positionId);
     }
 }
@@ -116,12 +116,12 @@ if (!function_exists('get_banner_route')) {
  * Return array with specific information of banner according to its parameters of disposition.
  *
  * - Example of use: 
- * $banners1 = get_banners_position(1, osc_item_category_id()); Show banner of position 1 in determinated category of a item.
- * $banners2 = get_banners_position(3, 'all'); Show banner of position 3 in all categories.
+ * $banners1 = banners_position_sort(1, osc_item_category_id()); Show banner of position 1 in determinated category of a item.
+ * $banners2 = banners_position_sort(3, 'all'); Show banner of position 3 in all categories.
  * 
  *  if (isset($banners1) && $banners1) {
  *      if ($banners1['type']) {
- *          echo "<a href=\"".$banners1['url']."\"><img src=\"".$banner['source']."\" /></a>";
+ *          echo "<a href=\"".$banners1['url']."\" target=\"_blank\"><img ".$banners1['attrs']." /></a>";
  *      } else {
  *          echo $banners1['script'];
  *      }
@@ -129,7 +129,7 @@ if (!function_exists('get_banner_route')) {
  * 
  *  if (isset($banners2) && $banners2) {
  *      if ($banners2['type']) {
- *          echo "<a href=\"".$banners2['url']."\"><img src=\"".$banner['source']."\" /></a>";
+ *          echo "<a href=\"".$banners2['url']."\" target=\"_blank\"><img ".$banners2['attrs']." /></a>";
  *      } else {
  *          echo $banners2['script'];
  *      }
@@ -140,12 +140,12 @@ if (!function_exists('get_banner_route')) {
  *
  * @param integer $sort Position number.
  * @param integer $category To know if a banner most show in determinated category.
- * @return array $b['url'] URL banner, $b['source'] URL of banner image, $b['type'] Type of banner: false is Script, true is a image uploaded.
+ * @return array $b['url'] URL banner, $b['attrs'] Image attributes, $b['type'] Type of banner: false is Script, true is a image uploaded.
  */
-function get_banners_position($sort, $category = 'all') {
+function banners_position_sort($sort, $category = 'all') {
     $position = Banners::newInstance()->getPositionBySortId($sort);
     if ($position) {
-        $banners = get_banner_by_position($position['pk_i_id']);
+        $banners = banners_by_position($position['pk_i_id']);
         if ($banners) {
             foreach ($banners as $banner) {
                 $b = array();
@@ -163,8 +163,13 @@ function get_banners_position($sort, $category = 'all') {
 
                     $advertiser = Banners::newInstance()->getAdvertiserById($banner['fk_i_advertiser_id']);
                     if ($showBanner == true && $advertiser['b_active'] == true) {
+                        $src            = BANNERS_ROUTE_SOURCES.$banner['s_name'].'.'.$banner['s_extension'];
+                        $title          = ($banner['s_title']) ? ' title="'.$banner['s_title'].'"' : ''; // <img title="Title" /> : <img />
+                        $alt            = ($banner['s_alt']) ? ' alt="'.$banner['s_alt'].'"' : '';
+                        $css_class      = ($banner['s_css_class']) ? ' class="'.$banner['s_css_class'].'"' : '';
+
                         $b['url']       = (osc_get_preference('show_url_banner', BANNERS_PREF)) ? get_banner_route($banner['s_url']) : get_banner_route($banner['s_name']);
-                        $b['source']    = BANNERS_ROUTE_SOURCES.$banner['s_name'].'.'.$banner['s_extension'];
+                        $b['attrs']     = 'src="'.$src.'"'.$title.$alt.$css_class;
                         $b['type']      = $banner['b_image'];
                         $kwords         = array('{URL}');
                         $rwords         = array($b['url']); // Replace {URL} by URL of Banner in the content

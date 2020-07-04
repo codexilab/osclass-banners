@@ -177,9 +177,11 @@
 					}
 					$row['category'] 		= $category . $actions;
 
-					$year 	= date("Y", strtotime($aRow['dt_until_date']));
-					$month 	= date("m", strtotime($aRow['dt_until_date']));
-					$row['position'] 		= '<a href="#" onclick="show_position('.$aRow['fk_i_position_id'].', '.$year.', '.$month.');return false;"><div class="center"><div class="text-center">'.banners_sort_position($aRow['fk_i_position_id']).'</div><div class="color-banner-box" style="background: '.$aRow['s_color'].';"></div></div></a>';
+					$year 		= date("Y", strtotime($aRow['dt_until_date']));
+					$month 		= date("m", strtotime($aRow['dt_until_date']));
+					$position 	= position_by_id($aRow['fk_i_position_id']);
+					$position['s_title'] = (isset($position['s_title'])) ? ' title="'.$position['s_title'].'"' : '';
+					$row['position'] 		= '<a'.$position['s_title'].' href="#" onclick="show_position('.$aRow['fk_i_position_id'].', '.$year.', '.$month.');return false;"><div class="center"><div class="text-center">'.banners_sort_position($aRow['fk_i_position_id']).'</div><div class="color-banner-box" style="background: '.$aRow['s_color'].';"></div></div></a>';
 					
 					$advertiser = Banners::newInstance()->getAdvertiserById($aRow['fk_i_advertiser_id']);
 					$row['advertiser'] 		= (get_user_name($advertiser['fk_i_user_id'])) ? '<a href="'. osc_admin_base_url(true) . '?page=users&action=edit&id=' . $advertiser['fk_i_user_id'] .'">'.get_user_name($advertiser['fk_i_user_id']).' ('.get_user_email($advertiser['fk_i_user_id']).')'.'</a>' : $advertiser['s_name'];

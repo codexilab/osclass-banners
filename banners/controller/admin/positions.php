@@ -30,22 +30,14 @@ class CAdminBannersPositions extends AdminSecBaseModel
 {
 	public function doModel()
 	{
-		$positionId = Params::getParam('position_id');
-		$position 	= Banners::newInstance()->getPositionById($positionId);
-
 		switch (Params::getParam('plugin_action')) {
 			case 'set_position':
-				$validateSortNumber = false;
-				if ($position) {
-					if ($position['i_sort_id'] == Params::getParam('i_sort_id')) {
-						$validateSortNumber = true;
-					}
-				}
+				$positionBySortId = Banners::newInstance()->getPositionBySortId(Params::getParam('i_sort_id'));
 
 				// If the fields are right
 				if (!Params::getParam('i_sort_id') || !is_numeric(Params::getParam('i_sort_id'))) {
 					osc_add_flash_error_message(__('Set number of position.', BANNERS_PREF), 'admin');
-				} elseif (!$validateSortNumber) {
+				} elseif ($positionBySortId && $positionBySortId['pk_i_id'] != Params::getParam('position_id')) {
 					osc_add_flash_error_message(__('This position already exist.', BANNERS_PREF), 'admin');
 				} else {
 					$data = array(
@@ -63,6 +55,8 @@ class CAdminBannersPositions extends AdminSecBaseModel
 		        break;
 
 			case 'delete_position':
+				$position = Banners::newInstance()->getPositionById(Params::getParam('position_id'));
+
 				// If exist this position
 				if ($position) {
 					// If exist banners using this position

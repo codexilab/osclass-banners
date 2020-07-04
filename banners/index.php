@@ -25,13 +25,13 @@
 
 /*
 Plugin Name: Banners
-Plugin URI: https://github.com/codexilab/osclass-banners
+Plugin URI: https://gitlab.com/xenotrue/development/osclass_plug_xt-banners
 Description: Put banners on the site, in any format and check its display time
-Version: 1.0.0
+Version: 0.1-beta
 Author: XenoTrue
-Author URI: https://github.com/codexilab
+Author URI: https://gitlab.com/xenotrue
 Short Name: banners
-Plugin update URI: https://github.com/codexilab/osclass-banners
+Plugin update URI: https://gitlab.com/xenotrue/development/osclass_plug_xt-banners
 */
 
 // Paths
@@ -191,10 +191,10 @@ foreach ($positions as $pos) {
 
     osc_add_hook('banners_position_'.$sort, function() use ($sort) {
 
-        $banner = get_banners_position($sort, osc_item_category_id());
+        $banner = banners_position_sort($sort, osc_item_category_id());
         if (isset($banner) && $banner) {
             if ($banner['type']) {
-                echo "<a href=\"".$banner['url']."\" target=\"_blank\"><img src=\"".$banner['source']."\" /></a>";
+                echo "<a href=\"".$banner['url']."\" target=\"_blank\"><img ".$banner['attrs']." /></a>";
             } else {
                 echo $banner['script'];
             }
