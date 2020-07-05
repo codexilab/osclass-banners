@@ -24,7 +24,7 @@
 	 */
 
 /*
-Plugin Name: Banners
+Plugin Name: XenoTrue Online Banners
 Plugin URI: https://gitlab.com/xenotrue/development/osclass_plug_xt-banners
 Description: Put banners on the site, in any format and check its display time
 Version: 0.1-beta
