@@ -28,8 +28,10 @@ if (!function_exists('banners_admin_menu')) {
  *
  * @return string
  */
-function banners_route_page() {
-    return (osc_get_preference('banner_route_page', BANNERS_PREF)) ? osc_get_preference('banner_route_page', BANNERS_PREF) : 'banners-banner-url';
+if (!function_exists('banners_route_page')) {
+    function banners_route_page() {
+        return (osc_get_preference('banner_route_page', BANNERS_PREF)) ? osc_get_preference('banner_route_page', BANNERS_PREF) : 'banners-banner-url';
+    }
 }
 
 /**
@@ -38,8 +40,10 @@ function banners_route_page() {
  *
  * @return string
  */
-function banners_route_param() {
-    return (osc_get_preference('banner_route_param', BANNERS_PREF)) ? osc_get_preference('banner_route_param', BANNERS_PREF) : 'ref';
+if (!function_exists('banners_route_param')) {
+    function banners_route_param() {
+        return (osc_get_preference('banner_route_param', BANNERS_PREF)) ? osc_get_preference('banner_route_param', BANNERS_PREF) : 'ref';
+    }
 }
 
 /**
@@ -142,46 +146,48 @@ if (!function_exists('get_banner_route')) {
  * @param integer $category To know if a banner most show in determinated category.
  * @return array $b['url'] URL banner, $b['attrs'] Image attributes, $b['type'] Type of banner: false is Script, true is a image uploaded.
  */
-function banners_position_sort($sort, $category = 'all') {
-    $position = Banners::newInstance()->getPositionBySortId($sort);
-    if ($position) {
-        $banners = banners_by_position($position['pk_i_id']);
-        if ($banners) {
-            foreach ($banners as $banner) {
-                $b = array();
-                if (todaydate() >= $banner['dt_since_date'] && todaydate() <= $banner['dt_until_date'] && $banner['b_active'] == true) {
+if (!function_exists('banners_position_sort')) {
+    function banners_position_sort($sort, $category = 'all') {
+        $position = Banners::newInstance()->getPositionBySortId($sort);
+        if ($position) {
+            $banners = banners_by_position($position['pk_i_id']);
+            if ($banners) {
+                foreach ($banners as $banner) {
+                    $b = array();
+                    if (todaydate() >= $banner['dt_since_date'] && todaydate() <= $banner['dt_until_date'] && $banner['b_active'] == true) {
 
-                    $showBanner = false;
-                    if ($banner['s_category'] != 'all') {
-                        $categories = explode(',', $banner['s_category']);
-                        if (in_array($category, $categories)) $showBanner = true;
-                    } else if (is_int($banner['s_category'])) {
-                        if ($category == $banner['s_category']) $showBanner = true;
-                    } else {
-                        $showBanner = true;
+                        $showBanner = false;
+                        if ($banner['s_category'] != 'all') {
+                            $categories = explode(',', $banner['s_category']);
+                            if (in_array($category, $categories)) $showBanner = true;
+                        } else if (is_int($banner['s_category'])) {
+                            if ($category == $banner['s_category']) $showBanner = true;
+                        } else {
+                            $showBanner = true;
+                        }
+
+                        $advertiser = Banners::newInstance()->getAdvertiserById($banner['fk_i_advertiser_id']);
+                        if ($showBanner == true && $advertiser['b_active'] == true) {
+                            $src            = BANNERS_ROUTE_SOURCES.$banner['s_name'].'.'.$banner['s_extension'];
+                            $title          = ($banner['s_title']) ? ' title="'.$banner['s_title'].'"' : ''; // <img title="Title" /> : <img />
+                            $alt            = ($banner['s_alt']) ? ' alt="'.$banner['s_alt'].'"' : '';
+                            $css_class      = ($banner['s_css_class']) ? ' class="'.$banner['s_css_class'].'"' : '';
+
+                            $b['url']       = (osc_get_preference('show_url_banner', BANNERS_PREF)) ? get_banner_route($banner['s_url']) : get_banner_route($banner['s_name']);
+                            $b['attrs']     = 'src="'.$src.'"'.$title.$alt.$css_class;
+                            $b['type']      = $banner['b_image'];
+                            $kwords         = array('{URL}');
+                            $rwords         = array($b['url']); // Replace {URL} by URL of Banner in the content
+                            $b['script']    = str_ireplace($kwords, $rwords, $banner['s_script']);
+                        }
+                        break;
+
                     }
-
-                    $advertiser = Banners::newInstance()->getAdvertiserById($banner['fk_i_advertiser_id']);
-                    if ($showBanner == true && $advertiser['b_active'] == true) {
-                        $src            = BANNERS_ROUTE_SOURCES.$banner['s_name'].'.'.$banner['s_extension'];
-                        $title          = ($banner['s_title']) ? ' title="'.$banner['s_title'].'"' : ''; // <img title="Title" /> : <img />
-                        $alt            = ($banner['s_alt']) ? ' alt="'.$banner['s_alt'].'"' : '';
-                        $css_class      = ($banner['s_css_class']) ? ' class="'.$banner['s_css_class'].'"' : '';
-
-                        $b['url']       = (osc_get_preference('show_url_banner', BANNERS_PREF)) ? get_banner_route($banner['s_url']) : get_banner_route($banner['s_name']);
-                        $b['attrs']     = 'src="'.$src.'"'.$title.$alt.$css_class;
-                        $b['type']      = $banner['b_image'];
-                        $kwords         = array('{URL}');
-                        $rwords         = array($b['url']); // Replace {URL} by URL of Banner in the content
-                        $b['script']    = str_ireplace($kwords, $rwords, $banner['s_script']);
-                    }
-                    break;
-
                 }
+                return $b;
             }
-            return $b;
+            return array();
         }
         return array();
     }
-    return array();
 }

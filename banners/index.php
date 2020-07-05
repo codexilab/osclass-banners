@@ -173,7 +173,7 @@ function banners_controller_requests() {
 osc_add_hook("ajax_banners_controller_requests", "banners_controller_requests");
 
 function modal_form_options() {
-    if (Params::getParam("page") == "plugins") {
+    if (Params::getParam('page') == "plugins" && in_array(Params::getParam('route'), array('banners-admin', 'banners-admin-set', 'banners-admin-advertisers', 'banners-admin-positions', 'banners-admin-settings'))) {
         include BANNERS_PATH . 'parts/admin/modals_form_options.php';
     }
 }
@@ -200,9 +200,9 @@ foreach ($positions as $pos) {
             }
         }
 
-    }); // end hook
+    });
 
-} // end foreach
+}
 
 
 // 'Configure' link
