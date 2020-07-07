@@ -16,10 +16,8 @@ if (!function_exists('position_by_id')) {
  *
  * @return string
  */
-if (!function_exists('banners_admin_menu')) {
-    function banners_admin_menu() {
-        require_once BANNERS_PATH . "parts/admin/menu.php";
-    }
+function banners_admin_menu() {
+    require_once BANNERS_PATH . "parts/admin/menu.php";
 }
 
 /**
@@ -28,10 +26,8 @@ if (!function_exists('banners_admin_menu')) {
  *
  * @return string
  */
-if (!function_exists('banners_route_page')) {
-    function banners_route_page() {
-        return (osc_get_preference('banner_route_page', BANNERS_PREF)) ? osc_get_preference('banner_route_page', BANNERS_PREF) : 'banners-banner-url';
-    }
+function banners_route_page() {
+    return (osc_get_preference('banner_route_page', BANNERS_PREF)) ? osc_get_preference('banner_route_page', BANNERS_PREF) : 'banners-banner-url';
 }
 
 /**
@@ -40,10 +36,8 @@ if (!function_exists('banners_route_page')) {
  *
  * @return string
  */
-if (!function_exists('banners_route_param')) {
-    function banners_route_param() {
-        return (osc_get_preference('banner_route_param', BANNERS_PREF)) ? osc_get_preference('banner_route_param', BANNERS_PREF) : 'ref';
-    }
+function banners_route_param() {
+    return (osc_get_preference('banner_route_param', BANNERS_PREF)) ? osc_get_preference('banner_route_param', BANNERS_PREF) : 'ref';
 }
 
 /**
@@ -52,11 +46,9 @@ if (!function_exists('banners_route_param')) {
  * @param int $id
  * @return int
  */
-if (!function_exists('banners_sort_position')) {
-    function banners_sort_position($id) {
-        $position = position_by_id($id);
-        return ($position) ? $position['i_sort_id'] : 0;
-    }
+function banners_sort_position($id) {
+    $position = position_by_id($id);
+    return ($position) ? $position['i_sort_id'] : 0;
 }
 
 /**
@@ -64,10 +56,8 @@ if (!function_exists('banners_sort_position')) {
  *
  * @return string
  */
-if (!function_exists('banners_positions_total')) {
-    function banners_positions_total() {
-        return Banners::newInstance()->positionsTotal();
-    }
+function banners_positions_total() {
+    return Banners::newInstance()->positionsTotal();
 }
 
 /**
@@ -75,10 +65,8 @@ if (!function_exists('banners_positions_total')) {
  *
  * @return int
  */
-if (!function_exists('banners_advertisers_total')) {
-    function banners_advertisers_total() {
-        return Banners::newInstance()->advertisersTotal();
-    }
+function banners_advertisers_total() {
+    return Banners::newInstance()->advertisersTotal();
 }
 
 /**
@@ -86,22 +74,48 @@ if (!function_exists('banners_advertisers_total')) {
  *
  * @return int
  */
-if (!function_exists('banners_count_total')) {
-    function banners_count_total() {
-        return Banners::newInstance()->total();
-    }
+function banners_count_total() {
+    return Banners::newInstance()->total();
 }
 
 /**
- * Get banners by position Id
+ * Get banners by position Id.
  *
  * @param int $positionId
  * @return array
  */
-if (!function_exists('banners_by_position')) {
-    function banners_by_position($positionId) {
-        return Banners::newInstance()->getByPositionId($positionId);
+function banners_by_position($positionId) {
+    return Banners::newInstance()->getByPositionId($positionId);
+}
+
+/**
+ * Detect banners in a date range (From date xxxx-xx-xx to date nnnn-nn-nn).
+ *
+ * In case there is banner to update: compare each Id thrown with the id of banner to update.
+ * If its found the same Id banner ignore that comparison.
+ *
+ * If it keeps detecting ids, it means that there are banners in the date range that are being queried,
+ * it is still colliding (detected) and a banner cannot be placed there, because those spaces or days in the calendar are already occupied.
+ *
+ * @param string $fromDate
+ * @param string $toDate
+ * @param int $positionId
+ * @param int $bannerId
+ * @return int
+ */
+function banners_detect_daterange($fromDate, $toDate, $positionId, $bannerId = null) {
+    $banners        = Banners::newInstance()->getByDateRange($fromDate, $toDate, $positionId);
+    $detected       = 0;
+    if ($banners) {
+        foreach ($banners as $banner) {
+            $detected++;
+            if (isset($bannerId) && $bannerId == $banner['pk_i_id']) {
+                $detected--; // Ignore this collision if is the same banner
+            }
+        }
     }
+
+    return $detected;
 }
 
 /**
@@ -146,48 +160,46 @@ if (!function_exists('get_banner_route')) {
  * @param integer $category To know if a banner most show in determinated category.
  * @return array $b['url'] URL banner, $b['attrs'] Image attributes, $b['type'] Type of banner: false is Script, true is a image uploaded.
  */
-if (!function_exists('banners_position_sort')) {
-    function banners_position_sort($sort, $category = 'all') {
-        $position = Banners::newInstance()->getPositionBySortId($sort);
-        if ($position) {
-            $banners = banners_by_position($position['pk_i_id']);
-            if ($banners) {
-                foreach ($banners as $banner) {
-                    $b = array();
-                    if (todaydate() >= $banner['dt_since_date'] && todaydate() <= $banner['dt_until_date'] && $banner['b_active'] == true) {
+function banners_position_sort($sort, $category = 'all') {
+    $position = Banners::newInstance()->getPositionBySortId($sort);
+    if ($position) {
+        $banners = banners_by_position($position['pk_i_id']);
+        if ($banners) {
+            foreach ($banners as $banner) {
+                $b = array();
+                if (todaydate() >= $banner['dt_from_date'] && todaydate() <= $banner['dt_to_date'] && $banner['b_active'] == true) {
 
-                        $showBanner = false;
-                        if ($banner['s_category'] != 'all') {
-                            $categories = explode(',', $banner['s_category']);
-                            if (in_array($category, $categories)) $showBanner = true;
-                        } else if (is_int($banner['s_category'])) {
-                            if ($category == $banner['s_category']) $showBanner = true;
-                        } else {
-                            $showBanner = true;
-                        }
-
-                        $advertiser = Banners::newInstance()->getAdvertiserById($banner['fk_i_advertiser_id']);
-                        if ($showBanner == true && $advertiser['b_active'] == true) {
-                            $src            = BANNERS_ROUTE_SOURCES.$banner['s_name'].'.'.$banner['s_extension'];
-                            $title          = ($banner['s_title']) ? ' title="'.$banner['s_title'].'"' : ''; // <img title="Title" /> : <img />
-                            $alt            = ($banner['s_alt']) ? ' alt="'.$banner['s_alt'].'"' : '';
-                            $css_class      = ($banner['s_css_class']) ? ' class="'.$banner['s_css_class'].'"' : '';
-
-                            $b['url']       = (osc_get_preference('show_url_banner', BANNERS_PREF)) ? get_banner_route($banner['s_url']) : get_banner_route($banner['s_name']);
-                            $b['attrs']     = 'src="'.$src.'"'.$title.$alt.$css_class;
-                            $b['type']      = $banner['b_image'];
-                            $kwords         = array('{URL}');
-                            $rwords         = array($b['url']); // Replace {URL} by URL of Banner in the content
-                            $b['script']    = str_ireplace($kwords, $rwords, $banner['s_script']);
-                        }
-                        break;
-
+                    $showBanner = false;
+                    if ($banner['s_category'] != 'all') {
+                        $categories = explode(',', $banner['s_category']);
+                        if (in_array($category, $categories)) $showBanner = true;
+                    } else if (is_int($banner['s_category'])) {
+                        if ($category == $banner['s_category']) $showBanner = true;
+                    } else {
+                        $showBanner = true;
                     }
+
+                    $advertiser = Banners::newInstance()->getAdvertiserById($banner['fk_i_advertiser_id']);
+                    if ($showBanner == true && $advertiser['b_active'] == true) {
+                        $src            = BANNERS_ROUTE_SOURCES.$banner['s_name'].'.'.$banner['s_extension'];
+                        $title          = ($banner['s_title']) ? ' title="'.$banner['s_title'].'"' : ''; // <img title="Title" /> : <img />
+                        $alt            = ($banner['s_alt']) ? ' alt="'.$banner['s_alt'].'"' : '';
+                        $css_class      = ($banner['s_css_class']) ? ' class="'.$banner['s_css_class'].'"' : '';
+
+                        $b['url']       = (osc_get_preference('show_url_banner', BANNERS_PREF)) ? get_banner_route($banner['s_url']) : get_banner_route($banner['s_name']);
+                        $b['attrs']     = 'src="'.$src.'"'.$title.$alt.$css_class;
+                        $b['type']      = $banner['b_image'];
+                        $kwords         = array('{URL}');
+                        $rwords         = array($b['url']); // Replace {URL} by URL of Banner in the content
+                        $b['script']    = str_ireplace($kwords, $rwords, $banner['s_script']);
+                    }
+                    break;
+
                 }
-                return $b;
             }
-            return array();
+            return $b;
         }
         return array();
     }
+    return array();
 }

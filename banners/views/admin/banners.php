@@ -277,31 +277,31 @@ osc_show_pagination_admin($aData);
 					</div>
 
 					<div class="form-row">
-						<div class="form-label"><?php _e('Since date', BANNERS_PREF); ?></div>
+						<div class="form-label"><?php _e('From date', BANNERS_PREF); ?></div>
 						<div class="form-controls">
-							<input id="sinceDate" type="text" class="xlarge" name="sinceDate" value="<?php echo Params::getParam('sinceDate'); ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>">
-							<select name="sinceDateControl">
-								<option value="equal" <?php echo ( (Params::getParam('sinceDateControl') == '=') ? 'selected="selected"' : '' )?>>=</option>
-								<option value="greater" <?php echo ( (Params::getParam('sinceDateControl') == '>') ? 'selected="selected"' : '' )?>>></option>
-								<option value="greater_equal" <?php echo ( (Params::getParam('sinceDateControl') == '>=') ? 'selected="selected"' : '' )?>>>=</option>
-								<option value="less" <?php echo ( (Params::getParam('sinceDateControl') == '<') ? 'selected="selected"' : '' )?>><</option>
-								<option value="less_equal" <?php echo ( (Params::getParam('sinceDateControl') == '<=') ? 'selected="selected"' : '' )?>><=</option>
-								<option value="not_equal" <?php echo ( (Params::getParam('sinceDateControl') == '!=') ? 'selected="selected"' : '' )?>>!=</option>
+							<input id="fromDate" type="text" class="xlarge" name="fromDate" value="<?php echo Params::getParam('fromDate'); ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>">
+							<select name="fromDateControl">
+								<option value="equal" <?php echo ( (Params::getParam('fromDateControl') == '=') ? 'selected="selected"' : '' )?>>=</option>
+								<option value="greater" <?php echo ( (Params::getParam('fromDateControl') == '>') ? 'selected="selected"' : '' )?>>></option>
+								<option value="greater_equal" <?php echo ( (Params::getParam('fromDateControl') == '>=') ? 'selected="selected"' : '' )?>>>=</option>
+								<option value="less" <?php echo ( (Params::getParam('fromDateControl') == '<') ? 'selected="selected"' : '' )?>><</option>
+								<option value="less_equal" <?php echo ( (Params::getParam('fromDateControl') == '<=') ? 'selected="selected"' : '' )?>><=</option>
+								<option value="not_equal" <?php echo ( (Params::getParam('fromDateControl') == '!=') ? 'selected="selected"' : '' )?>>!=</option>
 							</select>
 						</div>
 					</div>
 
 					<div class="form-row">
-						<div class="form-label"><?php _e('Until date', BANNERS_PREF); ?></div>
+						<div class="form-label"><?php _e('To date', BANNERS_PREF); ?></div>
 						<div class="form-controls">
-							<input id="untilDate" type="text" class="xlarge" name="untilDate" value="<?php echo Params::getParam('untilDate'); ?>" placeholder="<?php echo todaydate(1, 'month', '00:00:00'); ?>">
-							<select name="untilDateControl">
-								<option value="equal" <?php echo ( (Params::getParam('untilDateControl') == '=') ? 'selected="selected"' : '' )?>>=</option>
-								<option value="greater" <?php echo ( (Params::getParam('untilDateControl') == '>') ? 'selected="selected"' : '' )?>>></option>
-								<option value="greater_equal" <?php echo ( (Params::getParam('untilDateControl') == '>=') ? 'selected="selected"' : '' )?>>>=</option>
-								<option value="less" <?php echo ( (Params::getParam('untilDateControl') == '<') ? 'selected="selected"' : '' )?>><</option>
-								<option value="less_equal" <?php echo ( (Params::getParam('untilDateControl') == '<=') ? 'selected="selected"' : '' )?>><=</option>
-								<option value="not_equal" <?php echo ( (Params::getParam('untilDateControl') == '!=') ? 'selected="selected"' : '' )?>>!=</option>
+							<input id="toDate" type="text" class="xlarge" name="toDate" value="<?php echo Params::getParam('toDate'); ?>" placeholder="<?php echo todaydate(1, 'month', '00:00:00'); ?>">
+							<select name="toDateControl">
+								<option value="equal" <?php echo ( (Params::getParam('toDateControl') == '=') ? 'selected="selected"' : '' )?>>=</option>
+								<option value="greater" <?php echo ( (Params::getParam('toDateControl') == '>') ? 'selected="selected"' : '' )?>>></option>
+								<option value="greater_equal" <?php echo ( (Params::getParam('toDateControl') == '>=') ? 'selected="selected"' : '' )?>>>=</option>
+								<option value="less" <?php echo ( (Params::getParam('toDateControl') == '<') ? 'selected="selected"' : '' )?>><</option>
+								<option value="less_equal" <?php echo ( (Params::getParam('toDateControl') == '<=') ? 'selected="selected"' : '' )?>><=</option>
+								<option value="not_equal" <?php echo ( (Params::getParam('toDateControl') == '!=') ? 'selected="selected"' : '' )?>>!=</option>
 							</select>
 						</div>
 					</div>
@@ -358,8 +358,8 @@ osc_show_pagination_admin($aData);
 							<select name="sort">
 								<option value="date" <?php echo ( (Params::getParam('sort') == 'date') ? 'selected="selected"' : '' )?>><?php _e('DATE', BANNERS_PREF); ?></option>
 								<option value="update" <?php echo ( (Params::getParam('sort') == 'update') ? 'selected="selected"' : '' )?>><?php _e('UPDATE', BANNERS_PREF); ?></option>
-								<option value="since_date" <?php echo ( (Params::getParam('sort') == 'since_date') ? 'selected="selected"' : '' )?>><?php _e('SINCE DATE', BANNERS_PREF); ?></option>
-								<option value="until_date" <?php echo ( (Params::getParam('sort') == 'until_date') ? 'selected="selected"' : '' )?>><?php _e('UNTIL DATE', BANNERS_PREF); ?></option>
+								<option value="from_date" <?php echo ( (Params::getParam('sort') == 'from_date') ? 'selected="selected"' : '' )?>><?php _e('FROM DATE', BANNERS_PREF); ?></option>
+								<option value="to_date" <?php echo ( (Params::getParam('sort') == 'to_date') ? 'selected="selected"' : '' )?>><?php _e('TO DATE', BANNERS_PREF); ?></option>
 								<option value="position" <?php echo ( (Params::getParam('sort') == 'position') ? 'selected="selected"' : '' )?>><?php _e('POSITION', BANNERS_PREF); ?></option>
 							</select>
 							<select name="direction">
@@ -476,10 +476,10 @@ $(document).ready(function() {
 		return false;
 	});
 
-	$('#sinceDate').datepicker({
+	$('#fromDate').datepicker({
 		dateFormat: 'yy-mm-dd'
 	});
-	$('#untilDate').datepicker({
+	$('#toDate').datepicker({
 		dateFormat: 'yy-mm-dd'
 	});
 	$('#date').datepicker({

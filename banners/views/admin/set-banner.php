@@ -152,13 +152,13 @@ input[type="text"].bg-text-gray {
                 </div>
 
                 <div class="form-row">
-                    <div class="form-label"><?php _e("Since", BANNERS_PREF); ?></div>
-                    <div class="form-controls"><input id="dt_since_date" type="text" class="xlarge" name="dt_since_date" value="<?php if (isset($bannerToUpdate['dt_since_date'])) echo $bannerToUpdate['dt_since_date']; ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>" autocomplete="off"></div>
+                    <div class="form-label"><?php _e("From", BANNERS_PREF); ?></div>
+                    <div class="form-controls"><input id="dt_from_date" type="text" class="xlarge" name="dt_from_date" value="<?php if (isset($bannerToUpdate['dt_from_date'])) echo $bannerToUpdate['dt_from_date']; ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>" autocomplete="off"></div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-label"><?php _e("Until", BANNERS_PREF); ?></div>
-                    <div class="form-controls"><input id="dt_until_date" type="text" class="xlarge" name="dt_until_date" value="<?php if (isset($bannerToUpdate['dt_until_date'])) echo $bannerToUpdate['dt_until_date']; ?>" placeholder="<?php echo todaydate(1, 'month', '00:00:00'); ?>" autocomplete="off"></div>
+                    <div class="form-label"><?php _e("To", BANNERS_PREF); ?></div>
+                    <div class="form-controls"><input id="dt_to_date" type="text" class="xlarge" name="dt_to_date" value="<?php if (isset($bannerToUpdate['dt_to_date'])) echo $bannerToUpdate['dt_to_date']; ?>" placeholder="<?php echo todaydate(1, 'month', '00:00:00'); ?>" autocomplete="off"></div>
                 </div>
 
                 <div class="form-row">
@@ -174,7 +174,16 @@ input[type="text"].bg-text-gray {
                     </div>
 				</div>
 
-				<?php if ($bannerToUpdate) : ?>
+                <div class="form-row center">
+                	<div class="text-center fieldset-calendar" style="width: fit-content">
+                		<fieldset>
+                			<legend><?php _e("Calendar", BANNERS_PREF); ?></legend>
+                			<div id="show-calendar-content" style="width: fit-content"></div>
+                		</fieldset>
+                	</div>
+                </div>
+
+                <?php if ($bannerToUpdate && $bannerToUpdate['dt_date'] != 0) : ?>
 				<div class="form-row">
 					<div class="form-label"><?php _e("Added", BANNERS_PREF); ?></div>
 					<div class="form-controls">
@@ -196,15 +205,6 @@ input[type="text"].bg-text-gray {
                 </div>
                 <?php endif; ?>
 
-                <div class="form-row center">
-                	<div class="text-center fieldset-calendar" style="width: fit-content">
-                		<fieldset>
-                			<legend><?php _e("Calendar", BANNERS_PREF); ?></legend>
-                			<div id="show-calendar-content" style="width: fit-content"></div>
-                		</fieldset>
-                	</div>
-                </div>
-
                 <?php if ($bannerToUpdate && isset($bannerToUpdate['pk_i_id'])) : ?>
                 <div class="form-row">
                 	<div class="form-label"><?php _e("Clicks", BANNERS_PREF); ?></div>
@@ -215,6 +215,7 @@ input[type="text"].bg-text-gray {
                 	</div>
                 </div>
             	<?php endif; ?>
+
 			</div>
 
 			<div class="clear"></div>
@@ -287,10 +288,10 @@ $(document).ready(function() {
         $(".bannertype"+test).show();
     });
 
-    $('#dt_since_date').datepicker({
+    $('#dt_from_date').datepicker({
         dateFormat: 'yy-mm-dd'
     });
-    $('#dt_until_date').datepicker({
+    $('#dt_to_date').datepicker({
         dateFormat: 'yy-mm-dd'
     });
 

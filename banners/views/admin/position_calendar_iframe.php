@@ -39,10 +39,10 @@ for ($i = 1; $i <= date('t', strtotime($month)); $i++) {
 }
 
 // Save an array each one of the days of a interval, to be compared with days of calendar
-function daysinterval($since, $until, $color) {
+function daysinterval($fromDate, $toDate, $color) {
      $array = array();
-     $date = $since;
-     while(strtotime($date) <= strtotime($until)) {
+     $date = $fromDate;
+     while(strtotime($date) <= strtotime($toDate)) {
           $array[]['date'] = $date;
           $date = date("Y-m-j", strtotime($date . " + 1 day"));
      }
@@ -51,7 +51,7 @@ function daysinterval($since, $until, $color) {
 }
 $intervals = array();
 foreach ($banners as $banner) {
-     $intervals[] = daysinterval($banner['dt_since_date'], $banner['dt_until_date'], $banner['s_color']);
+     $intervals[] = daysinterval($banner['dt_from_date'], $banner['dt_to_date'], $banner['s_color']);
 }
 
 // Comparison
@@ -62,7 +62,7 @@ function check_values(&$value = null, $key = null) {
 }
 ?>
 
-<h3 class="render-title"><?php _e("Position", BANNERS_PREF); ?> <?php if (isset($position['i_sort_id'])) echo $position['i_sort_id']; ?> <?php if (isset($position['s_title'])) echo ' - ' . $position['s_title']; ?></h3>
+<h3 class="render-title"><?php _e("Position", BANNERS_PREF); ?> <?php if (isset($position['i_sort_id'])) echo $position['i_sort_id']; ?> <?php if (isset($position['s_title']) && $position['s_title']) echo ' - ' . $position['s_title']; ?></h3>
 
 <table class="table" cellpadding="0" cellspacing="0">
      <thead>
