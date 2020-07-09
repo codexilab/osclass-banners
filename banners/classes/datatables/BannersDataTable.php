@@ -101,7 +101,6 @@
             $this->addColumn('status', __('Status'));
             $this->addColumn('bulkactions', '<input id="check_all" type="checkbox" />');
 
-            $this->addColumn('category', __('Category', BANNERS_PREF));
             $this->addColumn('position', __('Position', BANNERS_PREF));
             $this->addColumn('advertiser', __('Advertiser', BANNERS_PREF));
             $this->addColumn('banner', __('Banner', BANNERS_PREF));
@@ -161,28 +160,13 @@
 					$row['status'] 			= $aRow['b_active'];
 					$row['bulkactions'] 	= '<input type="checkbox" name="id[]" value="' . $aRow['pk_i_id'] . '" />';
 
-					$category = '';
-					if ($aRow['s_category'] != 'all') {
-						$categoriesID = explode(',', $aRow['s_category']);
-						$categories = array();
-						foreach ($categoriesID as $categoryID) {
-							$c = Category::newInstance()->findRootCategory($categoryID);
-							$categories[] = ($c) ? '- '.$c['s_name'] : '::category no exist::';
-                        }
-						$category = implode('<br>', $categories);
-					} else if (is_int($aRow['s_category'])) {
-						$category = ($c) ? '- '.$c['s_name'] : '::category no exist::';
-					} else {
-						$category = 'All';
-					}
-					$row['category'] 		= $category . $actions;
-
 					$year 		= date("Y", strtotime($aRow['dt_to_date']));
 					$month 		= date("m", strtotime($aRow['dt_to_date']));
 					$position 	= position_by_id($aRow['fk_i_position_id']);
 					$position['s_title'] = (isset($position['s_title'])) ? ' title="'.$position['s_title'].'"' : '';
 					$row['position'] 		= '<a'.$position['s_title'].' href="#" onclick="show_position('.$aRow['fk_i_position_id'].', '.$year.', '.$month.');return false;"><div class="center"><div class="text-center">'.banners_sort_position($aRow['fk_i_position_id']).'</div><div class="color-banner-box" style="background: '.$aRow['s_color'].';"></div></div></a>';
-					
+					$row['position'] 		.= $actions;
+
 					$advertiser = Banners::newInstance()->getAdvertiserById($aRow['fk_i_advertiser_id']);
 					$row['advertiser'] 		= (get_user_name($advertiser['fk_i_user_id'])) ? '<a href="'. osc_admin_base_url(true) . '?page=users&action=edit&id=' . $advertiser['fk_i_user_id'] .'">'.get_user_name($advertiser['fk_i_user_id']).' ('.get_user_email($advertiser['fk_i_user_id']).')'.'</a>' : $advertiser['s_name'];
 
