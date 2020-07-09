@@ -24,22 +24,18 @@
 	 * SOFTWARE.
 	 */
 
+$categories 	= __get('categories');
+$selected 		= __get('selected');
 
-$categories 	= osc_get_categories();
 $positions 		= __get('positions');
 $advertisers 	= __get('advertisers');
+
 $bannerToUpdate = __get('bannerToUpdate');
 ?>
 
-<style type="text/css">
-input[type="text"].bg-text-gray {
-    background-color : #d1d1d1;
-}
-</style>
-
 <?php banners_admin_menu(); ?>
 
-<form id="dialog-new" method="post" action="<?php echo osc_route_admin_url('banners-admin-set'); if ($bannerToUpdate) echo '&banner='.$bannerToUpdate['pk_i_id']; ?>" enctype="multipart/form-data">
+<form id="dialog-new" class="plugin-configuration form-horizontal" method="post" action="<?php echo osc_route_admin_url('banners-admin-set'); if ($bannerToUpdate) echo '&banner='.$bannerToUpdate['pk_i_id']; ?>" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="plugins" />
 	<input type="hidden" name="action" value="renderplugin" />
 	<input type="hidden" name="route" value="banners-admin-set" />
@@ -50,26 +46,17 @@ input[type="text"].bg-text-gray {
 
 			<div class="grid-row grid-50">
 				<div class="form-row">
-					<div class="form-label"><?php _e("Categories", BANNERS_PREF) ?></div>
-					<div class="form-controls">
-						<div class="form-label-checkbox">
-						<?php if ($categories) : ?>
-							<?php if ($categories >= 1) : ?>
-							<label><input id="all_categories" type="checkbox" name="all_categories" value="1" <?php echo (isset($bannerToUpdate['s_category'])) ? get_html_checked($bannerToUpdate['s_category'], "all") : ''; ?>><?php _e("All categories", BANNERS_PREF); ?></label><br><br>
-							<?php endif; ?>
-							<div id="categories">
-								<?php $categoriesBannerToUpdate = (isset($bannerToUpdate['s_category'])) ? explode(',', $bannerToUpdate['s_category']) : array(); ?>
-								<?php foreach ($categories as $category) : ?>
-									<?php if (in_array($category['pk_i_id'], $categoriesBannerToUpdate)) : ?>
-									<label><input type="checkbox" name="s_category[]" value="<?php echo $category['pk_i_id']; ?>" checked="true"><?php echo $category['s_name']; ?></label><br>
-									<?php else: ?>
-									<label><input type="checkbox" name="s_category[]" value="<?php echo $category['pk_i_id']; ?>"><?php echo $category['s_name']; ?></label><br>
-									<?php endif; ?>
-								<?php endforeach; ?>
-							</div>
-						<?php endif; ?>
-						</div>
-					</div>
+					<div class="separate-top">
+	                    <div class="form-label">
+	                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', true); return false;"><?php _e('Check all'); ?></a> &middot;
+	                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', false); return false;"><?php _e('Uncheck all'); ?></a>
+	                    </div>
+	                    <div class="form-controls">
+	                        <ul id="plugin_tree">
+	                            <?php CategoryForm::categories_tree($categories, $selected); ?>
+	                        </ul>
+	                    </div>
+	                </div>
 				</div>
 
 				<div class="form-row">
@@ -269,18 +256,10 @@ input[type="text"].bg-text-gray {
 
 <script>
 $(document).ready(function() {
-	if ($("#all_categories").is(':checked')) {
-        $("#categories").hide();
-    } else {
-        $("#categories").show();
-    }
-    $('#all_categories').click(function () {
-        if ($(this).is(':checked')) {
-            $("#categories").hide();
-        } else {
-            $("#categories").show();
-        }
-    });
+	$("#plugin_tree").treeview({
+	    animated: "fast",
+	    collapsed: true
+	});
 
     $("input[name$='b_image']").click(function() {
         var test = $(this).val();
@@ -331,6 +310,19 @@ $(document).ready(function() {
 		modal: true
 	});
 });
+
+// check all the categories
+function checkAll(id, check) {
+    aa = $('#' + id + ' input[type=checkbox]').each(function() {
+        $(this).prop('checked', check);
+    });
+}
+
+function checkCat(id, check) {
+    aa = $('#cat' + id + ' input[type=checkbox]').each(function() {
+        $(this).prop('checked', check);
+    });
+}
 
 <?php if ($bannerToUpdate && file_exists(BANNERS_FOLDER_SOURCES.$bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension'])) : ?>
 function show_banner(img) {

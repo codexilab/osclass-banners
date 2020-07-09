@@ -45,7 +45,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 					'pk_i_id'               => ($bannerToUpdate) ? $bannerToUpdate['pk_i_id'] : false,
 					'fk_i_advertiser_id'    => Params::getParam('fk_i_advertiser_id'),
 					'fk_i_position_id'      => Params::getParam('fk_i_position_id'),
-					's_category'            => (Params::getParam('all_categories')) ? 'all' : implode(',', Params::getParam('s_category')),
+					's_category'            => (Params::getParam('all_categories')) ? 'all' : implode(',', Params::getParam('categories')),
 					's_url'                 => setURL(Params::getParam('s_url')),
 					's_name'                => osc_genRandomPassword(),
 					's_title' 				=> Params::getParam('s_title'),
@@ -80,7 +80,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 				} elseif ($validateColor && Banners::newInstance()->detectByColorAndPosition($data['s_color'], $data['fk_i_position_id']) >= 1) {
 					osc_add_flash_error_message(__("The color <span style=\"color: $color;\">$color</span> is already in use on this position.", BANNERS_PREF), 'admin');
 			    
-				} elseif (!Params::getParam('all_categories') && !Params::getParam('s_category')) {
+				} elseif (!Params::getParam('all_categories') && !Params::getParam('categories')) {
 					osc_add_flash_error_message(__('Select a category.', BANNERS_PREF), 'admin');
 			    
 				} else {
@@ -138,9 +138,13 @@ class CAdminBannersNew extends AdminSecBaseModel
 				break;
 
 			default:
-				$this->_exportVariableToView('advertisers', Banners::newInstance()->getAllAdvertisers());
-				$this->_exportVariableToView('positions', Banners::newInstance()->getAllPositions());
-				$this->_exportVariableToView('bannerToUpdate', $bannerToUpdate);
+				$this->_exportVariableToView("categories", Category::newInstance()->toTreeAll());
+				$this->_exportVariableToView("selected", (isset($bannerToUpdate['s_category'])) ? explode(',', $bannerToUpdate['s_category']) : array());
+				
+				$this->_exportVariableToView("advertisers", Banners::newInstance()->getAllAdvertisers());
+				$this->_exportVariableToView("positions", Banners::newInstance()->getAllPositions());
+				
+				$this->_exportVariableToView("bannerToUpdate", $bannerToUpdate);
 				break;
 		}
 	}
