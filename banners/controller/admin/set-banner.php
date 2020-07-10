@@ -45,7 +45,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 					'pk_i_id'               => ($bannerToUpdate) ? $bannerToUpdate['pk_i_id'] : false,
 					'fk_i_advertiser_id'    => Params::getParam('fk_i_advertiser_id'),
 					'fk_i_position_id'      => Params::getParam('fk_i_position_id'),
-					's_category'            => (Params::getParam('all_categories')) ? 'all' : implode(',', Params::getParam('s_category')),
+					's_category'            => implode(',', Params::getParam('categories')),
 					's_url'                 => setURL(Params::getParam('s_url')),
 					's_name'                => osc_genRandomPassword(),
 					's_title' 				=> Params::getParam('s_title'),
@@ -55,8 +55,8 @@ class CAdminBannersNew extends AdminSecBaseModel
 					's_extension'           => $banner['mime'], // png jpg gif
 					's_script'              => $_POST['s_script'],
 					's_color'               => Params::getParam('s_color'),
-		        	'dt_since_date'         => (Params::getParam('dt_since_date') == '') ? todaydate(null, null, '00:00:00') : Params::getParam('dt_since_date'),
-					'dt_until_date'         => (Params::getParam('dt_until_date') == '') ? todaydate(1, 'month', '00:00:00') : Params::getParam('dt_until_date'),
+		        	'dt_from_date'         	=> (Params::getParam('dt_from_date') == '') ? todaydate(null, null, '00:00:00') : Params::getParam('dt_from_date'),
+					'dt_to_date'         	=> (Params::getParam('dt_to_date') == '') ? todaydate(1, 'month', '00:00:00') : Params::getParam('dt_to_date'),
 					'b_image'               => Params::getParam('b_image'),
 					'b_active'              => Params::getParam('b_active')
 				);
@@ -64,19 +64,12 @@ class CAdminBannersNew extends AdminSecBaseModel
 				// If the banner to update have the same color, not validate the color
 				$validateColor = ($bannerToUpdate && $bannerToUpdate['s_color'] == $data['s_color']) ? false : true;
 
-				// If the banner to update have the same date range, not validate
-				if ($bannerToUpdate && $data['dt_since_date'] >= $bannerToUpdate['dt_since_date'] && $data['dt_until_date'] <= $bannerToUpdate['dt_until_date']) {
-					$validateDateRange = false;
-				} else {
-					$validateDateRange = true;
-				}
-
 				// Validate fields:
-				if (!Params::getParam('fk_i_advertiser_id') || ($data['b_image'] >= 1 && !Params::getParam('s_url')) || !Params::getParam('fk_i_position_id') || $data['dt_until_date'] < $data['dt_since_date']) {
-					osc_add_flash_error_message(__('All fields cannot be empty and Since date has it be higher that Until date.', BANNERS_PREF), 'admin');
+				if (!Params::getParam('fk_i_advertiser_id') || ($data['b_image'] >= 1 && !Params::getParam('s_url')) || !Params::getParam('fk_i_position_id') || $data['dt_to_date'] < $data['dt_from_date']) {
+					osc_add_flash_error_message(__('All fields cannot be empty and From date has it be higher that To date.', BANNERS_PREF), 'admin');
 			    
-				// Validation of date range (can not be repeated in a position)
-				} elseif ($validateDateRange && Banners::newInstance()->detectDisponibleDateRange($data['dt_since_date'], $data['dt_until_date'], $data['fk_i_position_id']) >= 1) {
+				// Validation of date range
+				} elseif (banners_detect_daterange($data['dt_from_date'], $data['dt_to_date'], $data['fk_i_position_id'], $data['pk_i_id']) >= 1) {
 					osc_add_flash_error_message(__('The banner is not in an available range.', BANNERS_PREF), 'admin');
 			    
 				// Validation color input field (can not be empty)
@@ -87,7 +80,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 				} elseif ($validateColor && Banners::newInstance()->detectByColorAndPosition($data['s_color'], $data['fk_i_position_id']) >= 1) {
 					osc_add_flash_error_message(__("The color <span style=\"color: $color;\">$color</span> is already in use on this position.", BANNERS_PREF), 'admin');
 			    
-				} elseif (!Params::getParam('all_categories') && !Params::getParam('s_category')) {
+				} elseif (!Params::getParam('all_categories') && !Params::getParam('categories')) {
 					osc_add_flash_error_message(__('Select a category.', BANNERS_PREF), 'admin');
 			    
 				} else {
@@ -141,13 +134,17 @@ class CAdminBannersNew extends AdminSecBaseModel
 
 				}
 				ob_get_clean();
-				osc_redirect_to($_SERVER['HTTP_REFERER']);
+				$this->redirectTo($_SERVER['HTTP_REFERER']);
 				break;
 
 			default:
-				$this->_exportVariableToView('advertisers', Banners::newInstance()->getAllAdvertisers());
-				$this->_exportVariableToView('positions', Banners::newInstance()->getAllPositions());
-				$this->_exportVariableToView('bannerToUpdate', $bannerToUpdate);
+				$this->_exportVariableToView("categories", Category::newInstance()->toTreeAll());
+				$this->_exportVariableToView("selected", (isset($bannerToUpdate['s_category'])) ? explode(',', $bannerToUpdate['s_category']) : array());
+				
+				$this->_exportVariableToView("advertisers", Banners::newInstance()->getAllAdvertisers());
+				$this->_exportVariableToView("positions", Banners::newInstance()->getAllPositions());
+				
+				$this->_exportVariableToView("bannerToUpdate", $bannerToUpdate);
 				break;
 		}
 	}

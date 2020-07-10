@@ -24,22 +24,18 @@
 	 * SOFTWARE.
 	 */
 
+$categories 	= __get('categories');
+$selected 		= __get('selected');
 
-$categories 	= osc_get_categories();
 $positions 		= __get('positions');
 $advertisers 	= __get('advertisers');
+
 $bannerToUpdate = __get('bannerToUpdate');
 ?>
 
-<style type="text/css">
-input[type="text"].bg-text-gray {
-    background-color : #d1d1d1;
-}
-</style>
-
 <?php banners_admin_menu(); ?>
 
-<form id="dialog-new" method="post" action="<?php echo osc_route_admin_url('banners-admin-set'); if ($bannerToUpdate) echo '&banner='.$bannerToUpdate['pk_i_id']; ?>" enctype="multipart/form-data">
+<form id="dialog-new" class="plugin-configuration form-horizontal" method="post" action="<?php echo osc_route_admin_url('banners-admin-set'); if ($bannerToUpdate) echo '&banner='.$bannerToUpdate['pk_i_id']; ?>" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="plugins" />
 	<input type="hidden" name="action" value="renderplugin" />
 	<input type="hidden" name="route" value="banners-admin-set" />
@@ -50,30 +46,54 @@ input[type="text"].bg-text-gray {
 
 			<div class="grid-row grid-50">
 				<div class="form-row">
-					<div class="form-label"><?php _e("Categories", BANNERS_PREF) ?></div>
-					<div class="form-controls">
-						<div class="form-label-checkbox">
-						<?php if ($categories) : ?>
-							<?php if ($categories >= 1) : ?>
-							<label><input id="all_categories" type="checkbox" name="all_categories" value="1" <?php echo (isset($bannerToUpdate['s_category'])) ? get_html_checked($bannerToUpdate['s_category'], "all") : ''; ?>><?php _e("All categories", BANNERS_PREF); ?></label><br><br>
-							<?php endif; ?>
-							<div id="categories">
-								<?php $categoriesBannerToUpdate = (isset($bannerToUpdate['s_category'])) ? explode(',', $bannerToUpdate['s_category']) : array(); ?>
-								<?php foreach ($categories as $category) : ?>
-									<?php if (in_array($category['pk_i_id'], $categoriesBannerToUpdate)) : ?>
-									<label><input type="checkbox" name="s_category[]" value="<?php echo $category['pk_i_id']; ?>" checked="true"><?php echo $category['s_name']; ?></label><br>
-									<?php else: ?>
-									<label><input type="checkbox" name="s_category[]" value="<?php echo $category['pk_i_id']; ?>"><?php echo $category['s_name']; ?></label><br>
-									<?php endif; ?>
-								<?php endforeach; ?>
-							</div>
-						<?php endif; ?>
-						</div>
-					</div>
+					<div class="form-label"><?php _e("Sections (*)", BANNERS_PREF); ?></div>
+					
+                    <div class="form-controls">
+                    	<?php _e("Categories in Search and Item pages:", BANNERS_PREF); ?><br />
+                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', true); return false;"><?php _e('Check all'); ?></a> &middot;
+                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', false); return false;"><?php _e('Uncheck all'); ?></a>
+                        
+                        <br />
+
+                        <ul id="plugin_tree"><?php CategoryForm::categories_tree($categories, $selected); ?></ul>
+
+                        <ul id="plugin_sections">
+                        	<ul>
+                        		<li><span class="folder"><?php _e("Rest of all pages", BANNERS_PREF); ?></span>
+									<ul id="catsections">
+										<li>
+											<a href="javascript:void(0);" onclick="checkAll('plugin_sections', true); return false;"><?php _e('Check all'); ?></a> &middot;
+	                        				<a href="javascript:void(0);" onclick="checkAll('plugin_sections', false); return false;"><?php _e('Uncheck all'); ?></a>
+	                        			</li>
+										<li><input type="checkbox" name="categories[]" value="home" <?php if (in_array('home', $selected)) echo 'checked="true"'; ?>><span><?php _e("Home page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="page" <?php if (in_array('page', $selected)) echo 'checked="true"'; ?>><span><?php _e("Static page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="contact" <?php if (in_array('contact', $selected)) echo 'checked="true"'; ?>><span><?php _e("Contact page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="item_add" <?php if (in_array('item_add', $selected)) echo 'checked="true"'; ?>><span><?php _e("Publish page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="item_edit" <?php if (in_array('item_edit', $selected)) echo 'checked="true"'; ?>><span><?php _e("Edit page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="item_contact" <?php if (in_array('item_contact', $selected)) echo 'checked="true"'; ?>><span><?php _e("Item contact page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="login" <?php if (in_array('login', $selected)) echo 'checked="true"'; ?>><span><?php _e("Login page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="register" <?php if (in_array('register', $selected)) echo 'checked="true"'; ?>><span><?php _e("Register page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="login_recover" <?php if (in_array('login_recover', $selected)) echo 'checked="true"'; ?>><span><?php _e("Recover page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="login_forgot" <?php if (in_array('login_forgot', $selected)) echo 'checked="true"'; ?>><span><?php _e("Forgot page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="custom" <?php if (in_array('custom', $selected)) echo 'checked="true"'; ?>><span><?php _e("Custom pages", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="pub_profile" <?php if (in_array('pub_profile', $selected)) echo 'checked="true"'; ?>><span><?php _e("Public profile page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="dashboard" <?php if (in_array('dashboard', $selected)) echo 'checked="true"'; ?>><span><?php _e("User dashboard", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="profile" <?php if (in_array('profile', $selected)) echo 'checked="true"'; ?>><span><?php _e("User profile", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="items" <?php if (in_array('items', $selected)) echo 'checked="true"'; ?>><span><?php _e("User's items page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="alerts" <?php if (in_array('alerts', $selected)) echo 'checked="true"'; ?>><span><?php _e("User's alerts page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="change_email" <?php if (in_array('change_email', $selected)) echo 'checked="true"'; ?>><span><?php _e("Change email page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="change_username" <?php if (in_array('change_username', $selected)) echo 'checked="true"'; ?>><span><?php _e("Change username page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="change_password" <?php if (in_array('change_password', $selected)) echo 'checked="true"'; ?>><span><?php _e("Change password page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="error" <?php if (in_array('error', $selected)) echo 'checked="true"'; ?>><span><?php _e("Error 404", BANNERS_PREF); ?></span></li>
+									</ul>
+								</li>
+                        	</ul>
+                        </ul>
+                    </div>
 				</div>
 
 				<div class="form-row">
-					<div class="form-label"><?php _e("Position", BANNERS_PREF); ?></div>
+					<div class="form-label"><?php _e("Position (*)", BANNERS_PREF); ?></div>
 					<div class="form-controls">
 						<div class="select-box undefined">
 							<div class="form-label-checkbox">
@@ -91,7 +111,7 @@ input[type="text"].bg-text-gray {
 				</div>
 
 				<div class="form-row">
-					<div class="form-label"><?php _e("Advertiser", BANNERS_PREF); ?></div>
+					<div class="form-label"><?php _e("Advertiser (*)", BANNERS_PREF); ?></div>
 					<div class="form-controls">
 						<div class="select-box undefined">
 							<div class="form-label-checkbox">
@@ -152,13 +172,13 @@ input[type="text"].bg-text-gray {
                 </div>
 
                 <div class="form-row">
-                    <div class="form-label"><?php _e("Since", BANNERS_PREF); ?></div>
-                    <div class="form-controls"><input id="dt_since_date" type="text" class="xlarge" name="dt_since_date" value="<?php if (isset($bannerToUpdate['dt_since_date'])) echo $bannerToUpdate['dt_since_date']; ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>" autocomplete="off"></div>
+                    <div class="form-label"><?php _e("From", BANNERS_PREF); ?></div>
+                    <div class="form-controls"><input id="dt_from_date" type="text" class="xlarge" name="dt_from_date" value="<?php if (isset($bannerToUpdate['dt_from_date'])) echo $bannerToUpdate['dt_from_date']; ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>" autocomplete="off"></div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-label"><?php _e("Until", BANNERS_PREF); ?></div>
-                    <div class="form-controls"><input id="dt_until_date" type="text" class="xlarge" name="dt_until_date" value="<?php if (isset($bannerToUpdate['dt_until_date'])) echo $bannerToUpdate['dt_until_date']; ?>" placeholder="<?php echo todaydate(1, 'month', '00:00:00'); ?>" autocomplete="off"></div>
+                    <div class="form-label"><?php _e("To", BANNERS_PREF); ?></div>
+                    <div class="form-controls"><input id="dt_to_date" type="text" class="xlarge" name="dt_to_date" value="<?php if (isset($bannerToUpdate['dt_to_date'])) echo $bannerToUpdate['dt_to_date']; ?>" placeholder="<?php echo todaydate(1, 'month', '00:00:00'); ?>" autocomplete="off"></div>
                 </div>
 
                 <div class="form-row">
@@ -174,7 +194,16 @@ input[type="text"].bg-text-gray {
                     </div>
 				</div>
 
-				<?php if ($bannerToUpdate) : ?>
+                <div class="form-row center">
+                	<div class="text-center fieldset-calendar" style="width: fit-content">
+                		<fieldset>
+                			<legend><?php _e("Calendar", BANNERS_PREF); ?></legend>
+                			<div id="show-calendar-content" style="width: fit-content"></div>
+                		</fieldset>
+                	</div>
+                </div>
+
+                <?php if ($bannerToUpdate && $bannerToUpdate['dt_date'] != 0) : ?>
 				<div class="form-row">
 					<div class="form-label"><?php _e("Added", BANNERS_PREF); ?></div>
 					<div class="form-controls">
@@ -196,15 +225,6 @@ input[type="text"].bg-text-gray {
                 </div>
                 <?php endif; ?>
 
-                <div class="form-row center">
-                	<div class="text-center fieldset-calendar" style="width: fit-content">
-                		<fieldset>
-                			<legend><?php _e("Calendar", BANNERS_PREF); ?></legend>
-                			<div id="show-calendar-content" style="width: fit-content"></div>
-                		</fieldset>
-                	</div>
-                </div>
-
                 <?php if ($bannerToUpdate && isset($bannerToUpdate['pk_i_id'])) : ?>
                 <div class="form-row">
                 	<div class="form-label"><?php _e("Clicks", BANNERS_PREF); ?></div>
@@ -215,6 +235,7 @@ input[type="text"].bg-text-gray {
                 	</div>
                 </div>
             	<?php endif; ?>
+
 			</div>
 
 			<div class="clear"></div>
@@ -268,18 +289,10 @@ input[type="text"].bg-text-gray {
 
 <script>
 $(document).ready(function() {
-	if ($("#all_categories").is(':checked')) {
-        $("#categories").hide();
-    } else {
-        $("#categories").show();
-    }
-    $('#all_categories').click(function () {
-        if ($(this).is(':checked')) {
-            $("#categories").hide();
-        } else {
-            $("#categories").show();
-        }
-    });
+	$("#plugin_tree, #plugin_sections").treeview({
+	    animated: "fast",
+	    collapsed: true
+	});
 
     $("input[name$='b_image']").click(function() {
         var test = $(this).val();
@@ -287,10 +300,10 @@ $(document).ready(function() {
         $(".bannertype"+test).show();
     });
 
-    $('#dt_since_date').datepicker({
+    $('#dt_from_date').datepicker({
         dateFormat: 'yy-mm-dd'
     });
-    $('#dt_until_date').datepicker({
+    $('#dt_to_date').datepicker({
         dateFormat: 'yy-mm-dd'
     });
 
@@ -330,6 +343,19 @@ $(document).ready(function() {
 		modal: true
 	});
 });
+
+// check all each checkbox
+function checkAll(id, check) {
+    aa = $('#' + id + ' input[type=checkbox]').each(function() {
+        $(this).prop('checked', check);
+    });
+}
+
+function checkCat(id, check) {
+    aa = $('#cat' + id + ' input[type=checkbox]').each(function() {
+        $(this).prop('checked', check);
+    });
+}
 
 <?php if ($bannerToUpdate && file_exists(BANNERS_FOLDER_SOURCES.$bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension'])) : ?>
 function show_banner(img) {

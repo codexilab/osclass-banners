@@ -70,3 +70,7 @@
 	width: 33px;
     height: 15px;
 }
+
+input[type="text"].bg-text-gray {
+    background-color : #d1d1d1;
+}

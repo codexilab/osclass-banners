@@ -24,10 +24,10 @@
 	 */
 
 /*
-Plugin Name: Banners
+Plugin Name: XenoTrue Online Banners
 Plugin URI: https://gitlab.com/xenotrue/development/osclass_plug_xt-banners
 Description: Put banners on the site, in any format and check its display time
-Version: 0.1-beta
+Version: 0.2-beta
 Author: XenoTrue
 Author URI: https://gitlab.com/xenotrue
 Short Name: banners
@@ -46,15 +46,23 @@ define('BANNERS_ROUTE_SOURCES', WEB_PATH . 'oc-content/plugins/' . BANNERS_FOLDE
 require_once BANNERS_PATH . "oc-load.php";
 
 // URL routes
-osc_add_route('banners-admin', BANNERS_FOLDER.'views/admin/banners', BANNERS_FOLDER.'views/admin/banners', BANNERS_FOLDER.'views/admin/banners.php');
-osc_add_route('banners-admin-set', BANNERS_FOLDER.'views/admin/set-banner', BANNERS_FOLDER.'views/admin/set-banner', BANNERS_FOLDER.'views/admin/set-banner.php');
-osc_add_route('banners-admin-advertisers', BANNERS_FOLDER.'views/admin/advertisers', BANNERS_FOLDER.'views/admin/advertisers', BANNERS_FOLDER.'views/admin/advertisers.php');
-osc_add_route('banners-admin-positions', BANNERS_FOLDER.'views/admin/positions', BANNERS_FOLDER.'views/admin/positions', BANNERS_FOLDER.'views/admin/positions.php');
-osc_add_route('banners-admin-settings', BANNERS_FOLDER.'views/admin/settings', BANNERS_FOLDER.'views/admin/settings', BANNERS_FOLDER.'views/admin/settings.php');
+foreach (banners_plugin_routes() as $route) {
+	osc_add_route($route['slug'], $route['regexp'], $route['url'], $route['file']);
+}
 osc_add_route(banners_route_page(), banners_route_page().'/', banners_route_page().'/', osc_plugin_folder(__FILE__).'views/web/banner-url.php');
+
+// Add custom CSS Styles in oc-admin
+function banners_custom_css_admin() {
+	if (Params::getParam('page') == "plugins" && in_array(Params::getParam('route'), banners_slug_routes())) {
+		osc_enqueue_script('jquery-treeview');
+		osc_enqueue_style('banners-css', osc_base_url() . 'oc-content/plugins/'.BANNERS_FOLDER.'assets/css/admin/main.css');
+	}
+}
+osc_add_hook('init_admin', 'banners_custom_css_admin');
 
 // Headers in the admin panel
 osc_add_hook('admin_menu_init', function() {
+	$routes = banners_plugin_routes();
 	osc_add_admin_submenu_divider(
 		"plugins", __("Banners", BANNERS_PREF), BANNERS_PREF, "administrator"
     );
@@ -67,14 +75,6 @@ osc_add_hook('admin_menu_init', function() {
 		"plugins", __("Settings", BANNERS_PREF), osc_route_admin_url("banners-admin-settings"), "banners-admin-settings", "administrator"
 	);
 });
-
-// Add custom CSS Styles in oc-admin
-function banners_custom_css_admin() {
-	if (Params::getParam('page') == "plugins") {
-		osc_enqueue_style('banners-css', osc_base_url() . 'oc-content/plugins/'. BANNERS_FOLDER. 'assets/css/admin/main.css');
-	}
-}
-osc_add_hook('init_admin', 'banners_custom_css_admin');
 
 // Load admin controllers, depend of url route
 function banners_admin_controllers() {
@@ -162,6 +162,7 @@ function banners_admin_controllers() {
 }
 osc_add_hook('renderplugin_controller', 'banners_admin_controllers');
 
+
 /**
  * The content of this function it will show by ajax request on this url:
  * <?php echo osc_base_url(); ?>index.php?page=ajax&action=runhook&hook=banners_controller_requests
@@ -172,12 +173,13 @@ function banners_controller_requests() {
 }
 osc_add_hook("ajax_banners_controller_requests", "banners_controller_requests");
 
-function modal_form_options() {
-    if (Params::getParam("page") == "plugins") {
+function modals_form_options() {
+    if (Params::getParam('page') == "plugins" && in_array(Params::getParam('route'), banners_slug_routes())) {
         include BANNERS_PATH . 'parts/admin/modals_form_options.php';
     }
 }
-osc_add_hook('admin_footer', 'modal_form_options');
+osc_add_hook('admin_footer', 'modals_form_options');
+
 
 /**
  * Build position hooks.
@@ -191,8 +193,8 @@ foreach ($positions as $pos) {
 
     osc_add_hook('banners_position_'.$sort, function() use ($sort) {
 
-        $banner = banners_position_sort($sort, osc_item_category_id());
-        if (isset($banner) && $banner) {
+        $banner = banners_position_sort($sort);
+        if ($banner) {
             if ($banner['type']) {
                 echo "<a href=\"".$banner['url']."\" target=\"_blank\"><img ".$banner['attrs']." /></a>";
             } else {
@@ -200,9 +202,9 @@ foreach ($positions as $pos) {
             }
         }
 
-    }); // end hook
+    });
 
-} // end foreach
+}
 
 
 // 'Configure' link

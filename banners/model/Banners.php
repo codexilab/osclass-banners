@@ -86,7 +86,7 @@ class Banners extends DAO
 	public function install()
 	{
 		$this->import(BANNERS_PATH.'struct.sql');
-		osc_set_preference('version', '0.1-beta', BANNERS_PREF, 'STRING');
+		osc_set_preference('version', '0.2-beta', BANNERS_PREF, 'STRING');
 		osc_set_preference('banner_route_page', 'banner-url', BANNERS_PREF, 'STRING');
 		osc_set_preference('banner_route_param', 'ref', BANNERS_PREF, 'STRING');
 		osc_set_preference('show_url_banner', '0', BANNERS_PREF, 'BOOLEAN');
@@ -127,7 +127,6 @@ class Banners extends DAO
      * Get all clicks of a specific banner
      *
      * @access public
-     * @since unknown
      * @param int $bannerId
      * @return array
      */
@@ -147,7 +146,6 @@ class Banners extends DAO
 	 * Count clicks a banner
 	 *
 	 * @access public
-	 * @since unknown
 	 * @param int $bannerId
 	 * @return int
 	 */
@@ -206,7 +204,6 @@ class Banners extends DAO
 	 * Get all advertisers
 	 *
 	 * @access public
-	 * @since unknown
 	 * @return array
 	 */
 	public function getAllAdvertisers()
@@ -227,7 +224,6 @@ class Banners extends DAO
      * This function is for search with parameters in the AdvertisersDataTable.php
      *
      * @access public
-     * @since unknown
      * @param array $params Is a array variable witch containt all parameters for the search and pagination
      * @return array
      */
@@ -268,7 +264,6 @@ class Banners extends DAO
      * Count total advertisers
      *
      * @access public
-     * @since unknown
      * @return integer
      */
     public function advertisersTotal()
@@ -289,7 +284,6 @@ class Banners extends DAO
      * Get advertiser by is user registered
      *
      * @access public
-     * @since unknown
      * @param integer $userId
      * @return array
      */
@@ -309,7 +303,6 @@ class Banners extends DAO
      * Get advertiser
      *
      * @access public
-     * @since unknown
      * @param integer $id
      * @return array
      */
@@ -345,7 +338,6 @@ class Banners extends DAO
      * Count total of positions
      *
      * @access public
-     * @since unknown
      * @return integer
      */
     public function positionsTotal()
@@ -366,7 +358,6 @@ class Banners extends DAO
 	 * Get all positions
 	 *
 	 * @access public
-	 * @since unknown
 	 * @param integer $bannerId
 	 * @return array
 	 */
@@ -386,7 +377,6 @@ class Banners extends DAO
      * Get position by it's ID
      *
      * @access public
-     * @since unknown
      * @param integer $id
      * @return array
      */
@@ -406,7 +396,6 @@ class Banners extends DAO
      * Get position by sort number
      *
      * @access public
-     * @since unknown
      * @param integer $sortId
      * @return array
      */
@@ -434,7 +423,6 @@ class Banners extends DAO
      * getBannerByName: Get banner by her image name
      *
      * @access public
-     * @since unknown
      * @param string $name
      * @return array
      */
@@ -455,7 +443,6 @@ class Banners extends DAO
      * getBannerByURL: Get banner by her URL
      *
      * @access public
-     * @since unknown
      * @param string $url
      * @return array
      */
@@ -475,7 +462,6 @@ class Banners extends DAO
      * detectBannerByColorAndPosition: Count banner by her Color
      *
      * @access public
-     * @since unknown
      * @param string $url
      * @return array
      */
@@ -496,34 +482,28 @@ class Banners extends DAO
     }
 
     /**
-     * detectDisponibleDateRangeBanner: Check if the date intervals of the banner is in the disponible range
+     * Get an array of banners primary key Id in a date range of position
      * 
-     * This is for validation when uploading banner in a determinated position.
-     * In the each position it cannot repeat a same date range of a banner.
-     *
      * @access public
-     * @param string $sinceDate
-     * @param string $untilDate
+     * @param string $fromDate
+     * @param string $toDate
      * @param string $positionId
      * @return array
      */
-    public function detectDisponibleDateRange($sinceDate, $untilDate, $positionId)
+    public function getByDateRange($fromDate, $toDate, $positionId)
     {
-        $this->dao->select('COUNT(*) as total') ;
+        $this->dao->select('pk_i_id');
         $this->dao->from($this->getTable_banners());
         $this->dao->where('fk_i_position_id', $positionId);
-        $this->dao->where("(('$sinceDate' BETWEEN dt_since_date AND date_sub(dt_until_date, interval +1 day)) 
-                            OR ('$untilDate' BETWEEN date_sub(dt_since_date, interval -1 day) AND dt_until_date) 
-                            OR (dt_since_date <= '$sinceDate' AND dt_until_date >= '$sinceDate')
-                            OR (dt_since_date >= '$sinceDate' AND dt_until_date <= '$untilDate'))");
+        $this->dao->where("(('$fromDate' BETWEEN dt_from_date AND date_sub(dt_to_date, interval +1 day)) 
+                            OR ('$toDate' BETWEEN date_sub(dt_from_date, interval -1 day) AND dt_to_date) 
+                            OR (dt_from_date <= '$fromDate' AND dt_to_date >= '$fromDate')
+                            OR (dt_from_date >= '$fromDate' AND dt_to_date <= '$toDate'))");
         $result = $this->dao->get();
         if($result) {
-            $row = $result->row();
-            if(isset($row['total'])) {
-                return $row['total'];
-            }
+            return $result->result();
         }
-        return 0;
+        return array();
     }
 
 	/**
@@ -555,7 +535,6 @@ class Banners extends DAO
      * This function is used for show the total uploaded banners from a advertiser specific by her id.
      *
      * @access public
-     * @since unknown
      * @param array $advertiserId
      * @return integer
      */
@@ -578,7 +557,6 @@ class Banners extends DAO
      * getBannerById: Get especific banner by it's ID
      *
      * @access public
-     * @since unknown
      * @param array $id
      * @return array
      */
@@ -598,7 +576,6 @@ class Banners extends DAO
      * getBannersByPositionId: Get banners by her position
      *
      * @access public
-     * @since unknown
      * @param integer $positionId
      * @return array
      */
@@ -618,7 +595,6 @@ class Banners extends DAO
      * getBannersByAdvertiserId: Get banners by a especific id advertiser
      *
      * @access public
-     * @since unknown
      * @param array $advertiserId
      * @return array
      */
@@ -638,10 +614,9 @@ class Banners extends DAO
      * Search banners
      *
      * This function is for thorough search with parameters in the BannersDataTable.php.
-     * The results can be ordered by date, update, since date, until date, position of banner, ascendant or descendant.
+     * The results can be ordered by date, update, from date, to date, position of banner, ascendant or descendant.
      *
      * @access public
-     * @since unknown
      * @param array $params Is a array variable witch containt all parameters for the search and pagination
      * @return array
      */
@@ -660,11 +635,11 @@ class Banners extends DAO
         	case 'update':
         		$sort = 'dt_update';
         		break;
-        	case 'since_date':
-        		$sort = 'dt_since_date';
+        	case 'from_date':
+        		$sort = 'dt_from_date';
         		break;
-        	case 'until_date':
-        		$sort = 'dt_until_date';
+        	case 'to_date':
+        		$sort = 'dt_to_date';
         		break;
         	case 'position':
         		$sort = 'fk_i_position_id';
@@ -682,11 +657,11 @@ class Banners extends DAO
         $url = (isset($params['s_url']) && $params['s_url']!='') ? $params['s_url'] : '';
         $imageType = (isset($params['s_content_type']) && $params['s_content_type']!='') ? $params['s_content_type'] : '';
 
-        $sinceDate = (isset($params['dt_since_date']) && $params['dt_since_date']!='') ? $params['dt_since_date'] : '';
-        $sinceDateControl = (isset($params['since_control']) && $params['since_control']!='') ? $params['since_control'] : '';
+        $fromDate = (isset($params['dt_from_date']) && $params['dt_from_date']!='') ? $params['dt_from_date'] : '';
+        $fromDateControl = (isset($params['from_date_control']) && $params['from_date_control']!='') ? $params['from_date_control'] : '';
 
-        $untilDate = (isset($params['dt_until_date']) && $params['dt_until_date']!='') ? $params['dt_until_date'] : '';
-        $untilDateControl = (isset($params['until_control']) && $params['until_control']!='') ? $params['until_control'] : '';
+        $toDate = (isset($params['dt_to_date']) && $params['dt_to_date']!='') ? $params['dt_to_date'] : '';
+        $toDateControl = (isset($params['to_date_control']) && $params['to_date_control']!='') ? $params['to_date_control'] : '';
 
         $date = (isset($params['dt_date']) && $params['dt_date']!='') ? $params['dt_date'] : '';
         $dateControl = (isset($params['date_control']) && $params['date_control']!='') ? $params['date_control'] : '';
@@ -733,66 +708,66 @@ class Banners extends DAO
             }
         }
 
-        if ($sinceDate != '') {
-        	switch ($sinceDateControl) {
+        if ($fromDate != '') {
+        	switch ($fromDateControl) {
         		case 'equal':
-        			$this->dao->where('dt_since_date', $sinceDate);
+        			$this->dao->where('dt_from_date', $fromDate);
         			break;
 
         		case 'greater':
-        			$this->dao->where("dt_since_date > '$sinceDate'");
+        			$this->dao->where("dt_from_date > '$fromDate'");
         			break;
 
         		case 'greater_equal':
-        			$this->dao->where("dt_since_date >= '$sinceDate'");
+        			$this->dao->where("dt_from_date >= '$fromDate'");
         			break;
 
         		case 'less':
-        			$this->dao->where("dt_since_date < '$sinceDate'");
+        			$this->dao->where("dt_from_date < '$fromDate'");
         			break;
 
         		case 'less_equal':
-        			$this->dao->where("dt_since_date <= '$sinceDate'");
+        			$this->dao->where("dt_from_date <= '$fromDate'");
         			break;
 
         		case 'not_equal':
-        			$this->dao->where("dt_since_date != '$sinceDate'");
+        			$this->dao->where("dt_from_date != '$fromDate'");
         			break;
         		
         		default:
-        			$this->dao->where('dt_since_date', $sinceDate);
+        			$this->dao->where('dt_from_date', $fromDate);
         			break;
         	}	
         }
 
-        if ($untilDate != '') {
-        	switch ($untilDateControl) {
+        if ($toDate != '') {
+        	switch ($toDateControl) {
         		case 'equal':
-        			$this->dao->where('dt_until_date', $untilDate);
+        			$this->dao->where('dt_to_date', $toDate);
         			break;
 
         		case 'greater':
-        			$this->dao->where("dt_until_date > '$untilDate'");
+        			$this->dao->where("dt_to_date > '$toDate'");
         			break;
 
         		case 'greater_equal':
-        			$this->dao->where("dt_until_date >= '$untilDate'");
+        			$this->dao->where("dt_to_date >= '$toDate'");
         			break;
 
         		case 'less':
-        			$this->dao->where("dt_until_date < '$untilDate'");
+        			$this->dao->where("dt_to_date < '$toDate'");
         			break;
 
         		case 'less_equal':
-        			$this->dao->where("dt_until_date <= '$untilDate'");
+        			$this->dao->where("dt_to_date <= '$toDate'");
         			break;
 
         		case 'not_equal':
-        			$this->dao->where("dt_until_date != '$untilDate'");
+        			$this->dao->where("dt_to_date != '$toDate'");
         			break;
         		
         		default:
-        			$this->dao->where('dt_until_date', $untilDate);
+        			$this->dao->where('dt_to_date', $toDate);
         			break;
         	}
         }
@@ -885,7 +860,6 @@ class Banners extends DAO
      * bannersTotal: Get total of banners
      *
      * @access public
-     * @since unknown
      * @return integer
      */
 	public function total()
@@ -908,7 +882,6 @@ class Banners extends DAO
      * Notes: Firts delete all her clicks; delete banner file if exist!
      *
      * @access public
-     * @since unknown
      * @param integer $id
      * @return bool
      */
