@@ -186,17 +186,6 @@ if (!function_exists('get_html_selected')) {
 }
 
 /**
- * Compare two variables, if they are equals return the html 'checked' atribute.
- *
- * @return string
- */
-if (!function_exists('get_html_checked')) {
-    function get_html_checked($a, $b) {
-        return ($a == $b) ? 'checked="true"' : '';
-    }
-}
-
-/**
  * All valid formats for the banners in the site.
  *
  * @return array

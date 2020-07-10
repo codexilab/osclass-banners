@@ -46,21 +46,54 @@ $bannerToUpdate = __get('bannerToUpdate');
 
 			<div class="grid-row grid-50">
 				<div class="form-row">
-					<div class="separate-top">
-	                    <div class="form-label">
-	                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', true); return false;"><?php _e('Check all'); ?></a> &middot;
-	                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', false); return false;"><?php _e('Uncheck all'); ?></a>
-	                    </div>
-	                    <div class="form-controls">
-	                        <ul id="plugin_tree">
-	                            <?php CategoryForm::categories_tree($categories, $selected); ?>
-	                        </ul>
-	                    </div>
-	                </div>
+					<div class="form-label"><?php _e("Sections (*)", BANNERS_PREF); ?></div>
+					
+                    <div class="form-controls">
+                    	<?php _e("Categories in Search and Item pages:", BANNERS_PREF); ?><br />
+                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', true); return false;"><?php _e('Check all'); ?></a> &middot;
+                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', false); return false;"><?php _e('Uncheck all'); ?></a>
+                        
+                        <br />
+
+                        <ul id="plugin_tree"><?php CategoryForm::categories_tree($categories, $selected); ?></ul>
+
+                        <ul id="plugin_sections">
+                        	<ul>
+                        		<li><span class="folder"><?php _e("Rest of all pages", BANNERS_PREF); ?></span>
+									<ul id="catsections">
+										<li>
+											<a href="javascript:void(0);" onclick="checkAll('plugin_sections', true); return false;"><?php _e('Check all'); ?></a> &middot;
+	                        				<a href="javascript:void(0);" onclick="checkAll('plugin_sections', false); return false;"><?php _e('Uncheck all'); ?></a>
+	                        			</li>
+										<li><input type="checkbox" name="categories[]" value="home" <?php if (in_array('home', $selected)) echo 'checked="true"'; ?>><span><?php _e("Home page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="page" <?php if (in_array('page', $selected)) echo 'checked="true"'; ?>><span><?php _e("Static page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="contact" <?php if (in_array('contact', $selected)) echo 'checked="true"'; ?>><span><?php _e("Contact page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="item_add" <?php if (in_array('item_add', $selected)) echo 'checked="true"'; ?>><span><?php _e("Publish page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="item_edit" <?php if (in_array('item_edit', $selected)) echo 'checked="true"'; ?>><span><?php _e("Edit page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="item_contact" <?php if (in_array('item_contact', $selected)) echo 'checked="true"'; ?>><span><?php _e("Item contact page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="login" <?php if (in_array('login', $selected)) echo 'checked="true"'; ?>><span><?php _e("Login page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="register" <?php if (in_array('register', $selected)) echo 'checked="true"'; ?>><span><?php _e("Register page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="login_recover" <?php if (in_array('login_recover', $selected)) echo 'checked="true"'; ?>><span><?php _e("Recover page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="login_forgot" <?php if (in_array('login_forgot', $selected)) echo 'checked="true"'; ?>><span><?php _e("Forgot page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="custom" <?php if (in_array('custom', $selected)) echo 'checked="true"'; ?>><span><?php _e("Custom pages", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="pub_profile" <?php if (in_array('pub_profile', $selected)) echo 'checked="true"'; ?>><span><?php _e("Public profile page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="dashboard" <?php if (in_array('dashboard', $selected)) echo 'checked="true"'; ?>><span><?php _e("User dashboard", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="profile" <?php if (in_array('profile', $selected)) echo 'checked="true"'; ?>><span><?php _e("User profile", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="items" <?php if (in_array('items', $selected)) echo 'checked="true"'; ?>><span><?php _e("User's items page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="alerts" <?php if (in_array('alerts', $selected)) echo 'checked="true"'; ?>><span><?php _e("User's alerts page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="change_email" <?php if (in_array('change_email', $selected)) echo 'checked="true"'; ?>><span><?php _e("Change email page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="change_username" <?php if (in_array('change_username', $selected)) echo 'checked="true"'; ?>><span><?php _e("Change username page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="change_password" <?php if (in_array('change_password', $selected)) echo 'checked="true"'; ?>><span><?php _e("Change password page", BANNERS_PREF); ?></span></li>
+										<li><input type="checkbox" name="categories[]" value="error" <?php if (in_array('error', $selected)) echo 'checked="true"'; ?>><span><?php _e("Error 404", BANNERS_PREF); ?></span></li>
+									</ul>
+								</li>
+                        	</ul>
+                        </ul>
+                    </div>
 				</div>
 
 				<div class="form-row">
-					<div class="form-label"><?php _e("Position", BANNERS_PREF); ?></div>
+					<div class="form-label"><?php _e("Position (*)", BANNERS_PREF); ?></div>
 					<div class="form-controls">
 						<div class="select-box undefined">
 							<div class="form-label-checkbox">
@@ -78,7 +111,7 @@ $bannerToUpdate = __get('bannerToUpdate');
 				</div>
 
 				<div class="form-row">
-					<div class="form-label"><?php _e("Advertiser", BANNERS_PREF); ?></div>
+					<div class="form-label"><?php _e("Advertiser (*)", BANNERS_PREF); ?></div>
 					<div class="form-controls">
 						<div class="select-box undefined">
 							<div class="form-label-checkbox">
@@ -256,7 +289,7 @@ $bannerToUpdate = __get('bannerToUpdate');
 
 <script>
 $(document).ready(function() {
-	$("#plugin_tree").treeview({
+	$("#plugin_tree, #plugin_sections").treeview({
 	    animated: "fast",
 	    collapsed: true
 	});
@@ -311,7 +344,7 @@ $(document).ready(function() {
 	});
 });
 
-// check all the categories
+// check all each checkbox
 function checkAll(id, check) {
     aa = $('#' + id + ' input[type=checkbox]').each(function() {
         $(this).prop('checked', check);

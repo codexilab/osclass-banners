@@ -45,7 +45,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 					'pk_i_id'               => ($bannerToUpdate) ? $bannerToUpdate['pk_i_id'] : false,
 					'fk_i_advertiser_id'    => Params::getParam('fk_i_advertiser_id'),
 					'fk_i_position_id'      => Params::getParam('fk_i_position_id'),
-					's_category'            => (Params::getParam('all_categories')) ? 'all' : implode(',', Params::getParam('categories')),
+					's_category'            => implode(',', Params::getParam('categories')),
 					's_url'                 => setURL(Params::getParam('s_url')),
 					's_name'                => osc_genRandomPassword(),
 					's_title' 				=> Params::getParam('s_title'),

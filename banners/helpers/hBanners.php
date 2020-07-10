@@ -168,11 +168,48 @@ if (!function_exists('get_banner_route')) {
 }
 
 /**
+ * Returns an array with references fo allowed sections where a banner can be shown,
+ * depending on the current location of the logged in user or visitor.
+ *
+ * @return array Example: array('home', '1')
+ */
+function banners_allowed_sections() {
+    $sections = array();
+    //$sections[] = 'all';
+    if (osc_is_404()) $sections[] = 'error';
+    if (osc_is_home_page()) $sections[] = 'home';
+    //if (osc_is_search_page()) $sections[] = 'search';
+    if (osc_is_static_page()) $sections[] = 'page';
+    if (osc_is_contact_page()) $sections[] = 'contact';
+    //if (osc_is_ad_page()) $sections[] = 'item';
+    if (osc_is_publish_page()) $sections[] = 'item_add';
+    if (osc_is_edit_page()) $sections[] = 'item_edit';
+    if (osc_is_item_contact_page()) $sections[] = 'item_contact';
+    if (osc_is_login_page()) $sections[] = 'login';
+    if (osc_is_register_page()) $sections[] = 'register';
+    if (osc_is_recover_page()) $sections[] = 'login_recover';
+    if (osc_is_forgot_page()) $sections[] = 'login_forgot';
+
+    if (osc_is_custom_page()) $sections[] = 'custom';
+
+    if (osc_is_public_profile())$sections[] = 'pub_profile';
+    if (osc_is_user_dashboard()) $sections[] = 'dashboard';
+    if (osc_is_user_profile()) $sections[] = 'profile';
+    if (osc_is_list_items()) $sections[] = 'items';
+    if (osc_is_list_alerts()) $sections[] = 'alerts';
+    if (osc_is_change_email_page()) $sections[] = 'change_email';
+    if (osc_is_change_username_page()) $sections[] = 'change_username';
+    if (osc_is_change_password_page()) $sections[] = 'change_password';
+    if (osc_category_id()) $sections[] = osc_category_id();
+    return $sections;
+}
+
+/**
  * Return array with specific information of banner according to its parameters of disposition.
  *
  * - Example of use: 
- * $banners1 = banners_position_sort(1, osc_item_category_id()); Show banner of position 1 in determinated category of a item.
- * $banners2 = banners_position_sort(3, 'all'); Show banner of position 3 in all categories.
+ * $banners1 = banners_position_sort(1); Show banner of position 1 in determinated category of a item.
+ * $banners2 = banners_position_sort(3); Show banner of position 3 in all categories.
  * 
  *  if ($banners1) {
  *      if ($banners1['type']) {
@@ -200,7 +237,7 @@ if (!function_exists('get_banner_route')) {
 function banners_position_sort($sort) {
     $position   = Banners::newInstance()->getPositionBySortId($sort);
     $banners    = (isset($position['pk_i_id'])) ? banners_by_position($position['pk_i_id']) : array();
-    $sections   = array('all', osc_category_id()); // You can add more elements here
+    $sections   = banners_allowed_sections(); // You can add more elements with array_unshift or array_push
     $showBanner = false;
     $b          = array();
 
@@ -209,8 +246,8 @@ function banners_position_sort($sort) {
             
             if (todaydate() >= $banner['dt_from_date'] && todaydate() <= $banner['dt_to_date'] && $banner['b_active'] == true) {
 
-                $category = explode(',', $banner['s_category']);
-                $showBanner = !empty(array_intersect($sections, $category)); // boolean value
+                $category = explode(',', $banner['s_category']); // Convert value $banner['s_category'] = 'home,1,2,3'; to $category = array('home', '1', '2', '3');
+                $showBanner = !empty(array_intersect($sections, $category)); // Boolean value
 
                 $advertiser = Banners::newInstance()->getAdvertiserById($banner['fk_i_advertiser_id']);
                 if ($showBanner == true && $advertiser['b_active'] == true) {
