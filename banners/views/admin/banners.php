@@ -40,8 +40,8 @@ $mimes 			= get_banner_mimes();
 
 <?php banners_admin_menu(); ?>
 
-<h2 class="render-title"><?php _e("Manage banners", BANNERS_PREF); ?>
-	<a href="<?php echo osc_route_admin_url('banners-admin-set'); ?>" class="btn btn-mini"><?php _e("Add new", BANNERS_PREF); ?></a>
+<h2 class="render-title"><?php _e('Manage banners', BANNERS_PREF); ?>
+	<a href="<?php echo osc_route_admin_url('banners-admin-set'); ?>" class="btn btn-mini"><?php _e('Add new'); ?></a>
 </h2>
 
 <!-- DataTable -->
@@ -68,7 +68,7 @@ $mimes 			= get_banner_mimes();
 				<input type="hidden" name="action" value="renderplugin" />
 				<input type="hidden" name="route" value="banners-admin" />
 
-				<a id="btn-display-filters" href="#" class="btn"><?php _e("Show filters", BANNERS_PREF); ?></a>
+				<a id="btn-display-filters" href="#" class="btn"><?php _e('Show filters'); ?></a>
 			</form>
 		</div>
 	</div><!-- /.table-toolbar -->
@@ -82,7 +82,7 @@ $mimes 			= get_banner_mimes();
         <div id="bulk-actions">
             <label>
                 <?php osc_print_bulk_actions('bulk_actions', 'plugin_action', __get('bulk_options'), 'select-box-extra'); ?>
-                <input type="submit" id="bulk_apply" class="btn" value="<?php echo osc_esc_html( __("Apply", BANNERS_PREF) ); ?>" />
+                <input type="submit" id="bulk_apply" class="btn" value="<?php echo osc_esc_html( __('Apply') ); ?>" />
             </label>
         </div>
 
@@ -110,7 +110,7 @@ $mimes 			= get_banner_mimes();
 				<?php } else { ?>
 					<tr>
 						<td colspan="<?php echo count($columns)+1; ?>" class="text-center">
-							<p><?php _e("No data available in table", BANNERS_PREF); ?></p>
+							<p><?php _e('No data available in table'); ?></p>
 						</td>
 					</tr>
 				<?php } ?>
@@ -145,15 +145,15 @@ osc_show_pagination_admin($aData);
         </div>
         <div class="form-actions">
             <div class="wrapper">
-            <a class="btn" href="javascript:void(0);" onclick="$('#dialog-banner-delete').dialog('close');"><?php _e('Cancel', BANNERS_PREF); ?></a>
-            <input id="banner-delete-submit" type="submit" value="<?php echo osc_esc_html( __('Delete', BANNERS_PREF) ); ?>" class="btn btn-red" />
+            <a class="btn" href="javascript:void(0);" onclick="$('#dialog-banner-delete').dialog('close');"><?php _e('Cancel'); ?></a>
+            <input id="banner-delete-submit" type="submit" value="<?php echo osc_esc_html( __('Delete') ); ?>" class="btn btn-red" />
             </div>
         </div>
     </div>
 </form>
 
 <!-- Dialog when it want activate a banner -->
-<form id="dialog-banner-activate" method="get" action="<?php echo osc_route_admin_url(true); ?>" class="has-form-actions hide" title="<?php echo osc_esc_html(__("Activate banner", BANNERS_PREF)); ?>">
+<form id="dialog-banner-activate" method="get" action="<?php echo osc_route_admin_url(true); ?>" class="has-form-actions hide" title="<?php echo osc_esc_html(__('Activate banner', BANNERS_PREF)); ?>">
     <input type="hidden" name="page" value="plugins" />
     <input type="hidden" name="action" value="renderplugin" />
     <input type="hidden" name="route" value="banners-admin" />
@@ -162,19 +162,19 @@ osc_show_pagination_admin($aData);
 
     <div class="form-horizontal">
         <div class="form-row">
-            <?php _e("Are you sure you want to activate this banner?", BANNERS_PREF); ?>
+            <?php _e('Are you sure you want to activate this banner?', BANNERS_PREF); ?>
         </div>
         <div class="form-actions">
             <div class="wrapper">
-                <a class="btn" href="javascript:void(0);" onclick="$('#dialog-banner-activate').dialog('close');"><?php _e("Cancel", BANNERS_PREF); ?></a>
-                <input id="banner-activate-submit" type="submit" value="<?php echo osc_esc_html( __("Activate", BANNERS_PREF) ); ?>" class="btn btn-red" />
+                <a class="btn" href="javascript:void(0);" onclick="$('#dialog-banner-activate').dialog('close');"><?php _e('Cancel'); ?></a>
+                <input id="banner-activate-submit" type="submit" value="<?php echo osc_esc_html( __('Activate') ); ?>" class="btn btn-red" />
             </div>
         </div>
     </div>
 </form>
 
 <!-- Dialog when it want deactivate a banner -->
-<form id="dialog-banner-deactivate" method="get" action="<?php echo osc_route_admin_url(true); ?>" class="has-form-actions hide" title="<?php echo osc_esc_html(__("Deactivate banner", BANNERS_PREF)); ?>">
+<form id="dialog-banner-deactivate" method="get" action="<?php echo osc_route_admin_url(true); ?>" class="has-form-actions hide" title="<?php echo osc_esc_html(__('Deactivate banner', BANNERS_PREF)); ?>">
     <input type="hidden" name="page" value="plugins" />
     <input type="hidden" name="action" value="renderplugin" />
     <input type="hidden" name="route" value="banners-admin" />
@@ -183,25 +183,25 @@ osc_show_pagination_admin($aData);
 
     <div class="form-horizontal">
         <div class="form-row">
-            <?php _e("Are you sure you want to deactivate this banner?", BANNERS_PREF); ?>
+            <?php _e('Are you sure you want to deactivate this banner?', BANNERS_PREF); ?>
         </div>
         <div class="form-actions">
             <div class="wrapper">
-                <a class="btn" href="javascript:void(0);" onclick="$('#dialog-banner-deactivate').dialog('close');"><?php _e("Cancel", BANNERS_PREF); ?></a>
-                <input id="banner-deactivate-submit" type="submit" value="<?php echo osc_esc_html( __("Deactivate", BANNERS_PREF) ); ?>" class="btn btn-red" />
+                <a class="btn" href="javascript:void(0);" onclick="$('#dialog-banner-deactivate').dialog('close');"><?php _e('Cancel'); ?></a>
+                <input id="banner-deactivate-submit" type="submit" value="<?php echo osc_esc_html( __('Deactivate') ); ?>" class="btn btn-red" />
             </div>
         </div>
     </div>
 </form>
 
 <!-- Dialog for bulk actions of toolbar -->
-<div id="dialog-bulk-actions" title="<?php _e("Bulk actions", BANNERS_PREF); ?>" class="has-form-actions hide">
+<div id="dialog-bulk-actions" title="<?php _e('Bulk actions'); ?>" class="has-form-actions hide">
     <div class="form-horizontal">
         <div class="form-row"></div>
         <div class="form-actions">
             <div class="wrapper">
-                <a id="bulk-actions-cancel" class="btn" href="javascript:void(0);"><?php _e("Cancel", BANNERS_PREF); ?></a>
-                <a id="bulk-actions-submit" href="javascript:void(0);" class="btn btn-red" ><?php echo osc_esc_html( __("Delete", BANNERS_PREF) ); ?></a>
+                <a id="bulk-actions-cancel" class="btn" href="javascript:void(0);"><?php _e('Cancel'); ?></a>
+                <a id="bulk-actions-submit" href="javascript:void(0);" class="btn btn-red" ><?php echo osc_esc_html( __('Delete') ); ?></a>
                 <div class="clear"></div>
             </div>
         </div>
@@ -224,10 +224,10 @@ osc_show_pagination_admin($aData);
     			<div class="row-wrapper">
     				<?php if ($advertisers) : ?>
     					<div class="form-row">
-    						<div class="form-label"><?php _e("Advertiser", BANNERS_PREF); ?></div>
+    						<div class="form-label"><?php _e('Advertiser', BANNERS_PREF); ?></div>
     						<div class="form-controls">
     							<select name="advertiserId">
-    								<option value="" <?php echo ((Params::getParam('advertiserId') == '') ? 'selected="selected"' : '' ); ?>><?php _e("Choose advertiser", BANNERS_PREF); ?></option>
+    								<option value="" <?php echo ((Params::getParam('advertiserId') == '') ? 'selected="selected"' : '' ); ?>><?php _e('Choose advertiser', BANNERS_PREF); ?></option>
     								<?php foreach ($advertisers as $advertiser) : ?>
 									<?php if ($advertiser['s_business_sector']) : ?>
 		                                <option value="<?php echo $advertiser['pk_i_id']; ?>" <?php echo get_html_selected(Params::getParam('advertiserId'), $advertiser['pk_i_id']); ?>><?php echo ($advertiser['fk_i_user_id']) ? get_user_name($advertiser['fk_i_user_id']).' ('.get_user_email($advertiser['fk_i_user_id']).') ' : $advertiser['s_name']; ?> - <?php echo $advertiser['s_business_sector']; ?></option>
@@ -327,7 +327,7 @@ osc_show_pagination_admin($aData);
 					</div>
 
 					<div class="form-row">
-						<div class="form-label"><?php _e('Last update', BANNERS_PREF); ?></div>
+						<div class="form-label"><?php _e('Last update'); ?></div>
 						<div class="form-controls">
 							<input id="update" type="text" class="xlarge" name="update" value="<?php echo Params::getParam('update'); ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>">
 							<select name="updateControl">
@@ -342,10 +342,10 @@ osc_show_pagination_admin($aData);
 					</div>
 
 					<div class="form-row">
-						<div class="form-label"><?php _e('Status', BANNERS_PREF); ?></div>
+						<div class="form-label"><?php _e('Status'); ?></div>
 						<div class="form-controls">
 							<select id="b_active" name="b_active">
-								<option value="" <?php echo ( (Params::getParam('b_active') == '') ? 'selected="selected"' : '' )?>><?php _e('Choose an option', BANNERS_PREF); ?></option>
+								<option value="" <?php echo ( (Params::getParam('b_active') == '') ? 'selected="selected"' : '' )?>><?php _e('Choose an option'); ?></option>
 								<option value="1" <?php echo ( (Params::getParam('b_active') == '1') ? 'selected="selected"' : '' )?>><?php _e('ACTIVE', BANNERS_PREF); ?></option>
 								<option value="0" <?php echo ( (Params::getParam('b_active') == '0') ? 'selected="selected"' : '' )?>><?php _e('DEACTIVE', BANNERS_PREF); ?></option>
 							</select>
@@ -377,8 +377,8 @@ osc_show_pagination_admin($aData);
     </div><!-- /.form-horizontal -->
 	<div class="form-actions">
 		<div class="wrapper">
-			<input id="show-filters" type="submit" value="<?php echo osc_esc_html( __('Apply filters', BANNERS_PREF)); ?>" class="btn btn-submit" />
-			<a class="btn" href="<?php echo osc_route_admin_url('banners-admin'); ?>"><?php _e('Reset filters', BANNERS_PREF); ?></a>
+			<input id="show-filters" type="submit" value="<?php echo osc_esc_html( __('Apply filters')); ?>" class="btn btn-submit" />
+			<a class="btn" href="<?php echo osc_route_admin_url('banners-admin'); ?>"><?php _e('Reset filters'); ?></a>
 		</div>
 	</div>
 </form>

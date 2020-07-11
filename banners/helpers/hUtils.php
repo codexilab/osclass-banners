@@ -85,7 +85,7 @@ if (!function_exists('setURL')) {
 
 if (!function_exists('currentURL')) {
     function currentURL() {
-        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     }
 }
 
@@ -192,7 +192,7 @@ if (!function_exists('get_html_selected')) {
  */
 if (!function_exists('get_banner_mimes')) {
     function get_banner_mimes() {
-        return array("gif", "jpg", "bmp", "png", "svg");
+        return array('gif', 'jpg', 'bmp', 'png', 'svg');
     }
 }
 

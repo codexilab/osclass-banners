@@ -35,7 +35,7 @@ $rows           = $aData['aRows'];
 
 <?php banners_admin_menu(); ?>
 
-<h2 class="render-title"><?php _e("Manage advertisers", BANNERS_PREF); ?> <a href="#" onclick="set_advertiser();return false;" class="btn btn-mini"><?php _e("Add new", BANNERS_PREF); ?></a></h2>
+<h2 class="render-title"><?php _e('Manage advertisers', BANNERS_PREF); ?> <a href="#" onclick="set_advertiser();return false;" class="btn btn-mini"><?php _e('Add new'); ?></a></h2>
 
 <!-- DataTable -->
 <div class="relative">
@@ -50,10 +50,10 @@ $rows           = $aData['aRows'];
 	                <?php endforeach; ?>
 
 	                <select name="iDisplayLength" class="select-box-extra select-box-medium float-left" onchange="this.form.submit();" >
-	                    <option value="10"><?php printf(__("%d Advertisers", BANNERS_PREF), 10); ?></option>
-	                    <option value="25" <?php if ( Params::getParam('iDisplayLength') == 25 ) echo 'selected'; ?> ><?php printf(__("%d Advertisers", BANNERS_PREF), 25); ?></option>
-	                    <option value="50" <?php if ( Params::getParam('iDisplayLength') == 50 ) echo 'selected'; ?> ><?php printf(__("%d Advertisers", BANNERS_PREF), 50); ?></option>
-	                    <option value="100" <?php if ( Params::getParam('iDisplayLength') == 100 ) echo 'selected'; ?> ><?php printf(__("%d Advertisers", BANNERS_PREF), 100); ?></option>
+	                    <option value="10"><?php printf(__('%d Advertisers', BANNERS_PREF), 10); ?></option>
+	                    <option value="25" <?php if ( Params::getParam('iDisplayLength') == 25 ) echo 'selected'; ?> ><?php printf(__('%d Advertisers', BANNERS_PREF), 25); ?></option>
+	                    <option value="50" <?php if ( Params::getParam('iDisplayLength') == 50 ) echo 'selected'; ?> ><?php printf(__('%d Advertisers', BANNERS_PREF), 50); ?></option>
+	                    <option value="100" <?php if ( Params::getParam('iDisplayLength') == 100 ) echo 'selected'; ?> ><?php printf(__('%d Advertisers', BANNERS_PREF), 100); ?></option>
 	                </select>
 	            </form>
 	        </div>
@@ -69,7 +69,7 @@ $rows           = $aData['aRows'];
         <div id="bulk-actions">
             <label>
                 <?php osc_print_bulk_actions('bulk_actions', 'plugin_action', __get('bulk_options'), 'select-box-extra'); ?>
-                <input type="submit" id="bulk_apply" class="btn" value="<?php echo osc_esc_html( __("Apply", BANNERS_PREF) ); ?>" />
+                <input type="submit" id="bulk_apply" class="btn" value="<?php echo osc_esc_html( __('Apply') ); ?>" />
             </label>
         </div>
 
@@ -98,7 +98,7 @@ $rows           = $aData['aRows'];
                 <?php } else { ?>
                     <tr>
                         <td colspan="<?php echo count($columns)+1; ?>" class="text-center">
-                            <p><?php _e("No data available in table", BANNERS_PREF); ?></p>
+                            <p><?php _e('No data available in table'); ?></p>
                         </td>
                     </tr>
                 <?php } ?>

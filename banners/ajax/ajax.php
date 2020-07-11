@@ -45,7 +45,7 @@ class CBannersAdminAjax extends AdminSecBaseModel
             case 'position_calendar_iframe':
             	$positionId = (Params::getParam('position')) ? Params::getParam('position') : 0;    			
     			// If no month has been selected, we put the current and the year
-    			$month 		= (Params::getParam('month')) ? Params::getParam('month') : date("Y-m");
+    			$month 		= (Params::getParam('month')) ? Params::getParam('month') : date('Y-m');
     			
     			$this->_exportVariableToView('positionId', $positionId);
     			$this->_exportVariableToView('month', $month);

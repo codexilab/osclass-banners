@@ -27,15 +27,9 @@
 $advertiserToUpdate = __get('advertiserToUpdate');
 ?>
 
-<style type="text/css">
-input[type="text"].bg-text-gray {
-    background-color : #d1d1d1;
-}
-</style>
-
 <?php // banners_admin_menu(); ?>
 
-<?php if (!$advertiserToUpdate) : ?><h2 class="render-title"><?php _e("Add new advertiser", BANNERS_PREF); ?></h2><?php endif; ?>
+<?php if (!$advertiserToUpdate) : ?><h2 class="render-title"><?php _e('Add new advertiser', BANNERS_PREF); ?></h2><?php endif; ?>
 
 <!--<form id="new-advertiser" method="post" action="" class="has-form-actions hide">-->
     <input type="hidden" name="page" value="plugins" />
@@ -46,26 +40,26 @@ input[type="text"].bg-text-gray {
 
     <div class="form-horizontal">
         <div class="form-row">
-            <div class="form-label"><?php _e("Name", BANNERS_PREF); ?></div>
+            <div class="form-label"><?php _e('Name'); ?></div>
             <div id="nAdv" class="form-controls">
-                <input id="fAdv" type="text" class="xlarge fAdv ui-autocomplete-input" name="s_name" value="<?php if (isset($advertiserToUpdate['fk_i_user_id']) || isset($advertiserToUpdate['s_name'])) echo (get_user_name($advertiserToUpdate['fk_i_user_id'])) ? get_user_name($advertiserToUpdate['fk_i_user_id']) : $advertiserToUpdate['s_name']; ?>"><a id="cAdv" href="#" class="btn btn-mini hide"><?php _e("Clear", BANNERS_PREF); ?></a>
+                <input id="fAdv" type="text" class="xlarge fAdv ui-autocomplete-input" name="s_name" value="<?php if (isset($advertiserToUpdate['fk_i_user_id']) || isset($advertiserToUpdate['s_name'])) echo (get_user_name($advertiserToUpdate['fk_i_user_id'])) ? get_user_name($advertiserToUpdate['fk_i_user_id']) : $advertiserToUpdate['s_name']; ?>"><a id="cAdv" href="#" class="btn btn-mini hide"><?php _e('Clear'); ?></a>
                 <input id="fAdvId" name="fk_i_user_id" type="hidden" value="" />
             </div>
         </div>
         <div class="form-row">
-            <div class="form-label"><?php _e("Business sector", BANNERS_PREF); ?></div>
+            <div class="form-label"><?php _e('Business sector', BANNERS_PREF); ?></div>
             <div class="form-controls"><input type="text" class="xlarge" name="s_business_sector" value="<?php if (isset($advertiserToUpdate['s_business_sector'])) echo $advertiserToUpdate['s_business_sector']; ?>"></div>
         </div>
         <div class="form-row">
             <div class="form-controls">
                 <div class="form-label-checkbox">
-                    <label><input type="checkbox" name="b_active" value="1" <?php if (!$advertiserToUpdate || isset($advertiserToUpdate['b_active']) && $advertiserToUpdate['b_active']) echo 'checked="true"'; ?>> <?php _e("Active", BANNERS_PREF); ?></label>
+                    <label><input type="checkbox" name="b_active" value="1" <?php if (!$advertiserToUpdate || isset($advertiserToUpdate['b_active']) && $advertiserToUpdate['b_active']) echo 'checked="true"'; ?>> <?php _e('Active'); ?></label>
                 </div>
             </div>
         </div>
         <div class="form-actions">
             <div class="wrapper">
-                <a class="btn button-close" href="javascript:void(0);" onclick="$('#modal-500px').dialog('close');"><?php _e('Cancel', BANNERS_PREF); ?></a>
+                <a class="btn button-close" href="javascript:void(0);" onclick="$('#modal-500px').dialog('close');"><?php _e('Cancel'); ?></a>
                 <input type="submit" value="<?php echo ($advertiserToUpdate) ? __('Update advertiser', BANNERS_PREF) : __('Add new advertiser', BANNERS_PREF); ?>" class="btn btn-submit">
             </div>
         </div>

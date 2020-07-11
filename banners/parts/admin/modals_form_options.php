@@ -50,7 +50,7 @@
 	});
 
 	function loading_modal() {
-		return '<div class="text-center">Loading...</div>';
+		return '<div class="text-center"><?php echo osc_esc_js( __('Loading...', BANNERS_PREF) ); ?></div>';
 	}
 
 	function set_advertiser(advertiser_id = null) {

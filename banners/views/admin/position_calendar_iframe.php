@@ -62,7 +62,7 @@ function check_values(&$value = null, $key = null) {
 }
 ?>
 
-<h3 class="render-title"><?php _e("Position", BANNERS_PREF); ?> <?php if (isset($position['i_sort_id'])) echo $position['i_sort_id']; ?> <?php if (isset($position['s_title']) && $position['s_title']) echo ' - ' . $position['s_title']; ?></h3>
+<h3 class="render-title"><?php _e('Position', BANNERS_PREF); ?> <?php if (isset($position['i_sort_id'])) echo $position['i_sort_id']; ?> <?php if (isset($position['s_title']) && $position['s_title']) echo ' - ' . $position['s_title']; ?></h3>
 
 <table class="table" cellpadding="0" cellspacing="0">
      <thead>

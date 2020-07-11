@@ -62,6 +62,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 				);
 
 				// If the banner to update have the same color, not validate the color
+				$color = $data['s_color'];
 				$validateColor = ($bannerToUpdate && $bannerToUpdate['s_color'] == $data['s_color']) ? false : true;
 
 				// Validate fields:
@@ -93,7 +94,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 							if ($bannerToUpdate) $data['s_name'] = $bannerToUpdate['s_name']; #unset($data['s_name']);
 							unset($data['s_content_type']);
 							unset($data['s_extension']);
-							if (Params::getParam('s_url') == "") $data['s_url'] = "";
+							if (Params::getParam('s_url') == '') $data['s_url'] = '';
 							Banners::newInstance()->set($data);
 							osc_add_flash_ok_message(__('The banner has been correctly placed.', BANNERS_PREF), 'admin');
 						}

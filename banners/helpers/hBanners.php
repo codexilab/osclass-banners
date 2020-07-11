@@ -54,7 +54,7 @@ function position_by_id($id) {
  * @return string
  */
 function banners_admin_menu() {
-    require_once BANNERS_PATH . "parts/admin/menu.php";
+    require_once BANNERS_PATH . 'parts/admin/menu.php';
 }
 
 /**

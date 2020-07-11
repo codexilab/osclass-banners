@@ -43,7 +43,7 @@ define('BANNERS_FOLDER_SOURCES', BANNERS_PATH . 'uploads/'); // Folder where to 
 define('BANNERS_ROUTE_SOURCES', WEB_PATH . 'oc-content/plugins/' . BANNERS_FOLDER . 'uploads/');
 
 // Prepare model, controllers and helpers
-require_once BANNERS_PATH . "oc-load.php";
+require_once BANNERS_PATH . 'oc-load.php';
 
 // URL routes
 foreach (banners_plugin_routes() as $route) {
@@ -53,7 +53,7 @@ osc_add_route(banners_route_page(), banners_route_page().'/', banners_route_page
 
 // Add custom CSS Styles in oc-admin
 function banners_custom_css_admin() {
-	if (Params::getParam('page') == "plugins" && in_array(Params::getParam('route'), banners_slug_routes())) {
+	if (Params::getParam('page') == 'plugins' && in_array(Params::getParam('route'), banners_slug_routes())) {
 		osc_enqueue_script('jquery-treeview');
 		osc_enqueue_style('banners-css', osc_base_url() . 'oc-content/plugins/'.BANNERS_FOLDER.'assets/css/admin/main.css');
 	}
@@ -64,15 +64,15 @@ osc_add_hook('init_admin', 'banners_custom_css_admin');
 osc_add_hook('admin_menu_init', function() {
 	$routes = banners_plugin_routes();
 	osc_add_admin_submenu_divider(
-		"plugins", __("Banners", BANNERS_PREF), BANNERS_PREF, "administrator"
+		'plugins', __('Banners', BANNERS_PREF), BANNERS_PREF, 'administrator'
     );
 
 	osc_add_admin_submenu_page(
-		"plugins", __("Manage banners", BANNERS_PREF), osc_route_admin_url("banners-admin"), "banners-admin", "administrator"
+		'plugins', __('Manage banners', BANNERS_PREF), osc_route_admin_url('banners-admin'), 'banners-admin', 'administrator'
 	);
 
 	osc_add_admin_submenu_page(
-		"plugins", __("Settings", BANNERS_PREF), osc_route_admin_url("banners-admin-settings"), "banners-admin-settings", "administrator"
+		'plugins', __('Settings', BANNERS_PREF), osc_route_admin_url('banners-admin-settings'), 'banners-admin-settings', 'administrator'
 	);
 });
 
@@ -81,14 +81,14 @@ function banners_admin_controllers() {
 	switch (Params::getParam("route")) {
 		case 'banners-admin':
 			$filter = function($string) {
-                return __("Banners", BANNERS_PREF);
+                return __('Banners', BANNERS_PREF);
             };
 
             // Page title (in <head />)
-            osc_add_filter("admin_title", $filter, 10);
+            osc_add_filter('admin_title', $filter, 10);
 
             // Page title (in <h1 />)
-            osc_add_filter("custom_plugin_title", $filter);
+            osc_add_filter('custom_plugin_title', $filter);
 
             $do = new CAdminBanners();
             $do->doModel();
@@ -96,14 +96,14 @@ function banners_admin_controllers() {
 
 		case 'banners-admin-set':
 			$filter = function($string) {
-                return __("Banners", BANNERS_PREF);
+                return __('Banners', BANNERS_PREF);
             };
 
             // Page title (in <head />)
-            osc_add_filter("admin_title", $filter, 10);
+            osc_add_filter('admin_title', $filter, 10);
 
             // Page title (in <h1 />)
-            osc_add_filter("custom_plugin_title", $filter);
+            osc_add_filter('custom_plugin_title', $filter);
 
             $do = new CAdminBannersNew();
             $do->doModel();
@@ -111,14 +111,14 @@ function banners_admin_controllers() {
 
 		case 'banners-admin-positions':
 			$filter = function($string) {
-                return __("Positions - Banners", BANNERS_PREF);
+                return __('Positions - Banners', BANNERS_PREF);
             };
 
             // Page title (in <head />)
-            osc_add_filter("admin_title", $filter, 10);
+            osc_add_filter('admin_title', $filter, 10);
 
             // Page title (in <h1 />)
-            osc_add_filter("custom_plugin_title", $filter);
+            osc_add_filter('custom_plugin_title', $filter);
 
             $do = new CAdminBannersPositions();
             $do->doModel();
@@ -126,14 +126,14 @@ function banners_admin_controllers() {
 
 		case 'banners-admin-advertisers':
 			$filter = function($string) {
-                return __("Advertisers - Banners", BANNERS_PREF);
+                return __('Advertisers - Banners', BANNERS_PREF);
             };
 
             // Page title (in <head />)
-            osc_add_filter("admin_title", $filter, 10);
+            osc_add_filter('admin_title', $filter, 10);
 
             // Page title (in <h1 />)
-            osc_add_filter("custom_plugin_title", $filter);
+            osc_add_filter('custom_plugin_title', $filter);
 
             $do = new CAdminBannersAdvertisers();
             $do->doModel();
@@ -141,14 +141,14 @@ function banners_admin_controllers() {
 
 		case 'banners-admin-settings':
 			$filter = function($string) {
-                return __("Settings - Banners", BANNERS_PREF);
+                return __('Settings - Banners', BANNERS_PREF);
             };
 
             // Page title (in <head />)
-            osc_add_filter("admin_title", $filter, 10);
+            osc_add_filter('admin_title', $filter, 10);
 
             // Page title (in <h1 />)
-            osc_add_filter("custom_plugin_title", $filter);
+            osc_add_filter('custom_plugin_title', $filter);
 
             $do = new CAdminBannersSettings();
             $do->doModel();
@@ -171,10 +171,10 @@ function banners_controller_requests() {
 	$do = new CBannersAdminAjax();
 	$do->doModel();
 }
-osc_add_hook("ajax_banners_controller_requests", "banners_controller_requests");
+osc_add_hook('ajax_banners_controller_requests', 'banners_controller_requests');
 
 function modals_form_options() {
-    if (Params::getParam('page') == "plugins" && in_array(Params::getParam('route'), banners_slug_routes())) {
+    if (Params::getParam('page') == 'plugins' && in_array(Params::getParam('route'), banners_slug_routes())) {
         include BANNERS_PATH . 'parts/admin/modals_form_options.php';
     }
 }
