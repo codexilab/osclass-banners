@@ -153,11 +153,6 @@ function banners_admin_controllers() {
             $do = new CAdminBannersSettings();
             $do->doModel();
 			break;
-
-		case banners_route_page():
-            $do = new CWebBannersURL();
-        	$do->doModel();
-			break;
 	}
 }
 osc_add_hook('renderplugin_controller', 'banners_admin_controllers');
