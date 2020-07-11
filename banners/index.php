@@ -207,6 +207,18 @@ foreach ($positions as $pos) {
 }
 
 
+// When the an account is deleted, it will delete all trail of activity on this plugin
+function banners_when_delete_user($id) {
+	// Check if is advertiser
+	$advertiser = Banners::newInstance()->getAdvertiserByUserId($id);
+	if ($advertiser) {
+		Banners::newInstance()->deleteAdverstiser($advertiser['pk_i_id']); // Include banners
+	}
+	
+}
+osc_add_hook('delete_user', 'banners_when_delete_user');
+
+
 // 'Configure' link
 function banners_configure_admin_link() {
 	osc_redirect_to(osc_route_admin_url('banners-admin-settings'));
