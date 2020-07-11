@@ -98,6 +98,14 @@ class Banners extends DAO
 	 */
 	public function uninstall()
 	{
+        // Delete all files from BANNERS_FOLDER_SOURCES
+        $exclude = array('php'); // Exclude .php files
+        $files = glob(BANNERS_FOLDER_SOURCES . '*');
+        foreach($files as $file) {
+            $extension = pathinfo($file, PATHINFO_EXTENSION);
+            if(!in_array($extension, $exclude)) @unlink($file);
+        }
+
 		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners_clicks()));
 		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners()));
 		$this->dao->query(sprintf('DROP TABLE %s', $this->getTable_banners_advertisers()));
@@ -183,7 +191,7 @@ class Banners extends DAO
     /**
      * Delete advertiser.
      *
-     * Note: Firts delete all her banners.
+     * Note: Firts delete all your banners.
      *
      * @access public
      * @param integer $id
@@ -194,7 +202,7 @@ class Banners extends DAO
         $banners = $this->getByAdvertiserId($id);
         if($banners) {
             foreach ($banners as $banner) {
-                $this->deleteBanner($banner['pk_i_id']);
+                $this->delete($banner['pk_i_id']);
             }
         }
         return $this->dao->delete($this->getTable_banners_advertisers(), array('pk_i_id' => $id));
