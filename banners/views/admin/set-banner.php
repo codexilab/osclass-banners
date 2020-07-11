@@ -35,11 +35,16 @@ $bannerToUpdate = __get('bannerToUpdate');
 
 <?php banners_admin_menu(); ?>
 
-<form id="dialog-new" class="plugin-configuration form-horizontal" method="post" action="<?php echo osc_route_admin_url('banners-admin-set'); if ($bannerToUpdate) echo '&banner='.$bannerToUpdate['pk_i_id']; ?>" enctype="multipart/form-data">
+<form id="dialog-new" class="plugin-configuration form-horizontal" method="post" action="<?php echo osc_route_admin_url('banners-admin-set'); ?>" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="plugins" />
 	<input type="hidden" name="action" value="renderplugin" />
 	<input type="hidden" name="route" value="banners-admin-set" />
 	<input type="hidden" name="plugin_action" value="new_banner" />
+
+	<!-- Get banner Id -->
+	<?php if ($bannerToUpdate) : ?>
+	<input type="hidden" name="banner" value="<?php if (isset($bannerToUpdate['pk_i_id'])) echo $bannerToUpdate['pk_i_id']; ?>">
+	<?php endif; ?>
 
 	<div class="form-horizontal">
 		<div class="grid-system">
