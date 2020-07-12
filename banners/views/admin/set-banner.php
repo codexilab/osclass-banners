@@ -54,17 +54,9 @@ $bannerToUpdate = __get('bannerToUpdate');
 					<div class="form-label"><?php _e('Sections (*)', BANNERS_PREF); ?></div>
 					
                     <div class="form-controls">
-                    	<?php _e('Categories in Search and Item pages:', BANNERS_PREF); ?><br />
-                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', true); return false;"><?php _e('Check all'); ?></a> &middot;
-                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', false); return false;"><?php _e('Uncheck all'); ?></a>
-                        
-                        <br />
-
-                        <ul id="plugin_tree"><?php CategoryForm::categories_tree($categories, $selected); ?></ul>
-
-                        <ul id="plugin_sections">
+                    	<ul id="plugin_sections">
                         	<ul>
-                        		<li><span class="folder"><?php _e('Rest of all pages', BANNERS_PREF); ?></span>
+                        		<li><span><?php _e('Show sections', BANNERS_PREF); ?></span>
 									<ul id="catsections">
 										<li>
 											<a href="javascript:void(0);" onclick="checkAll('plugin_sections', true); return false;"><?php _e('Check all'); ?></a> &middot;
@@ -90,10 +82,21 @@ $bannerToUpdate = __get('bannerToUpdate');
 										<li><input type="checkbox" name="categories[]" value="change_username" <?php if (in_array('change_username', $selected)) echo 'checked="true"'; ?>><span><?php _e('Change username page', BANNERS_PREF); ?></span></li>
 										<li><input type="checkbox" name="categories[]" value="change_password" <?php if (in_array('change_password', $selected)) echo 'checked="true"'; ?>><span><?php _e('Change password page', BANNERS_PREF); ?></span></li>
 										<li><input type="checkbox" name="categories[]" value="error" <?php if (in_array('error', $selected)) echo 'checked="true"'; ?>><span><?php _e('Error 404', BANNERS_PREF); ?></span></li>
+										<li>
+											<span><?php _e('Search and Item pages\'s categories:', BANNERS_PREF); ?></span><br />
+					                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', true); return false;"><?php _e('Check all'); ?></a> &middot;
+					                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', false); return false;"><?php _e('Uncheck all'); ?></a>
+					                        
+					                        <br />
+
+					                        <ul id="plugin_tree"><?php CategoryForm::categories_tree($categories, $selected); ?></ul>
+										</li>
 									</ul>
 								</li>
                         	</ul>
                         </ul>
+
+                    	
                     </div>
 				</div>
 
