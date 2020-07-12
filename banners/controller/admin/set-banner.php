@@ -60,6 +60,9 @@ class CAdminBannersNew extends AdminSecBaseModel
 					'b_image'               => Params::getParam('b_image'),
 					'b_active'              => Params::getParam('b_active')
 				);
+				
+				if (!$bannerToUpdate) $data['dt_date'] = todaydate(); // Publication date
+				if ($bannerToUpdate) $data['dt_update'] = todaydate(); // Last update
 
 				// If the banner to update have the same color, not validate the color
 				$color = $data['s_color'];
@@ -108,7 +111,6 @@ class CAdminBannersNew extends AdminSecBaseModel
 			            if ($bannerToUpdate && $banner['error'] == UPLOAD_ERR_NO_FILE) {
 							$data['s_name'] = $bannerToUpdate['s_name'];
 							unset($data['dt_date']);
-							$data['dt_update'] = todaydate(); // Last update
 							Banners::newInstance()->set($data);
 							osc_add_flash_ok_message(__('The banner has been correctly updated.', BANNERS_PREF), 'admin');
 						} else {
@@ -116,10 +118,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 								if (move_uploaded_file($banner['tmp_name'], BANNERS_FOLDER_SOURCES . $data['s_name'].'.'.$data['s_extension'])) {
 									if ($bannerToUpdate) {
 										unset($data['dt_date']);
-										$data['dt_update'] = todaydate(); // Last update
 										unlink(BANNERS_FOLDER_SOURCES . $bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension']);
-									} else {
-										$data['dt_date'] = todaydate(); // Publication date
 									}
 
 									Banners::newInstance()->set($data);
@@ -135,7 +134,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 
 				}
 				ob_get_clean();
-				$this->redirectTo($_SERVER['HTTP_REFERER']);
+				$this->redirectTo(osc_route_admin_url('banners-admin'));
 				break;
 
 			default:

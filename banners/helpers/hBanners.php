@@ -244,7 +244,7 @@ function banners_position_sort($sort) {
     if ($banners) {
         foreach ($banners as $banner) {
             
-            if (todaydate() >= $banner['dt_from_date'] && todaydate() <= $banner['dt_to_date'] && $banner['b_active'] == true) {
+            if (date('Y-m-d') >= $banner['dt_from_date'] && date('Y-m-d') <= $banner['dt_to_date'] && $banner['b_active'] == true) {
 
                 $category = explode(',', $banner['s_category']); // Convert value $banner['s_category'] = 'home,1,2,3'; to $category = array('home', '1', '2', '3');
                 $showBanner = !empty(array_intersect($sections, $category)); // Boolean value
