@@ -65,7 +65,7 @@ $showURLBanner 		= osc_get_preference('show_url_banner', BANNERS_PREF);
         <div class="form-actions">
             <div class="wrapper">
                 <a class="btn" href="<?php echo adminReturnBack('banners-admin'); ?>"><?php _e('Cancel'); ?></a>
-                <input type="submit" value="<?php _e('Submit', BANNERS_PREF); ?>" class="btn btn-submit">
+                <input type="submit" value="<?php _e('Apply'); ?>" class="btn btn-submit">
             </div>
         </div>
     </div>

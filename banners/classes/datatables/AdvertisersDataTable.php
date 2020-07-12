@@ -134,7 +134,7 @@
 
         public function _status($status)
         {
-            return (!$status) ? __('Inactive', BANNERS_PREF) : __('Active');
+            return (!$status) ? __('Inactive') : __('Active');
         }
 
         /**

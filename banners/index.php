@@ -72,7 +72,7 @@ osc_add_hook('admin_menu_init', function() {
 	);
 
 	osc_add_admin_submenu_page(
-		'plugins', __('Settings', BANNERS_PREF), osc_route_admin_url('banners-admin-settings'), 'banners-admin-settings', 'administrator'
+		'plugins', __('Settings'), osc_route_admin_url('banners-admin-settings'), 'banners-admin-settings', 'administrator'
 	);
 });
 

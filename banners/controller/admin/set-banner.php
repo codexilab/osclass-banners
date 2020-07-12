@@ -79,9 +79,9 @@ class CAdminBannersNew extends AdminSecBaseModel
 			    
 				// Color validation (can not be repeated in a position)
 				} elseif ($validateColor && Banners::newInstance()->detectByColorAndPosition($data['s_color'], $data['fk_i_position_id']) >= 1) {
-					osc_add_flash_error_message(__("The color <span style=\"color: $color;\">$color</span> is already in use on this position.", BANNERS_PREF), 'admin');
+					osc_add_flash_error_message(sprintf(__('The color %s is already in use on this position.', BANNERS_PREF), '<span style="color: '.$color.';">'.$color.'</span>'), 'admin');
 			    
-				} elseif (!Params::getParam('all_categories') && !Params::getParam('categories')) {
+				} elseif (!Params::getParam('categories')) {
 					osc_add_flash_error_message(__('Select a category.', BANNERS_PREF), 'admin');
 			    
 				} else {
@@ -125,10 +125,10 @@ class CAdminBannersNew extends AdminSecBaseModel
 									Banners::newInstance()->set($data);
 									osc_add_flash_ok_message(__('The banner has been correctly uploaded.', BANNERS_PREF), 'admin');
 								} else {
-									osc_add_flash_error_message(__('An error has occurred to upload file, please try again. (1)', BANNERS_PREF), 'admin');
+									osc_add_flash_error_message(sprintf(__('An error has occurred to upload file, please try again. (%s)', BANNERS_PREF), '1'), 'admin');
 								}
 							} else {
-								osc_add_flash_error_message(__('An error has occurred to upload file, please try again. (2)', BANNERS_PREF), 'admin');
+								osc_add_flash_error_message(sprintf(__('An error has occurred to upload file, please try again. (%s)', BANNERS_PREF), '2'), 'admin');
 							}
 						}
 					}

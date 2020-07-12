@@ -177,7 +177,7 @@ $bannerToUpdate = __get('bannerToUpdate');
                 </div>
 
                 <div class="form-row">
-                    <div class="form-label"><?php _e('From'); ?></div>
+                    <div class="form-label"><?php _e('From', BANNERS_PREF); ?></div>
                     <div class="form-controls"><input id="dt_from_date" type="text" class="xlarge" name="dt_from_date" value="<?php if (isset($bannerToUpdate['dt_from_date'])) echo $bannerToUpdate['dt_from_date']; ?>" placeholder="<?php echo todaydate(null, null, '00:00:00'); ?>" autocomplete="off"></div>
                 </div>
 
