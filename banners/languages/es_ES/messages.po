@@ -120,11 +120,11 @@ msgstr "Eliminar posición"
 msgid "Sections (*)"
 msgstr "Secciones (*)"
 
-msgid "Categories in Search and Item pages:"
+msgid "Search and Item pages's categories:"
 msgstr "Categorías en páginas de Búsqueda e Item:"
 
-msgid "Rest of all pages"
-msgstr "Resto de todas las páginas"
+msgid "Show sections"
+msgstr "Mostrar secciones"
 
 msgid "Home page"
 msgstr "Página de inicio"

@@ -120,10 +120,10 @@ msgstr ""
 msgid "Sections (*)"
 msgstr ""
 
-msgid "Categories in Search and Item pages:"
+msgid "Search and Item pages\'s categories:"
 msgstr ""
 
-msgid "Rest of all pages"
+msgid "Show sections"
 msgstr ""
 
 msgid "Home page"
