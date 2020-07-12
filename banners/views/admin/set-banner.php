@@ -201,10 +201,10 @@ $bannerToUpdate = __get('bannerToUpdate');
 				</div>
 
                 <div class="form-row center">
-                	<div class="text-center fieldset-calendar" style="width: fit-content">
+                	<div class="text-center fieldset-calendar" style="width: max-content;">
                 		<fieldset>
                 			<legend><?php _e('Calendar', BANNERS_PREF); ?></legend>
-                			<div id="show-calendar-content" style="width: fit-content"></div>
+                			<div id="show-calendar-content" style="width: fit-content;"></div>
                 		</fieldset>
                 	</div>
                 </div>
