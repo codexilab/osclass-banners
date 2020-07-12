@@ -360,7 +360,10 @@ msgstr ""
 msgid "The position can't be deleted, there are banners using it."
 msgstr ""
 
-msgid "All fields cannot be empty and From date has it be higher that To date."
+msgid "All fields cannot be empty."
+msgstr ""
+
+msgid "From date has it be higher that To date."
 msgstr ""
 
 msgid "The banner is not in an available range."
@@ -391,9 +394,6 @@ msgid "The banner has been correctly uploaded."
 msgstr ""
 
 msgid "An error has occurred to upload file, please try again. (%s)"
-msgstr ""
-
-msgid "All fields cannot be empty."
 msgstr ""
 
 msgid "The plugin is now configured."

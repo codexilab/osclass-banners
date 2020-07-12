@@ -39,10 +39,10 @@ $bannerToUpdate = __get('bannerToUpdate');
 	<input type="hidden" name="page" value="plugins" />
 	<input type="hidden" name="action" value="renderplugin" />
 	<input type="hidden" name="route" value="banners-admin-set" />
-	<input type="hidden" name="plugin_action" value="new_banner" />
+	<input type="hidden" name="plugin_action" value="set_banner" />
 
-	<!-- Get banner Id -->
 	<?php if ($bannerToUpdate) : ?>
+	<!-- Get banner Id -->
 	<input type="hidden" name="banner" value="<?php if (isset($bannerToUpdate['pk_i_id'])) echo $bannerToUpdate['pk_i_id']; ?>">
 	<?php endif; ?>
 
