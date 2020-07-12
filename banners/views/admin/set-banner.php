@@ -83,7 +83,7 @@ $bannerToUpdate = __get('bannerToUpdate');
 										<li><input type="checkbox" name="categories[]" value="change_password" <?php if (in_array('change_password', $selected)) echo 'checked="true"'; ?>><span><?php _e('Change password page', BANNERS_PREF); ?></span></li>
 										<li><input type="checkbox" name="categories[]" value="error" <?php if (in_array('error', $selected)) echo 'checked="true"'; ?>><span><?php _e('Error 404', BANNERS_PREF); ?></span></li>
 										<li>
-											<span><?php _e('Search and Item pages\'s categories:', BANNERS_PREF); ?></span><br />
+											<?php _e('Search and Item pages\'s categories:', BANNERS_PREF); ?><br />
 					                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', true); return false;"><?php _e('Check all'); ?></a> &middot;
 					                        <a href="javascript:void(0);" onclick="checkAll('plugin_tree', false); return false;"><?php _e('Uncheck all'); ?></a>
 					                        
@@ -95,8 +95,6 @@ $bannerToUpdate = __get('bannerToUpdate');
 								</li>
                         	</ul>
                         </ul>
-
-                    	
                     </div>
 				</div>
 
