@@ -24,18 +24,18 @@
 	 */
 
 // Model
-require_once BANNERS_PATH . "model/Banners.php";
+require_once BANNERS_PATH . 'model/Banners.php';
 
 // Helpers
-require_once BANNERS_PATH . "helpers/hUtils.php";
-require_once BANNERS_PATH . "helpers/hBanners.php";
+require_once BANNERS_PATH . 'helpers/hUtils.php';
+require_once BANNERS_PATH . 'helpers/hBanners.php';
 
 // Controllers
-require_once BANNERS_PATH . "controller/admin/positions.php";
-require_once BANNERS_PATH . "controller/admin/advertisers.php";
-require_once BANNERS_PATH . "controller/admin/banners.php";
-require_once BANNERS_PATH . "controller/admin/set-banner.php";
-require_once BANNERS_PATH . "controller/admin/settings.php";
+require_once BANNERS_PATH . 'controller/admin/positions.php';
+require_once BANNERS_PATH . 'controller/admin/advertisers.php';
+require_once BANNERS_PATH . 'controller/admin/banners.php';
+require_once BANNERS_PATH . 'controller/admin/set-banner.php';
+require_once BANNERS_PATH . 'controller/admin/settings.php';
 
 // Ajax
-require_once BANNERS_PATH . "ajax/ajax.php";
+require_once BANNERS_PATH . 'ajax/ajax.php';

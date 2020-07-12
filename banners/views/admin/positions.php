@@ -30,7 +30,7 @@ $positions = __get('positions');
 <?php banners_admin_menu(); ?>
 
 <h2 class="render-title">
-	<?php _e("Positions:", BANNERS_PREF); ?>
+	<?php _e('Positions:', BANNERS_PREF); ?>
     <?php if ($positions) : ?>
     <small>
         <?php foreach ($positions as $position) : ?>
@@ -51,12 +51,12 @@ $positions = __get('positions');
 
     <div class="form-horizontal">
         <div class="form-row text-center">
-            <?php _e("Really want to delete the selected position?", BANNERS_PREF); ?>
+            <?php _e('Really want to delete the selected position?', BANNERS_PREF); ?>
         </div>
         <div class="form-actions">
             <div class="wrapper">
                 <a class="btn" href="javascript:void(0);" onclick="$('#delete-position').dialog('close');"><?php _e('Cancel'); ?></a>
-                <input id="position-delete-submit" type="submit" value="<?php _e("Acept", BANNERS_PREF); ?>" class="btn btn-red" />
+                <input id="position-delete-submit" type="submit" value="<?php _e('Delete'); ?>" class="btn btn-red" />
             </div>
         </div>
     </div>

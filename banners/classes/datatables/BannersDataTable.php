@@ -129,13 +129,13 @@
 					$options_more   = array();
 					$moreOptions 	= '';
 
-					$options[] = '<a href="'.osc_route_admin_url('banners-admin-set').'&banner='.$aRow['pk_i_id'].'">' . __("Edit", BANNERS_PREF) . '</a>';
-					$options[] = '<a href="#" onclick="delete_dialog('.$aRow['pk_i_id'].');return false;">' . __("Delete", BANNERS_PREF) . '</a></center>';
+					$options[] = '<a href="'.osc_route_admin_url('banners-admin-set').'&banner='.$aRow['pk_i_id'].'">' . __('Edit') . '</a>';
+					$options[] = '<a href="#" onclick="delete_dialog('.$aRow['pk_i_id'].');return false;">' . __('Delete') . '</a></center>';
 
 					// more actions
 					if (count($options_more) > 0) {
 						$options_more = osc_apply_filter('more_actions_manage_banners', $options_more, $aRow);
-						$moreOptions = '<li class="show-more">'.PHP_EOL.'<a href="#" class="show-more-trigger">'. __("Show more...", BANNERS_PREF) .'</a>'. PHP_EOL .'<ul>'. PHP_EOL;
+						$moreOptions = '<li class="show-more">'.PHP_EOL.'<a href="#" class="show-more-trigger">'. __('Show more') .'...</a>'. PHP_EOL .'<ul>'. PHP_EOL;
 						foreach( $options_more as $actual ) {
 							$moreOptions .= '<li>'.$actual."</li>".PHP_EOL;
 						}
@@ -164,7 +164,7 @@
 					$month 		= date("m", strtotime($aRow['dt_to_date']));
 					$position 	= position_by_id($aRow['fk_i_position_id']);
 					$position['s_title'] = (isset($position['s_title'])) ? ' title="'.$position['s_title'].'"' : '';
-					$row['position'] 		= '<a'.$position['s_title'].' href="#" onclick="show_position('.$aRow['fk_i_position_id'].', '.$year.', '.$month.');return false;"><div class="center"><div class="text-center">'.banners_sort_position($aRow['fk_i_position_id']).'</div><div class="color-banner-box" style="background: '.$aRow['s_color'].';"></div></div></a>';
+					$row['position'] 		= '<a'.$position['s_title'].' href="#" onclick="show_position('.$aRow['fk_i_position_id'].', \''.$year.'\', \''.$month.'\');return false;"><div class="center"><div class="text-center">'.banners_sort_position($aRow['fk_i_position_id']).'</div><div class="color-banner-box" style="background: '.$aRow['s_color'].';"></div></div></a>';
 					$row['position'] 		.= $actions;
 
 					$advertiser = Banners::newInstance()->getAdvertiserById($aRow['fk_i_advertiser_id']);
@@ -172,7 +172,7 @@
 
 					$banner = '';
 					if ($aRow['b_image']) {
-						$banner = '<div class="text-center"><a href="#" onclick="show_banner(\''.BANNERS_ROUTE_SOURCES.$aRow['s_name'].'.'.$aRow['s_extension'].'\');return false;">' . __("View", BANNERS_PREF) . '</a><br>'.$aRow['s_content_type'].'</div>';
+						$banner = '<div class="text-center"><a href="#" onclick="show_banner(\''.BANNERS_ROUTE_SOURCES.$aRow['s_name'].'.'.$aRow['s_extension'].'\');return false;">' . __('View', BANNERS_PREF) . '</a><br>'.$aRow['s_content_type'].'</div>';
 					} else {
 						$banner = '<div class="text-center">'.htmlentities("</script>").'</div>';
 					}

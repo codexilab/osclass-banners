@@ -48,7 +48,7 @@ class CAdminBanners extends AdminSecBaseModel
 		            }
 		        }
 		        ob_get_clean();
-		        osc_redirect_to($_SERVER['HTTP_REFERER']);
+		        $this->redirectTo($_SERVER['HTTP_REFERER']);
 		        break;
 
 			case 'activate':
@@ -73,7 +73,7 @@ class CAdminBanners extends AdminSecBaseModel
 					}
 				}
 				ob_get_clean();
-				osc_redirect_to($_SERVER['HTTP_REFERER']);
+				$this->redirectTo($_SERVER['HTTP_REFERER']);
 				break;
 
 			case 'deactivate':
@@ -98,14 +98,14 @@ class CAdminBanners extends AdminSecBaseModel
 					}
 				}
 				ob_get_clean();
-				osc_redirect_to($_SERVER['HTTP_REFERER']);
+				$this->redirectTo($_SERVER['HTTP_REFERER']);
 				break;
 
 			default:
 				$this->_exportVariableToView('advertisers', Banners::newInstance()->getAllAdvertisers());
 				$this->_exportVariableToView('positions', Banners::newInstance()->getAllPositions());
 
-				require_once BANNERS_PATH . "classes/datatables/BannersDataTable.php";
+				require_once BANNERS_PATH . 'classes/datatables/BannersDataTable.php';
 
 				if( Params::getParam('iDisplayLength') != '' ) {
                     Cookie::newInstance()->push('listing_iDisplayLength', Params::getParam('iDisplayLength'));
@@ -164,7 +164,7 @@ class CAdminBanners extends AdminSecBaseModel
                     array('value' => 'delete', 'data-dialog-content' => sprintf(__('Are you sure you want to %s the selected banners?', BANNERS_PREF), strtolower(__('Delete'))), 'label' => __('Delete'))
                 );
 
-                $bulk_options = osc_apply_filter("banner_bulk_filter", $bulk_options);
+                $bulk_options = osc_apply_filter('banner_bulk_filter', $bulk_options);
                 $this->_exportVariableToView('bulk_options', $bulk_options);
 				break;
 		}

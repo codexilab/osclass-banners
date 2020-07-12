@@ -44,13 +44,13 @@ class CAdminBannersAdvertisers extends AdminSecBaseModel
 				if (!Params::getParam('s_name') && Params::getParam('fk_i_user_id') == '') {
 					osc_add_flash_error_message(__('Write advertiser name.', BANNERS_PREF), 'admin');
 					ob_get_clean();
-					osc_redirect_to($_SERVER['HTTP_REFERER']);
+					$this->redirectTo($_SERVER['HTTP_REFERER']);
 
 				// If the user is a advertiser
 				} elseif (Banners::newInstance()->getAdvertiserByUserId($userId)) {
 					osc_add_flash_error_message(__('This user has been already added.', BANNERS_PREF), 'admin');
 					ob_get_clean();
-					osc_redirect_to($_SERVER['HTTP_REFERER']);
+					$this->redirectTo($_SERVER['HTTP_REFERER']);
 				} else {
 					$data = array(
 						'pk_i_id'           => ($advertiserToUpdate) ? $advertiserToUpdate['pk_i_id'] : false,
@@ -67,13 +67,13 @@ class CAdminBannersAdvertisers extends AdminSecBaseModel
 					}
 					Banners::newInstance()->setAdvertiser($data);
 					if (!$advertiserToUpdate) {
-						osc_add_flash_ok_message(__("The advertiser it has been added correctly.", BANNERS_PREF), 'admin');
+						osc_add_flash_ok_message(__('The advertiser it has been added correctly.', BANNERS_PREF), 'admin');
 					} else {
-						osc_add_flash_ok_message(__("The advertiser it has been updated correctly.", BANNERS_PREF), 'admin');
+						osc_add_flash_ok_message(__('The advertiser it has been updated correctly.', BANNERS_PREF), 'admin');
 					}
 				}
 				ob_get_clean();
-				osc_redirect_to($_SERVER['HTTP_REFERER']);
+				$this->redirectTo($_SERVER['HTTP_REFERER']);
 				break;
 
 			case 'delete':
@@ -93,7 +93,7 @@ class CAdminBannersAdvertisers extends AdminSecBaseModel
 		            }
 		        }
 		        ob_get_clean();
-		        osc_redirect_to($_SERVER['HTTP_REFERER']);
+		        $this->redirectTo($_SERVER['HTTP_REFERER']);
 		        break;
 
 			case 'activate':
@@ -118,7 +118,7 @@ class CAdminBannersAdvertisers extends AdminSecBaseModel
 					}
 				}
 				ob_get_clean();
-				osc_redirect_to($_SERVER['HTTP_REFERER']);
+				$this->redirectTo($_SERVER['HTTP_REFERER']);
 				break;
 
 			case 'deactivate':
@@ -143,11 +143,11 @@ class CAdminBannersAdvertisers extends AdminSecBaseModel
 					}
 				}
 				ob_get_clean();
-				osc_redirect_to($_SERVER['HTTP_REFERER']);
+				$this->redirectTo($_SERVER['HTTP_REFERER']);
 				break;
 
 			default:
-				require_once BANNERS_PATH . "classes/datatables/AdvertisersDataTable.php";
+				require_once BANNERS_PATH . 'classes/datatables/AdvertisersDataTable.php';
 
 				if( Params::getParam('iDisplayLength') != '' ) {
                     Cookie::newInstance()->push('listing_iDisplayLength', Params::getParam('iDisplayLength'));
@@ -206,7 +206,7 @@ class CAdminBannersAdvertisers extends AdminSecBaseModel
                     array('value' => 'delete', 'data-dialog-content' => sprintf(__('Are you sure you want to %s the selected advertiser?', BANNERS_PREF), strtolower(__('Delete'))), 'label' => __('Delete'))
                 );
 
-                $bulk_options = osc_apply_filter("advertiser_bulk_filter", $bulk_options);
+                $bulk_options = osc_apply_filter('advertiser_bulk_filter', $bulk_options);
                 $this->_exportVariableToView('bulk_options', $bulk_options);
 				break;
 		}

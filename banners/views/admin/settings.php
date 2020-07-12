@@ -32,7 +32,7 @@ $showURLBanner 		= osc_get_preference('show_url_banner', BANNERS_PREF);
 
 <?php banners_admin_menu(); ?>
 
-<h2 class="render-title"><?php _e("Banner route internal struct", BANNERS_PREF); ?></h2>
+<h2 class="render-title"><?php _e('Banner route internal struct', BANNERS_PREF); ?></h2>
 <form>
 	<input type="hidden" name="page" value="plugins" />
 	<input type="hidden" name="action" value="renderplugin" />
@@ -41,21 +41,21 @@ $showURLBanner 		= osc_get_preference('show_url_banner', BANNERS_PREF);
 
 	<div class="form-horizontal">
         <div class="form-row">
-            <div class="form-label"><?php _e("Route page", BANNERS_PREF); ?></div>
+            <div class="form-label"><?php _e('Route page', BANNERS_PREF); ?></div>
             <div class="form-controls">
                 <input type="text" class="xlarge" id="banner_route_page" name="banner_route_page" value="<?php echo $bannerRoutePage; ?>" autocomplete="off">
             </div>
         </div>
         <div class="form-row">
-            <div class="form-label"><?php _e("Route param", BANNERS_PREF); ?></div>
+            <div class="form-label"><?php _e('Route param', BANNERS_PREF); ?></div>
             <div class="form-controls"><input type="text" class="xlarge" id="banner_route_param" name="banner_route_param" value="<?php echo $bannerRouteParam; ?>" autocomplete="off"></div>
         </div>
         <div class="form-row">
-            <div class="form-controls"><label><input type="checkbox" <?php echo ($showURLBanner) ? 'checked="true"' : ''; ?> name="show_url_banner" value="1"> <?php _e("Show URL Banner.", BANNERS_PREF); ?></label></div>
+            <div class="form-controls"><label><input type="checkbox" <?php echo ($showURLBanner) ? 'checked="true"' : ''; ?> name="show_url_banner" value="1"> <?php _e('Show URL Banner.', BANNERS_PREF); ?></label></div>
         </div>
         <div class="form-row">
         	<div class="form-controls">
-        		<span class="help-box"><b><?php _e("Example:", BANNERS_PREF); ?></b>
+        		<span class="help-box"><b><?php _e('Example:', BANNERS_PREF); ?></b>
         		
                 <span id="bannerRoutePage"></span><?php echo (osc_rewrite_enabled()) ? '/?' : '&'; ?><span id="bannerRouteParam"></span>=<span id="URLBanner"></span>
 
@@ -65,7 +65,7 @@ $showURLBanner 		= osc_get_preference('show_url_banner', BANNERS_PREF);
         <div class="form-actions">
             <div class="wrapper">
                 <a class="btn" href="<?php echo adminReturnBack('banners-admin'); ?>"><?php _e('Cancel'); ?></a>
-                <input type="submit" value="<?php _e("Submit", BANNERS_PREF); ?>" class="btn btn-submit">
+                <input type="submit" value="<?php _e('Apply'); ?>" class="btn btn-submit">
             </div>
         </div>
     </div>

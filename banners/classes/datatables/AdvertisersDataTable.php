@@ -61,10 +61,10 @@
         private function addTableHeader()
         {
             $this->addColumn('status-border', '');
-            $this->addColumn('status', __("Status", BANNERS_PREF));
+            $this->addColumn('status', __('Status'));
             $this->addColumn('bulkactions', '<input id="check_all" type="checkbox" />');
 
-            $this->addColumn('name', __("Name", BANNERS_PREF));
+            $this->addColumn('name', __('Name'));
             $this->addColumn('business', __('Business sector', BANNERS_PREF));
             $this->addColumn('banners', __('Banners', BANNERS_PREF));
 
@@ -83,19 +83,19 @@
                     $moreOptions    = '';
 
                     // Actions of DataTable
-                    $options[] = '<a href="#" onclick="set_advertiser('.$aRow['pk_i_id'].');return false;">'.__("Edit", BANNERS_PREF).'</a>';
-                    $options[] = '<a href="#" onclick="delete_dialog('.$aRow['pk_i_id'].');return false;">'.__("Delete", BANNERS_PREF).'</a>';
+                    $options[] = '<a href="#" onclick="set_advertiser('.$aRow['pk_i_id'].');return false;">'.__('Edit').'</a>';
+                    $options[] = '<a href="#" onclick="delete_dialog('.$aRow['pk_i_id'].');return false;">'.__('Delete').'</a>';
 
                     if( $aRow['b_active'] == 1 ) {
-                        $options[]  = '<a href="#" onclick="deactivate_dialog('.$aRow['pk_i_id'].');return false;">' . __("Deactivate", BANNERS_PREF) . '</a>';
+                        $options[]  = '<a href="#" onclick="deactivate_dialog('.$aRow['pk_i_id'].');return false;">' . __('Deactivate') . '</a>';
                     } else {
-                        $options[]  = '<a href="#" onclick="activate_dialog('.$aRow['pk_i_id'].');return false;">' . __("Activate", BANNERS_PREF) . '</a>';
+                        $options[]  = '<a href="#" onclick="activate_dialog('.$aRow['pk_i_id'].');return false;">' . __('Activate') . '</a>';
                     }
 
                     // more actions
                     $options_more = osc_apply_filter('more_actions_manage_advertisers', $options_more, $aRow);
                     if (count($options_more) > 0 && $options_more != "" && $options_more != NULL) {
-                        $moreOptions = '<li class="show-more">'.PHP_EOL.'<a href="#" class="show-more-trigger">'. __("Show more", BANNERS_PREF) .'...</a>'. PHP_EOL .'<ul>'. PHP_EOL;
+                        $moreOptions = '<li class="show-more">'.PHP_EOL.'<a href="#" class="show-more-trigger">'. __('Show more') .'...</a>'. PHP_EOL .'<ul>'. PHP_EOL;
                         foreach( $options_more as $actual ) {
                             $moreOptions .= '<li>'.$actual."</li>".PHP_EOL;
                         }
@@ -134,7 +134,7 @@
 
         public function _status($status)
         {
-            return (!$status) ? __("Inactive", BANNERS_PREF) : __("Active", BANNERS_PREF);
+            return (!$status) ? __('Inactive') : __('Active');
         }
 
         /**

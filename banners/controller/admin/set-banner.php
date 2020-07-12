@@ -60,8 +60,12 @@ class CAdminBannersNew extends AdminSecBaseModel
 					'b_image'               => Params::getParam('b_image'),
 					'b_active'              => Params::getParam('b_active')
 				);
+				
+				if (!$bannerToUpdate) $data['dt_date'] = todaydate(); // Publication date
+				if ($bannerToUpdate) $data['dt_update'] = todaydate(); // Last update
 
 				// If the banner to update have the same color, not validate the color
+				$color = $data['s_color'];
 				$validateColor = ($bannerToUpdate && $bannerToUpdate['s_color'] == $data['s_color']) ? false : true;
 
 				// Validate fields:
@@ -78,9 +82,9 @@ class CAdminBannersNew extends AdminSecBaseModel
 			    
 				// Color validation (can not be repeated in a position)
 				} elseif ($validateColor && Banners::newInstance()->detectByColorAndPosition($data['s_color'], $data['fk_i_position_id']) >= 1) {
-					osc_add_flash_error_message(__("The color <span style=\"color: $color;\">$color</span> is already in use on this position.", BANNERS_PREF), 'admin');
+					osc_add_flash_error_message(sprintf(__('The color %s is already in use on this position.', BANNERS_PREF), '<span style="color: '.$color.';">'.$color.'</span>'), 'admin');
 			    
-				} elseif (!Params::getParam('all_categories') && !Params::getParam('categories')) {
+				} elseif (!Params::getParam('categories')) {
 					osc_add_flash_error_message(__('Select a category.', BANNERS_PREF), 'admin');
 			    
 				} else {
@@ -93,7 +97,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 							if ($bannerToUpdate) $data['s_name'] = $bannerToUpdate['s_name']; #unset($data['s_name']);
 							unset($data['s_content_type']);
 							unset($data['s_extension']);
-							if (Params::getParam('s_url') == "") $data['s_url'] = "";
+							if (Params::getParam('s_url') == '') $data['s_url'] = '';
 							Banners::newInstance()->set($data);
 							osc_add_flash_ok_message(__('The banner has been correctly placed.', BANNERS_PREF), 'admin');
 						}
@@ -107,7 +111,6 @@ class CAdminBannersNew extends AdminSecBaseModel
 			            if ($bannerToUpdate && $banner['error'] == UPLOAD_ERR_NO_FILE) {
 							$data['s_name'] = $bannerToUpdate['s_name'];
 							unset($data['dt_date']);
-							$data['dt_update'] = todaydate(); // Last update
 							Banners::newInstance()->set($data);
 							osc_add_flash_ok_message(__('The banner has been correctly updated.', BANNERS_PREF), 'admin');
 						} else {
@@ -115,26 +118,23 @@ class CAdminBannersNew extends AdminSecBaseModel
 								if (move_uploaded_file($banner['tmp_name'], BANNERS_FOLDER_SOURCES . $data['s_name'].'.'.$data['s_extension'])) {
 									if ($bannerToUpdate) {
 										unset($data['dt_date']);
-										$data['dt_update'] = todaydate(); // Last update
 										unlink(BANNERS_FOLDER_SOURCES . $bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension']);
-									} else {
-										$data['dt_date'] = todaydate(); // Publication date
 									}
 
 									Banners::newInstance()->set($data);
 									osc_add_flash_ok_message(__('The banner has been correctly uploaded.', BANNERS_PREF), 'admin');
 								} else {
-									osc_add_flash_error_message(__('An error has occurred to upload file, please try again. (1)', BANNERS_PREF), 'admin');
+									osc_add_flash_error_message(sprintf(__('An error has occurred to upload file, please try again. (%s)', BANNERS_PREF), '1'), 'admin');
 								}
 							} else {
-								osc_add_flash_error_message(__('An error has occurred to upload file, please try again. (2)', BANNERS_PREF), 'admin');
+								osc_add_flash_error_message(sprintf(__('An error has occurred to upload file, please try again. (%s)', BANNERS_PREF), '2'), 'admin');
 							}
 						}
 					}
 
 				}
 				ob_get_clean();
-				$this->redirectTo($_SERVER['HTTP_REFERER']);
+				$this->redirectTo(osc_route_admin_url('banners-admin'));
 				break;
 
 			default:

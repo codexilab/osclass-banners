@@ -1,6 +1,19 @@
 # XenoTrue Online Banners
 ====================
 
+## [1.0.0] 2020-07-12
+
+### Added
+
+- Languages.
+
+### Fixed
+
+- Bug: calendar in datatable it not draw the banners (colors).
+- Bug: little bug that not allowed show banner in To date.
+- Bug: when uninstall the plugin, it not deleting banners source.
+- Bug: when an user is deleted, not delete all trail of your activity in the plugin.
+
 ## [0.2-beta] 2020-07-10
 
 ### Added

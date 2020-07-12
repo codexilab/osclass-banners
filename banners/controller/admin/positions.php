@@ -51,7 +51,7 @@ class CAdminBannersPositions extends AdminSecBaseModel
 					}
 				}
 				ob_get_clean();
-    			osc_redirect_to($_SERVER['HTTP_REFERER']);
+    			$this->redirectTo($_SERVER['HTTP_REFERER']);
 		        break;
 
 			case 'delete_position':
@@ -67,7 +67,7 @@ class CAdminBannersPositions extends AdminSecBaseModel
 					}
 				}
 				ob_get_clean();
-				osc_redirect_to($_SERVER['HTTP_REFERER']);
+				$this->redirectTo($_SERVER['HTTP_REFERER']);
 				break;
 
 			default:
