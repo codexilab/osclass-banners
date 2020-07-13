@@ -33,6 +33,25 @@ $advertisers 	= __get('advertisers');
 $bannerToUpdate = __get('bannerToUpdate');
 ?>
 
+<?php if (!is_writable(BANNERS_FOLDER_SOURCES)) : ?>
+	<div id="flash_message">
+        <p>
+            <?php
+                $msg  = sprintf(__('The images folder %s is not writable on your server', BANNERS_PREF), BANNERS_FOLDER_SOURCES ) .", ";
+                $msg .= __('Osclass can\'t upload banners', BANNERS_PREF) . '. ';
+                $msg .= __('Please make the mentioned images folder writable', BANNERS_PREF) . '.';
+                echo $msg;
+            ?>
+        </p>
+        <p>
+            <?php _e('To make a directory writable under UNIX execute this command from the shell', BANNERS_PREF); ?>:
+        </p>
+        <p style="background-color: white; border: 1px solid black; padding: 8px;">
+            chmod a+w <?php echo BANNERS_FOLDER_SOURCES; ?>
+        </p>
+    </div>
+<?php endif; ?>
+
 <?php banners_admin_menu(); ?>
 
 <form id="dialog-new" class="plugin-configuration form-horizontal" method="post" action="<?php echo osc_route_admin_url('banners-admin-set'); ?>" enctype="multipart/form-data">

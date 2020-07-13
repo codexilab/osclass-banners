@@ -404,3 +404,15 @@ msgstr ""
 
 msgid "View"
 msgstr ""
+
+msgid "The images folder %s is not writable on your server"
+msgstr ""
+
+msgid "Osclass can\'t upload banners"
+msgstr ""
+
+msgid "Please make the mentioned images folder writable"
+msgstr ""
+
+msgid "To make a directory writable under UNIX execute this command from the shell"
+msgstr ""

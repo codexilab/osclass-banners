@@ -404,3 +404,15 @@ msgstr "Desde/Hasta"
 
 msgid "View"
 msgstr "Ver"
+
+msgid "The images folder %s is not writable on your server"
+msgstr "La carpeta de imágenes %s no se puede escribir en su servidor"
+
+msgid "Osclass can't upload banners"
+msgstr "Osclass no puede subir banner"
+
+msgid "Please make the mentioned images folder writable"
+msgstr "Haga que la carpeta de imágenes mencionada se pueda escribir"
+
+msgid "To make a directory writable under UNIX execute this command from the shell"
+msgstr "Para hacer que un directorio se pueda escribir en UNIX, ejecute este comando desde el shell"
