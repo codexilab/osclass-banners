@@ -33,16 +33,35 @@ $advertisers 	= __get('advertisers');
 $bannerToUpdate = __get('bannerToUpdate');
 ?>
 
+<?php if (!is_writable(BANNERS_FOLDER_SOURCES)) : ?>
+	<div id="flash_message">
+        <p>
+            <?php
+                $msg  = sprintf(__('The images folder %s is not writable on your server', BANNERS_PREF), BANNERS_FOLDER_SOURCES ) .", ";
+                $msg .= __('Osclass can\'t upload banners', BANNERS_PREF) . '. ';
+                $msg .= __('Please make the mentioned images folder writable', BANNERS_PREF) . '.';
+                echo $msg;
+            ?>
+        </p>
+        <p>
+            <?php _e('To make a directory writable under UNIX execute this command from the shell', BANNERS_PREF); ?>:
+        </p>
+        <p style="background-color: white; border: 1px solid black; padding: 8px;">
+            chmod a+w <?php echo BANNERS_FOLDER_SOURCES; ?>
+        </p>
+    </div>
+<?php endif; ?>
+
 <?php banners_admin_menu(); ?>
 
 <form id="dialog-new" class="plugin-configuration form-horizontal" method="post" action="<?php echo osc_route_admin_url('banners-admin-set'); ?>" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="plugins" />
 	<input type="hidden" name="action" value="renderplugin" />
 	<input type="hidden" name="route" value="banners-admin-set" />
-	<input type="hidden" name="plugin_action" value="new_banner" />
+	<input type="hidden" name="plugin_action" value="set_banner" />
 
-	<!-- Get banner Id -->
 	<?php if ($bannerToUpdate) : ?>
+	<!-- Get banner Id -->
 	<input type="hidden" name="banner" value="<?php if (isset($bannerToUpdate['pk_i_id'])) echo $bannerToUpdate['pk_i_id']; ?>">
 	<?php endif; ?>
 
@@ -201,10 +220,10 @@ $bannerToUpdate = __get('bannerToUpdate');
 				</div>
 
                 <div class="form-row center">
-                	<div class="text-center fieldset-calendar" style="width: fit-content">
+                	<div class="text-center fieldset-calendar" style="width: max-content;">
                 		<fieldset>
                 			<legend><?php _e('Calendar', BANNERS_PREF); ?></legend>
-                			<div id="show-calendar-content" style="width: fit-content"></div>
+                			<div id="show-calendar-content" style="width: fit-content;"></div>
                 		</fieldset>
                 	</div>
                 </div>

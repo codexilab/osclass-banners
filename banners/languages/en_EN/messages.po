@@ -360,7 +360,10 @@ msgstr ""
 msgid "The position can't be deleted, there are banners using it."
 msgstr ""
 
-msgid "All fields cannot be empty and From date has it be higher that To date."
+msgid "All fields cannot be empty."
+msgstr ""
+
+msgid "From date has it be higher that To date."
 msgstr ""
 
 msgid "The banner is not in an available range."
@@ -393,9 +396,6 @@ msgstr ""
 msgid "An error has occurred to upload file, please try again. (%s)"
 msgstr ""
 
-msgid "All fields cannot be empty."
-msgstr ""
-
 msgid "The plugin is now configured."
 msgstr ""
 
@@ -403,4 +403,16 @@ msgid "From/To"
 msgstr ""
 
 msgid "View"
+msgstr ""
+
+msgid "The images folder %s is not writable on your server"
+msgstr ""
+
+msgid "Osclass can\'t upload banners"
+msgstr ""
+
+msgid "Please make the mentioned images folder writable"
+msgstr ""
+
+msgid "To make a directory writable under UNIX execute this command from the shell"
 msgstr ""

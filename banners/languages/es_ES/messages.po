@@ -360,8 +360,11 @@ msgstr "La posición ha sido establecida correctamente."
 msgid "The position can't be deleted, there are banners using it."
 msgstr "La posición no puede ser eliminada, hay banners usándola."
 
-msgid "All fields cannot be empty and From date has it be higher that To date."
-msgstr "Todos los campos no pueden estar vacíos y Desde tiene que ser mayor que Hasta."
+msgid "All fields cannot be empty."
+msgstr "Todos los campos no pueden estar vacíos."
+
+msgid "From date has it be higher that To date."
+msgstr "Desde tiene que ser mayor que Hasta."
 
 msgid "The banner is not in an available range."
 msgstr "El banner no está en un rango de fechas disponible."
@@ -393,9 +396,6 @@ msgstr "El banner se ha subido correctamente."
 msgid "An error has occurred to upload file, please try again. (%s)"
 msgstr "Un error ha ocurrido al subir el archivo, intente otra vez. (%s)"
 
-msgid "All fields cannot be empty."
-msgstr "Todos los campos no pueden estar vacíos."
-
 msgid "The plugin is now configured."
 msgstr "El plugin está configurado."
 
@@ -404,3 +404,15 @@ msgstr "Desde/Hasta"
 
 msgid "View"
 msgstr "Ver"
+
+msgid "The images folder %s is not writable on your server"
+msgstr "La carpeta de imágenes %s no se puede escribir en su servidor"
+
+msgid "Osclass can't upload banners"
+msgstr "Osclass no puede subir banner"
+
+msgid "Please make the mentioned images folder writable"
+msgstr "Haga que la carpeta de imágenes mencionada se pueda escribir"
+
+msgid "To make a directory writable under UNIX execute this command from the shell"
+msgstr "Para hacer que un directorio se pueda escribir en UNIX, ejecute este comando desde el shell"

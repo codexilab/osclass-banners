@@ -33,7 +33,9 @@ class CAdminBannersNew extends AdminSecBaseModel
 		$bannerToUpdate = Banners::newInstance()->getById(Params::getParam('banner'));
 
 		switch (Params::getParam('plugin_action')) {
-			case 'new_banner':
+			case 'set_banner':
+				$error = 0;
+
 				$banner = Params::getFiles('banner');
 				if ($bannerToUpdate && !$banner['tmp_name']) {
 					$banner['tmp_name'] = BANNERS_ROUTE_SOURCES . $bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension'];
@@ -68,23 +70,33 @@ class CAdminBannersNew extends AdminSecBaseModel
 				$color = $data['s_color'];
 				$validateColor = ($bannerToUpdate && $bannerToUpdate['s_color'] == $data['s_color']) ? false : true;
 
-				// Validate fields:
-				if (!Params::getParam('fk_i_advertiser_id') || ($data['b_image'] >= 1 && !Params::getParam('s_url')) || !Params::getParam('fk_i_position_id') || $data['dt_to_date'] < $data['dt_from_date']) {
-					osc_add_flash_error_message(__('All fields cannot be empty and From date has it be higher that To date.', BANNERS_PREF), 'admin');
+				// Validate fields with (*)
+				if (!Params::getParam('fk_i_advertiser_id') || ($data['b_image'] >= 1 && !Params::getParam('s_url')) || !Params::getParam('fk_i_position_id')) {
+					$error++;
+					osc_add_flash_error_message(__('All fields cannot be empty.', BANNERS_PREF), 'admin');
 			    
-				// Validation of date range
+			    // Validation of date range
+			    } elseif ($data['dt_to_date'] < $data['dt_from_date']) {
+			    	$error++;
+			    	osc_add_flash_error_message(__('From date has it be higher that To date.', BANNERS_PREF), 'admin');
+			    	
+				// Availability validation in date range
 				} elseif (banners_detect_daterange($data['dt_from_date'], $data['dt_to_date'], $data['fk_i_position_id'], $data['pk_i_id']) >= 1) {
+					$error++;
 					osc_add_flash_error_message(__('The banner is not in an available range.', BANNERS_PREF), 'admin');
 			    
 				// Validation color input field (can not be empty)
 				} elseif (!$data['s_color']) {
+					$error++;
 					osc_add_flash_error_message(__('Select a color to show on the position calendar.', BANNERS_PREF), 'admin');
 			    
 				// Color validation (can not be repeated in a position)
 				} elseif ($validateColor && Banners::newInstance()->detectByColorAndPosition($data['s_color'], $data['fk_i_position_id']) >= 1) {
+					$error++;
 					osc_add_flash_error_message(sprintf(__('The color %s is already in use on this position.', BANNERS_PREF), '<span style="color: '.$color.';">'.$color.'</span>'), 'admin');
 			    
 				} elseif (!Params::getParam('categories')) {
+					$error++;
 					osc_add_flash_error_message(__('Select a category.', BANNERS_PREF), 'admin');
 			    
 				} else {
@@ -92,6 +104,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 					// Validate coding banner
 					if ($data['b_image'] <= 0) {
 						if ($data['s_script'] == "") {
+							$error++;
 							osc_add_flash_error_message(__('The banner script cannot be empty.', BANNERS_PREF), 'admin');            
 						} else {
 							if ($bannerToUpdate) $data['s_name'] = $bannerToUpdate['s_name']; #unset($data['s_name']);
@@ -104,6 +117,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 
 					// Validate upload banner
 					} elseif ($data['b_image'] >= 1 && is_valid_mime($banner['mime']) == false) {
+						$error++;
 						osc_add_flash_error_message(__('The banner have it be a gif, jpg, png or bmp.', BANNERS_PREF), 'admin');
 					} else {
 
@@ -124,9 +138,11 @@ class CAdminBannersNew extends AdminSecBaseModel
 									Banners::newInstance()->set($data);
 									osc_add_flash_ok_message(__('The banner has been correctly uploaded.', BANNERS_PREF), 'admin');
 								} else {
+									$error++;
 									osc_add_flash_error_message(sprintf(__('An error has occurred to upload file, please try again. (%s)', BANNERS_PREF), '1'), 'admin');
 								}
 							} else {
+								$error++;
 								osc_add_flash_error_message(sprintf(__('An error has occurred to upload file, please try again. (%s)', BANNERS_PREF), '2'), 'admin');
 							}
 						}
@@ -134,7 +150,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 
 				}
 				ob_get_clean();
-				$this->redirectTo(osc_route_admin_url('banners-admin'));
+				$this->redirectTo((($error > 0) ? $_SERVER['HTTP_REFERER'] : osc_route_admin_url('banners-admin')));
 				break;
 
 			default:
