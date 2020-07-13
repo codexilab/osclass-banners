@@ -199,11 +199,10 @@
 			return (!$status) ? __('Inactive') : __('Active');
 		}
 
-		public function row_class($row)
-		{
-			$status_class = $this->get_row_status_class($row['status']);
-			return $status_class;
-		}
+		public function row_class($status)
+        {
+            return $this->get_row_status_class($status);
+        }
 
 		private function get_row_status_class($status)
 		{
