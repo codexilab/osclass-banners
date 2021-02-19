@@ -27,7 +27,7 @@
 Plugin Name: XenoTrue Online Banners
 Plugin URI: https://gitlab.com/xenotrue/development/osclass_plug_xt-banners
 Description: Put banners on the site, in any format and check its display time
-Version: 1.0.1
+Version: 1.0.2
 Author: XenoTrue
 Author URI: https://gitlab.com/xenotrue
 Short Name: banners
@@ -59,6 +59,14 @@ function banners_custom_css_admin() {
 	}
 }
 osc_add_hook('init_admin', 'banners_custom_css_admin');
+
+// Add responsive CSS styles for the banners widths
+function banners_widths_css_web() {
+	if (!OC_ADMIN) {
+		osc_enqueue_style('banners-widths-css', osc_base_url() . 'oc-content/plugins/'.BANNERS_FOLDER.'assets/css/web/banners-widths.css');
+	}
+}
+osc_add_hook('init', 'banners_widths_css_web');
 
 // Headers in the admin panel
 osc_add_hook('admin_menu_init', function() {

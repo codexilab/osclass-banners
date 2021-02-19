@@ -1,0 +1,47 @@
+
+/**
+ * Default banner widths
+ * 
+ * 300px, 320px, 336px, 468px, 728px (header), 970px
+ *
+ */
+
+.ads_300, .ads_320, .ads_336, .ads_468, .ads_728, .ads_header, .ads_970 {
+  display: none;
+}
+
+@media (min-width: 970px) {
+  .ads_970 {
+    display: block;
+  }
+}
+
+@media (min-width: 728px) {
+  .ads_728, .ads_header {
+    display: block;
+  }
+}
+
+@media (min-width: 468px) {
+  .ads_468 {
+    display: block;
+  }
+}
+
+@media (min-width: 336px) {
+  .ads_336 {
+    display: block;
+  }
+}
+
+@media (min-width: 320px) {
+  .ads_320 {
+    display: block;
+  }
+}
+
+@media (min-width: 300px) {
+  .ads_300 {
+    display: block;
+  }
+}

@@ -40,8 +40,10 @@ class CAdminBannersNew extends AdminSecBaseModel
 				if ($bannerToUpdate && !$banner['tmp_name']) {
 					$banner['tmp_name'] = BANNERS_ROUTE_SOURCES . $bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension'];
 				}
-				list($banner['width'], $banner['height'], $banner['mime']) = getimagesize($banner['tmp_name']);
-				$banner['mime'] = getmimetype($banner['mime']);
+				if (isset($banner['tmp_name']) && $banner['tmp_name']) {
+					list($banner['width'], $banner['height'], $banner['mime']) = getimagesize($banner['tmp_name']);
+				}
+				$banner['mime'] = (isset($banner['mime']) && $banner['mime']) ? getmimetype($banner['mime']) : '';
 
 				$data = array(
 					'pk_i_id'               => ($bannerToUpdate) ? $bannerToUpdate['pk_i_id'] : false,
@@ -116,7 +118,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 						}
 
 					// Validate upload banner
-					} elseif ($data['b_image'] >= 1 && is_valid_mime($banner['mime']) == false) {
+					} else if ($data['b_image'] >= 1 && is_valid_mime($banner['mime']) == false) {
 						$error++;
 						osc_add_flash_error_message(__('The banner have it be a gif, jpg, png or bmp.', BANNERS_PREF), 'admin');
 					} else {
@@ -132,7 +134,7 @@ class CAdminBannersNew extends AdminSecBaseModel
 								if (move_uploaded_file($banner['tmp_name'], BANNERS_FOLDER_SOURCES . $data['s_name'].'.'.$data['s_extension'])) {
 									if ($bannerToUpdate) {
 										unset($data['dt_date']);
-										unlink(BANNERS_FOLDER_SOURCES . $bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension']);
+										@unlink(BANNERS_FOLDER_SOURCES . $bannerToUpdate['s_name'].'.'.$bannerToUpdate['s_extension']);
 									}
 
 									Banners::newInstance()->set($data);

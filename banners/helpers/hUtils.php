@@ -66,19 +66,24 @@ if (!function_exists('setURL')) {
     function setURL($url) {
         $allowed = ['mailto'];
         $parsed = parse_url($url);
-        if (in_array($parsed['scheme'], $allowed)) {
+        if (isset($parsed['scheme']) && $parsed['scheme'] && in_array($parsed['scheme'], $allowed)) {
+            
             return $url;
 
         } elseif (preg_match('/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/', $url)) {
-        return 'mailto:'.$url;
+        
+            return 'mailto:'.$url;
 
         // wthout localhost  '/^(http|https):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i'
         // with localhost    '/^(http|https):\/\/+(localhost|[A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i'
         } elseif (preg_match('/^((http|https):\/\/?)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/?))/i', $url)) {
+            
             return $url;
 
         } else {
+            
             return 'http://'.$url;
+
         }
     }
 }
@@ -147,30 +152,29 @@ if (!function_exists('getmimetype')) {
     function getmimetype($type) {
         switch ($type) {
             case 1:
-                $return = 'gif';
+                return 'gif';
                 break;
 
             case 2:
-                $return = 'jpg';
+                return 'jpg';
                 break;
 
             case 3:
-                $return = 'png';
+                return 'png';
                 break;
 
             case 4:
-                $return = 'swf';
+                return 'swf';
                 break;
 
             case 5:
-                $return = 'psd';
+                return 'psd';
                 break;
 
             case 6:
-                $return = 'bmp';
+                return 'bmp';
                 break;
         }
-        return $return;
     }
 }
 

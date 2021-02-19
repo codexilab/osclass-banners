@@ -1,6 +1,12 @@
 # XenoTrue Online Banners
 ====================
 
+## [1.0.2] 2020-08-21
+
+### Fixed
+
+- Some little erros.
+
 ## [1.0.1] 2020-07-13
 
 ### Added
