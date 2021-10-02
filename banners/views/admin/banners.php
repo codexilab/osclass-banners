@@ -497,8 +497,8 @@ function show_banner(img) {
 
 // Note: this function can be moved to modals_form_options
 function show_position(id = null, year = null, month = null) {
-    $("#modal-300px").html('<div id="show-calendar-content" class="text-center"></div>'); show_calendar(id, year, month);
-    $('#modal-300px').dialog('open');
+    $("#modal-400px").html('<div id="show-calendar-content" class="text-center"></div>'); show_calendar(id, year, month);
+    $('#modal-400px').dialog('open');
 };
 
 // dialog delete function
