@@ -1,5 +1,12 @@
-# XenoTrue Online Banners
+# Banners
 ====================
+
+## [1.0.3] 2021-10-02
+
+### Changed
+
+- Window sizes to +100px larger.
+- Name of project.
 
 ## [1.0.2] 2020-08-21
 

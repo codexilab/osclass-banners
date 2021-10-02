@@ -3,7 +3,7 @@
     /*
      * MIT License
      * 
-     * Copyright (c) 2020 XenoTrue
+     * Copyright (c) 2021 CodexiLab
      * 
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,7 @@ $advertiserToUpdate = __get('advertiserToUpdate');
         </div>
         <div class="form-actions">
             <div class="wrapper">
-                <a class="btn button-close" href="javascript:void(0);" onclick="$('#modal-500px').dialog('close');"><?php _e('Cancel'); ?></a>
+                <a class="btn button-close" href="javascript:void(0);" onclick="$('#modal-700px').dialog('close');"><?php _e('Cancel'); ?></a>
                 <input type="submit" value="<?php echo ($advertiserToUpdate) ? __('Update advertiser', BANNERS_PREF) : __('Add new advertiser', BANNERS_PREF); ?>" class="btn btn-submit">
             </div>
         </div>

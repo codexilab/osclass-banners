@@ -3,7 +3,7 @@
 	/*
 	 * MIT License
 	 * 
-	 * Copyright (c) 2020 XenoTrue
+	 * Copyright (c) 2021 CodexiLab
 	 * 
 	 * Permission is hereby granted, free of charge, to any person obtaining a copy
 	 * of this software and associated documentation files (the "Software"), to deal
@@ -172,7 +172,7 @@
 
 					$banner = '';
 					if ($aRow['b_image']) {
-						$banner = '<div class="text-center"><a href="#" onclick="show_banner(\''.BANNERS_ROUTE_SOURCES.$aRow['s_name'].'.'.$aRow['s_extension'].'\');return false;">' . __('View', BANNERS_PREF) . '</a><br>'.$aRow['s_content_type'].'</div>';
+						$banner = '<div class="text-center"><a href="#" onclick="show_banner(\''.BANNERS_ROUTE_SOURCES.$aRow['s_name'].'.'.$aRow['s_extension'].'\');return false;">' . __('View', BANNERS_PREF) . '</a><div>'.$aRow['s_content_type'].'</div></div>';
 					} else {
 						$banner = '<div class="text-center">'.htmlentities("</script>").'</div>';
 					}

@@ -3,7 +3,7 @@
     /*
      * MIT License
      * 
-     * Copyright (c) 2020 XenoTrue
+     * Copyright (c) 2021 CodexiLab
      * 
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
@@ -69,7 +69,7 @@ $positionToUpdate = __get('positionToUpdate');
 
     <div class="form-actions">
         <div class="wrapper">
-            <a class="btn btn-mini button-close" href="javascript:void(0);" onclick="$('#modal-500px, #modal-300px').dialog('close');"><?php _e('Close') ?></a>
+            <a class="btn btn-mini button-close" href="javascript:void(0);" onclick="$('#modal-700px, #modal-400px').dialog('close');"><?php _e('Close') ?></a>
             <input type="submit" value="<?php ((!$positionToUpdate) ? _e('Add position', BANNERS_PREF) : _e('Save changes')); ?>" class="btn btn-mini btn-submit">
             <?php if ($positionToUpdate) : ?>
             <a href="#" onclick="delete_position(<?php if (isset($positionToUpdate['pk_i_id'])) echo $positionToUpdate['pk_i_id']; ?>);return false;" class="btn btn-mini btn-red"><?php _e('Delete'); ?></a>

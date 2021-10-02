@@ -2,7 +2,7 @@
 	/*
 	 * MIT License
 	 * 
-	 * Copyright (c) 2020 XenoTrue
+	 * Copyright (c) 2021 CodexiLab
 	 * 
 	 * Permission is hereby granted, free of charge, to any person obtaining a copy
 	 * of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,14 @@
 	 */
 
 /*
-Plugin Name: XenoTrue Online Banners
-Plugin URI: https://gitlab.com/xenotrue/development/osclass_plug_xt-banners
+Plugin Name: Banners
+Plugin URI: https://github.com/codexilab/osclass-banners
 Description: Put banners on the site, in any format and check its display time
-Version: 1.0.2
-Author: XenoTrue
-Author URI: https://gitlab.com/xenotrue
+Version: 1.0.3
+Author: CodexiLab
+Author URI: https://github.com/codexilab
 Short Name: banners
-Plugin update URI: https://gitlab.com/xenotrue/development/osclass_plug_xt-banners
+Plugin update URI: https://github.com/codexilab/osclass-banners/
 */
 
 // Paths
