@@ -27,7 +27,7 @@
 Plugin Name: Banners
 Plugin URI: https://github.com/codexilab/osclass-banners
 Description: Put banners on the site, in any format and check its display time
-Version: 1.0.3
+Version: 1.0.4
 Author: CodexiLab
 Author URI: https://github.com/codexilab
 Short Name: banners
