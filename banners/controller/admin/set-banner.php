@@ -45,11 +45,13 @@ class CAdminBannersNew extends AdminSecBaseModel
 				}
 				$banner['mime'] = (isset($banner['mime']) && $banner['mime']) ? getmimetype($banner['mime']) : '';
 
+				$categories = (is_array(Params::getParam('categories'))) ? Params::getParam('categories') : [];
+
 				$data = array(
 					'pk_i_id'               => ($bannerToUpdate) ? $bannerToUpdate['pk_i_id'] : false,
 					'fk_i_advertiser_id'    => Params::getParam('fk_i_advertiser_id'),
 					'fk_i_position_id'      => Params::getParam('fk_i_position_id'),
-					's_category'            => implode(',', Params::getParam('categories')),
+					's_category'            => implode(',', $categories),
 					's_url'                 => setURL(Params::getParam('s_url')),
 					's_name'                => osc_genRandomPassword(),
 					's_title' 				=> Params::getParam('s_title'),
