@@ -401,8 +401,7 @@ $(document).ready(function() {
 		autoOpen: false,
 		width: "1000px",
 		modal: true,
-		title: '<?php echo osc_esc_js( __('Show banner', BANNERS_PREF) ); ?>',
-		position: "center"
+		title: '<?php echo osc_esc_js( __('Show banner', BANNERS_PREF) ); ?>'
 	});
 
 	// dialog delete
