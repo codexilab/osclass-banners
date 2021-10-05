@@ -37,7 +37,7 @@
 	        width: "600px",
 	        modal: true,
 	        title: '<?php echo osc_esc_js( __('Banners', BANNERS_PREF) ); ?>',
-            position: "top"
+            position: "center"
 	    });
 
 	    $("#modal-300px").dialog({
@@ -45,7 +45,7 @@
 	        width: "300px",
 	        modal: true,
 	        title: '<?php echo osc_esc_js( __('Banners', BANNERS_PREF) ); ?>',
-            position: "top"
+            position: "center"
 	    });
 	});
 
