@@ -5,23 +5,23 @@
  * @return array
  */
 function banners_plugin_routes() {
-    $routes = array(
-        array(
+    $routes = [
+        [
             'slug' => 'banners-admin', 'regexp' => BANNERS_FOLDER.'views/admin/banners', 'url' => BANNERS_FOLDER.'views/admin/banners', 'file' => BANNERS_FOLDER.'views/admin/banners.php'
-        ),
-        array(
+        ],
+        [
             'slug' => 'banners-admin-set', 'regexp' => BANNERS_FOLDER.'views/admin/set-banner', 'url' => BANNERS_FOLDER.'views/admin/set-banner', 'file' => BANNERS_FOLDER.'views/admin/set-banner.php'
-        ),
-        array(
+        ],
+        [
             'slug' => 'banners-admin-advertisers', 'regexp' => BANNERS_FOLDER.'views/admin/advertisers', 'url' => BANNERS_FOLDER.'views/admin/advertisers', 'file' => BANNERS_FOLDER.'views/admin/advertisers.php'
-        ),
-        array(
+        ],
+        [
             'slug' => 'banners-admin-positions', 'regexp' => BANNERS_FOLDER.'views/admin/positions', 'url' => BANNERS_FOLDER.'views/admin/positions', 'file' => BANNERS_FOLDER.'views/admin/positions.php'
-        ),
-        array(
+        ],
+        [
             'slug' => 'banners-admin-settings', 'regexp' => BANNERS_FOLDER.'views/admin/settings', 'url' => BANNERS_FOLDER.'views/admin/settings', 'file' => BANNERS_FOLDER.'views/admin/settings.php'
-        )
-    );
+        ]
+    ];
     return $routes;
 }
 
@@ -162,8 +162,8 @@ function banners_detect_daterange($fromDate, $toDate, $positionId, $bannerId = n
  */
 if (!function_exists('get_banner_route')) {
     function get_banner_route($url) {
-    $r = (!osc_rewrite_enabled()) ? '&' : '?';
-        return osc_route_url(banners_route_page()).$r.banners_route_param().'='.$url;
+    $rw = (!osc_rewrite_enabled()) ? '&' : '?';
+        return osc_route_url(banners_route_page()).$rw.banners_route_param().'='.$url;
     }
 }
 
@@ -171,10 +171,10 @@ if (!function_exists('get_banner_route')) {
  * Returns an array with references fo allowed sections where a banner can be shown,
  * depending on the current location of the logged in user or visitor.
  *
- * @return array Example: array('home', '1')
+ * @return array Example: ['home', '1']
  */
 function banners_allowed_sections() {
-    $sections = array();
+    $sections = [];
     //$sections[] = 'all';
     if (osc_is_404()) $sections[] = 'error';
     if (osc_is_home_page()) $sections[] = 'home';
@@ -236,10 +236,10 @@ function banners_allowed_sections() {
  */
 function banners_position_sort($sort) {
     $position   = Banners::newInstance()->getPositionBySortId($sort);
-    $banners    = (isset($position['pk_i_id'])) ? banners_by_position($position['pk_i_id']) : array();
+    $banners    = (isset($position['pk_i_id'])) ? banners_by_position($position['pk_i_id']) : [];
     $sections   = banners_allowed_sections(); // You can add more elements with array_unshift or array_push
     $showBanner = false;
-    $b          = array();
+    $b          = [];
 
     if ($banners) {
         foreach ($banners as $banner) {

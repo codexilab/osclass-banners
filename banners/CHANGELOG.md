@@ -1,6 +1,13 @@
 # Banners
 ====================
 
+## [1.0.4] 2021-10-05
+
+### Fixed
+
+- Little bugs.
+- Not fake clicks on the banners when the admin is logged.
+
 ## [1.0.3] 2021-10-02
 
 ### Changed
