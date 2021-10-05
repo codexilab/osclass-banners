@@ -45,7 +45,8 @@ class CAdminBannersNew extends AdminSecBaseModel
 				}
 				$banner['mime'] = (isset($banner['mime']) && $banner['mime']) ? getmimetype($banner['mime']) : '';
 
-				$categories = (is_array(Params::getParam('categories'))) ? Params::getParam('categories') : [];
+				$categories = Params::getParam('categories');
+				$categories = (is_array($categories)) ? $categories : [];
 
 				$data = array(
 					'pk_i_id'               => ($bannerToUpdate) ? $bannerToUpdate['pk_i_id'] : false,
