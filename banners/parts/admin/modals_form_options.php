@@ -26,23 +26,23 @@
 
 ?>
 
-<form id="modal-700px" method="post" action="" class="has-form-actions hide"></form>
+<form id="modal-600px" method="post" action="" class="has-form-actions hide"></form>
 
-<form id="modal-400px" method="post" action="" class="has-form-actions hide"></form>
+<form id="modal-300px" method="post" action="" class="has-form-actions hide"></form>
 
 <script>
 	$(document).ready(function() {
-		$("#modal-700px").dialog({
+		$("#modal-600px").dialog({
 	        autoOpen: false,
-	        width: "700px",
+	        width: "600px",
 	        modal: true,
 	        title: '<?php echo osc_esc_js( __('Banners', BANNERS_PREF) ); ?>',
             position: "top"
 	    });
 
-	    $("#modal-400px").dialog({
+	    $("#modal-300px").dialog({
 	        autoOpen: false,
-	        width: "400px",
+	        width: "300px",
 	        modal: true,
 	        title: '<?php echo osc_esc_js( __('Banners', BANNERS_PREF) ); ?>',
             position: "top"
@@ -54,20 +54,20 @@
 	}
 
 	function set_advertiser(advertiser_id = null) {
-        $("#modal-700px").html(loading_modal());
-        $('#modal-700px').dialog('open');
+        $("#modal-600px").html(loading_modal());
+        $('#modal-600px').dialog('open');
         var url = '<?php echo osc_base_url(); ?>index.php?page=ajax&action=runhook&hook=banners_controller_requests&route=set_advertiser_iframe&id='+advertiser_id;
         $.ajax({
             method: "GET",
             url: url,
             dataType: "html"
         }).done(function(data) {
-            $("#modal-700px").html(data);
+            $("#modal-600px").html(data);
         });
 	};
 
 	function set_position(id = null) {
-        var modal = (id == null) ? '#modal-400px' : '#modal-700px';
+        var modal = (id == null) ? '#modal-300px' : '#modal-600px';
         $(modal).html(loading_modal());
 	    $(modal).dialog('open');
 	    var url = '<?php echo osc_base_url(); ?>index.php?page=ajax&action=runhook&hook=banners_controller_requests&route=set_position_iframe&id='+id;

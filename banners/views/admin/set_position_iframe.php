@@ -41,12 +41,17 @@ $positionToUpdate = __get('positionToUpdate');
     <div class="grid-system">
         <div class="grid-row grid-<?php echo ($positionToUpdate) ? '50' : '100'; ?>">
             <div class="form-row">
-                <?php _e('Title'); ?>
-                <input type="text" class="xlarge" name="s_title" value="<?php if (isset($positionToUpdate['s_title'])) echo $positionToUpdate['s_title']; ?>">
+                <p>
+                    <?php _e('Title'); ?><br>
+                    <input type="text" class="xlarge" name="s_title" value="<?php if (isset($positionToUpdate['s_title'])) echo $positionToUpdate['s_title']; ?>">
+                </p>
             </div>
 
             <div class="form-row">
-                <label><?php _e('Sort number', BANNERS_PREF); ?> <input type="text" class="input-small" name="i_sort_id" value="<?php if (isset($positionToUpdate['i_sort_id'])) echo $positionToUpdate['i_sort_id']; ?>"></label>
+                <p>
+                    <?php _e('Sort number', BANNERS_PREF); ?><br>
+                    <input type="text" class="input-small" name="i_sort_id" value="<?php if (isset($positionToUpdate['i_sort_id'])) echo $positionToUpdate['i_sort_id']; ?>">
+                </p>
             </div>
         </div>
 
@@ -69,7 +74,7 @@ $positionToUpdate = __get('positionToUpdate');
 
     <div class="form-actions">
         <div class="wrapper">
-            <a class="btn btn-mini button-close" href="javascript:void(0);" onclick="$('#modal-700px, #modal-400px').dialog('close');"><?php _e('Close') ?></a>
+            <a class="btn btn-mini button-close" href="javascript:void(0);" onclick="$('#modal-600px, #modal-300px').dialog('close');"><?php _e('Close') ?></a>
             <input type="submit" value="<?php ((!$positionToUpdate) ? _e('Add position', BANNERS_PREF) : _e('Save changes')); ?>" class="btn btn-mini btn-submit">
             <?php if ($positionToUpdate) : ?>
             <a href="#" onclick="delete_position(<?php if (isset($positionToUpdate['pk_i_id'])) echo $positionToUpdate['pk_i_id']; ?>);return false;" class="btn btn-mini btn-red"><?php _e('Delete'); ?></a>
