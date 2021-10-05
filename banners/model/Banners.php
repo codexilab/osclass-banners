@@ -86,7 +86,7 @@ class Banners extends DAO
 	public function install()
 	{
 		$this->import(BANNERS_PATH.'struct.sql');
-		osc_set_preference('version', '1.0.2', BANNERS_PREF, 'STRING');
+		osc_set_preference('version', '1.0.4', BANNERS_PREF, 'STRING');
 		osc_set_preference('banner_route_page', 'banner-url', BANNERS_PREF, 'STRING');
 		osc_set_preference('banner_route_param', 'ref', BANNERS_PREF, 'STRING');
 		osc_set_preference('show_url_banner', '0', BANNERS_PREF, 'BOOLEAN');
